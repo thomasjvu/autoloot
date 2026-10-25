@@ -1,0 +1,10 @@
+# Set AUTOLOOT_DOMAIN to your viewer domain; run Caddy on the same host.
+{$AUTOLOOT_DOMAIN} {
+    # Admin capability is available only through the direct localhost dashboard.
+    @private path /api/bootstrap /twitch-setup.html
+    respond @private 404
+    reverse_proxy 127.0.0.1:4173 {
+        # Preserve public host and forwarded metadata; do not rewrite Host to localhost.
+        header_up Host {http.request.host}
+    }
+}

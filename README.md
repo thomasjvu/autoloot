@@ -8,7 +8,7 @@ The [Papers documentation site](documentation/README.md) includes setup, streame
 
 ## Start
 
-Node.js **22+**:
+Node.js **22.16+**:
 
 ```sh
 npm ci
@@ -34,6 +34,26 @@ The interface uses bold solid-color sections, rounded geometry, heavy display he
 5. Return to the streamer’s Orders page to ship or simulate a refund before shipping.
 6. In Companion, ask for the next lot. Review its proposal, then Apply. Select Codex to use real AI instead of local scripted replies.
 
+## CSV and fulfillment
+
+Import inventory with column mapping and SKU updates from Inventory → Import CSV. Orders includes a Ready to ship queue, private shipping CSV export, and reviewed bulk tracking import. [CSV and shipping guide](docs/csv-and-shipping.md) covers field formats and the CSV bridge for other stores. Shippo supports native rate shopping, label purchase and explicit dispatch; Pirate Ship has a dedicated CSV export and tracking import. See the [shipping setup guide](docs/shipping.md). Native Shopify/WooCommerce account connections remain outside scope.
+
+## Live drop room
+
+The public `/shop` presents the active lot with a prominent server-based closing countdown, final-ten-seconds treatment, time-progress bar, accepted-bid activity and sold result. Pauses hold the clock; reconnecting hides stale countdowns. New bids and results get short visual reactions with reduced-motion support. Available inventory appears in a lineup; it does not imply scheduled opening times. Bid commands still go through Twitch chat and private buyer checkout stays in Your orders.
+
+## Operator policies
+
+Each streamer supplies their seller/operator identity, public support/privacy email and shipping, returns and retention policies in Settings. These appear on the storefront and Terms/Privacy/Help pages; new orders preserve the published policy snapshot. AI/cohost and automation disclosures are visible in the relevant flows. See [Operator policies](docs/operator-policies.md) for responsibilities, data handling and remaining deployment-specific requirements.
+
+## NFT delivery and storage
+
+NFT orders can complete at verified digital transfer without waiting for physical redemption. The first verifiers support standard ERC-721 on configured EVM chains and standard SPL NFTs on Solana. Connect a constrained agent-wallet bridge or the scoped agent tools; actual provider/signer access and real-chain verification remain required. See [NFT delivery](docs/nft-delivery.md). SQLite, automatic local verified backups and offline restore now replace JSON as authoritative storage; see [storage and recovery](docs/storage.md).
+
+## Agent-led runs
+
+In Studio, configure and arm a fixed queue of single-unit products for 1–240 minutes. Autoloot runs existing auctions and fixed-price listings, waits for verified/simulated payment and recorded fulfillment, and pauses on restart, disconnect, expiry or unexpected order state. There is no inventory purchasing. NFT transfers require separate explicit authorization and a native fee cap. New break formats are still planned. See [Agent-led runs](docs/agent-led-runs.md) for limits, controls and verification.
+
 ## Implemented
 
 - Inventory CRUD, search, product photos, condition, stock, buy-now prices and storefront listing controls.
@@ -47,7 +67,7 @@ The interface uses bold solid-color sections, rounded geometry, heavy display he
 - Shipping collection through Stripe, per-order flat shipping price, tracking entry, CSV totals and authenticated receipt JSON.
 - Structured Codex action proposals: draft a product listing, start next lot, pause, resume. Reviewable listing drafts show every field before Apply. Payment and winner state are controlled by code.
 - Transparent OBS output, optional Mochi avatar and opt-in browser speech in the dashboard.
-- Atomic JSON persistence, restart-paused auctions, capability-protected admin operations, origin checks, request limits and sanitized public snapshots.
+- Transactional SQLite persistence with verified backups, restart-paused auctions, capability-protected admin operations, origin checks, request limits and sanitized public snapshots.
 
 ## Twitch
 
@@ -58,7 +78,7 @@ The interface uses bold solid-color sections, rounded geometry, heavy display he
 5. For viewers on other devices, expose the local server through an HTTPS tunnel, set `PUBLIC_URL`, and register that URL’s `/auth/twitch/callback` redirect as well. Keep the creator dashboard at localhost. **The tunnel must preserve its external Host header**, because localhost admin bootstrap is intentionally unavailable through the public hostname.
 6. Share `<PUBLIC_URL>/shop`. Viewers sign in with Twitch to register, then bid in the connected channel. Switch the creator workspace to Live to accept real Twitch bids.
 
-Twitch credentials and sessions are memory-only and reconnecting is required after server restart. Registered buyer IDs persist with orders. Chat disconnects pause live bidding; the creator explicitly resumes after reconnecting. Messages missed during an outage are not replayed by Twitch.
+Twitch access/refresh tokens are memory-only and the streamer reconnects after restart. Buyer sessions persist in SQLite with hashed tokens, expiry and revocation. Registered buyer IDs persist with orders. Chat disconnects pause live bidding; the creator explicitly resumes after reconnecting. Messages missed during an outage are not replayed by Twitch.
 
 ## Stripe Checkout
 
@@ -84,7 +104,7 @@ Copy the printed signing secret into your local `.env`, then restart Autoloot. S
 
 Configure `SHIPPING_COUNTRIES` as comma-separated ISO codes, such as `US,CA`. Set the flat shipping amount in **Edit show**. Shipping is snapshotted into each order and included in its immutable checkout total. Stripe collects the buyer’s address and returns it through a signed payment event. There is **no automatic tax calculation** in this build.
 
-Checkout success/cancel return URLs do not mark an order paid. The signed webhook verifies the session ID, order ID, USD amount and payment environment. Unpaid async sessions remain processing. Failed/expired checkout releases stock once. Cancellation first expires an open session; if payment already completed, it is reconciled rather than cancelled. Refunds restore stock only after successful provider confirmation. Shipped and externally-paid refunds remain outside this app.
+Checkout success/cancel return URLs do not mark an order paid. The signed webhook verifies the session ID, order ID, USD amount and payment environment. Unpaid async sessions remain processing. Failed/expired checkout releases stock once. New auction and buy-now orders reserve inventory for 15 minutes before checkout begins or payment is confirmed. A checkout attempt is persisted before contacting Stripe, so a lost response cannot cause local expiry and double-selling. Retry checkout to recover an uncertain session before cancelling. Cancellation first expires an open session; if payment already completed, it is reconciled rather than cancelled. Refunds restore stock only after successful provider confirmation. Shipped and externally-paid refunds remain outside this app.
 
 **Verification boundary:** tests use the real Stripe SDK’s signature verifier with signed fixtures and a mocked API client. No real Stripe sandbox purchase/refund has been executed in this environment. Add your keys and verify the full provider flow before enabling real payments. Live auctions do not require Stripe, so an external-payment fallback exists; buy-now purchases in Live mode require configured checkout.
 
@@ -110,6 +130,9 @@ Real local CLI replies and a structured listing draft were verified during devel
 
 ## OBS
 
+Settings now includes a **Go live checklist** and **Stream widgets** with Full show, Compact auction, Chat vote and Mochi-only presets, size guidance, preview and URL copy controls. See the [Twitch and OBS integration guide](docs/twitch-widgets.md) for setup, buyer flow and the distinction from a Twitch Extension.
+
+
 Copy the overlay URL in Connections. Create an OBS Browser Source at **1280 × 720** and paste the URL. The background is transparent and it uses public show state only. The companion can be disabled independently of the auction display. Enable **Overlay voice** in Companion, then use the overlay’s **Enable / test voice** control if the browser requires a gesture. In OBS use the Browser Source interaction panel for that control and enable **Control audio via OBS**. Browser speech availability depends on the installed runtime and voices; actual OBS audio has not been verified here. Reduced motion disables avatar movement. Voice skips initial history and stale events; the final three-second countdown follows the authoritative end time. A late bid resets countdown eligibility.
 
 ## Architecture
@@ -123,15 +146,17 @@ lib/companion.mjs       Scripted demo + schema-constrained Codex adapter
 server.mjs              HTTP API, sessions, access checks, SSE, persistence
 tests/                  Engine, commerce, Twitch and HTTP integration tests
 docs/                   Architecture + hackathon demo guidance
-.data/show.json         Local runtime data (ignored)
+.data/autoloot.sqlite   Transactional runtime state and indexes (ignored)
 .data/images/           Uploaded product photos (ignored)
 ```
 
-One process owns one workspace. Engine transitions are synchronous and persisted with temporary file + rename, then broadcast over SSE. Prices are integer cents. Server receive time decides bid acceptance. Existing runtime data migrates default settings in memory and is preserved.
+One process owns one workspace. Engine transitions commit to SQLite with WAL/full synchronization, relational constraints and revision checks before SSE publication. A second writer is rejected; write failures halt sales. See [storage and recovery](docs/storage.md) for backup/restore and production boundaries. Prices are integer cents. Server receive time decides bid acceptance.
 
 The localhost creator page obtains a random admin capability. Remote viewers never receive it. Every viewer-order mutation checks the authenticated owner. Public state excludes orders, shipping, registrations and bidder IDs. Uploaded product photos are public catalog assets. Back up `.data` while stopped; it contains private order/shipping data, so do not commit or publish it.
 
-This remains a single-streamer hackathon build, not a production multi-tenant marketplace. Production work still includes database transactions across multiple processes, durable sessions, card preauthorization/bid eligibility, purchase reservation timeouts before checkout begins, verified shipping-label purchase, tax configuration, disputes, deployment/admin identity and operational monitoring. Pending reservations without a checkout remain held until cancelled. No marketplace synchronization is planned: Twitch is the product’s platform.
+This remains a single-streamer hackathon build, not a production multi-tenant marketplace. Production work still includes multi-process transactional entity storage, card preauthorization/bid eligibility, verified shipping-label purchase, tax configuration, disputes, deployment/admin identity and operational monitoring. Pending orders have a 15-minute reservation deadline before checkout starts or payment is confirmed. Untouched overdue reservations expire and release stock once. Active or attempted Stripe checkouts remain reserved until their provider outcome is resolved. No marketplace synchronization is planned: Twitch is the product’s platform.
+
+See [production deployment](docs/production.md) for the supported single-host topology, launch checks and service configuration.
 
 ## Submission
 
@@ -174,3 +199,7 @@ Auto scan currently reads the next reveal then pauses for review. Codex CLI imag
 **Catalog** (also linked from Inventory → Browse Metadata) searches the hosted TCG catalog across games, with an optional game ID filter and paginated results. Choose a canonical card, review its set/number/reference image, and supply your own opening price, quantity and actual condition. Adding creates an unlisted auction lot with its Metadata identity attached; it does not start an auction or copy a market guide price. The picker currently supports card records, not every Metadata vertical or sealed-product SKUs.
 
 With Codex selected, ask “find Pikachu in the catalog,” then “choose the [name/set/number] result.” The companion uses server-controlled catalog search and selection and cannot invent a catalog ID. Search/selection do not create inventory; the creator reviews the selected card in Catalog and adds it. Demo scripted replies do not perform catalog searches. Live Metadata access requires a healthy origin and server-side credentials; provider failures are displayed, never replaced with sample matches. HTTPS catalog reference images load from their original image hosts; API credentials remain on the server.
+
+## Independent marketing site
+
+Build the separate Cloudflare Pages target with `npm run marketing:build`. Publish only `marketing/dist` and configure `WORKSPACE_URL` for the intended app origin. See [marketing deployment](marketing/README.md). The Node workspace server does not host the marketing site.

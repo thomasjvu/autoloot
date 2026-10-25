@@ -60,3 +60,156 @@ test("chat voting uses verified event identity and does not create bids", async 
   assert.deepEqual(e.state.vote.counts, [1, 0]);
   assert.equal(e.state.auction.bidCount, 0);
 });
+
+// No Twitch credentials or network calls: exercise the adapter lifecycle itself.
+function lifecycle(t) {
+  const engine = new Engine(seed());
+  engine.setMode('live');
+  engine.start({ productId: 'p1' });
+  const twitch = new Twitch(engine);
+  twitch.client = 'test-client';
+  twitch.secret = 'test-secret';
+  twitch.status.configured = true;
+  twitch.base = 'https://show.example';
+  twitch.user = { id: 'channel', login: 'creator' };
+  const sockets = [];
+  class Socket extends EventTarget {
+    constructor(url) { super(); this.url = url; sockets.push(this); }
+    packet(type, payload) { this.dispatchEvent(new MessageEvent('message', { data: JSON.stringify({ metadata: { message_type: type }, payload }) })); }
+    close() { this.closed = true; this.dispatchEvent(new Event('close')); }
+  }
+  const originalSocket = globalThis.WebSocket;
+  globalThis.WebSocket = Socket;
+  t.after(() => { globalThis.WebSocket = originalSocket; });
+  t.after(() => { twitch.tokens = null; for (const socket of sockets) socket.close(); });
+  const welcome = socket => socket.packet('session_welcome', { session: { id: 'socket-session', keepalive_timeout_seconds: 30 } });
+  return { engine, twitch, sockets, welcome };
+}
+test('OAuth rejects expired/replayed state and validates identity before creating a session', async t => {
+  const { twitch } = lifecycle(t);
+  const state = new URL(twitch.login('viewer')).searchParams.get('state');
+  t.mock.method(globalThis, 'fetch', async url => new Response(JSON.stringify(String(url).endsWith('/token')
+    ? { access_token: 'fixture-token' }
+    : { client_id: 'test-client', user_id: 'buyer', login: 'buyer' }), { status: 200 }));
+  const result = await twitch.callback('fixture-code', state);
+  assert.equal(twitch.session(`autoloot_session=${result.session}`).id, 'buyer');
+  await assert.rejects(twitch.callback('fixture-code', state), /expired/);
+  const expired = new URL(twitch.login()).searchParams.get('state');
+  twitch.pending.get(expired).at = Date.now() - 600001;
+  await assert.rejects(twitch.callback('fixture-code', expired), /expired/);
+  const invalid = new URL(twitch.login()).searchParams.get('state');
+  globalThis.fetch.mock.mockImplementation(async url => new Response(JSON.stringify(String(url).endsWith('/token') ? { access_token: 'fixture' } : { client_id: 'wrong-client' })));
+  await assert.rejects(twitch.callback('fixture-code', invalid), /identity validation/);
+});
+test('API refreshes an expired token and retries with the replacement token', async t => {
+  const { twitch } = lifecycle(t);
+  twitch.tokens = { access_token: 'old-fixture', refresh_token: 'refresh-fixture' };
+  const calls = [];
+  t.mock.method(globalThis, 'fetch', async (url, options) => {
+    calls.push({ url, options });
+    if (String(url).endsWith('/token')) return new Response(JSON.stringify({ access_token: 'new-fixture', refresh_token: 'next-fixture' }));
+    if (options.headers.Authorization === 'Bearer old-fixture') return new Response('{}', { status: 401 });
+    return new Response(JSON.stringify({ data: [{ id: 'channel' }] }));
+  });
+  assert.deepEqual(await twitch.api('users'), { data: [{ id: 'channel' }] });
+  assert.equal(calls.length, 3);
+  assert.equal(calls[2].options.headers.Authorization, 'Bearer new-fixture');
+});
+test('EventSub subscribes on welcome and migration preserves a running auction', async t => {
+  const { engine, twitch, sockets, welcome } = lifecycle(t);
+  const subscriptions = [];
+  t.mock.method(twitch, 'api', async (path, body) => { subscriptions.push({ path, body }); return {}; });
+  const initial = twitch.connect();
+  welcome(sockets[0]);
+  await initial;
+  assert.equal(twitch.status.connected, true);
+  assert.equal(subscriptions[0].body.type, 'channel.chat.message');
+  assert.equal(subscriptions[0].body.transport.session_id, 'socket-session');
+  const received = [];
+  t.mock.method(twitch, 'onChat', async event => received.push(event));
+  const migration = twitch.connect('wss://eventsub.wss.twitch.tv/ws?reconnect=fixture', true);
+  sockets[0].packet('notification', { event: { message: { text: '!lot' } } });
+  assert.equal(received.length, 1, 'old connection remains active until migration completes');
+  welcome(sockets[1]);
+  await migration;
+  assert.equal(sockets[0].closed, true);
+  assert.equal(subscriptions.length, 1);
+  assert.equal(engine.state.auction.status, 'live');
+  assert.throws(() => twitch.connect('wss://untrusted.example/ws'), /Unexpected/);
+  sockets[1].close();
+  assert.equal(engine.state.auction.status, 'paused');
+  assert.equal(twitch.status.connected, false);
+});
+test('EventSub revocation and failed validation pause bidding', async t => {
+  const { engine, twitch, sockets, welcome } = lifecycle(t);
+  t.mock.method(twitch, 'api', async () => ({}));
+  const connected = twitch.connect();
+  welcome(sockets[0]);
+  await connected;
+  sockets[0].packet('revocation', {});
+  assert.equal(engine.state.auction.status, 'paused');
+  assert.match(twitch.status.error, /revoked/);
+  engine.resume();
+  twitch.tokens = { access_token: 'fixture' };
+  t.mock.method(globalThis, 'fetch', async () => new Response('{}', { status: 403 }));
+  await twitch.validate();
+  assert.equal(engine.state.auction.status, 'paused');
+  assert.equal(twitch.tokens, null);
+  assert.match(twitch.status.error, /validation failed/);
+});
+test('unexpected disconnect retries EventSub while keeping the auction paused', async t => {
+  const { engine, twitch, sockets, welcome } = lifecycle(t);
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  t.after(() => t.mock.timers.reset());
+  twitch.tokens = { access_token: 'fixture' };
+  t.mock.method(twitch, 'api', async () => ({}));
+  const connected = twitch.connect();
+  welcome(sockets[0]);
+  await connected;
+  sockets[0].close();
+  assert.equal(engine.state.auction.status, 'paused');
+  t.mock.timers.tick(2000);
+  assert.equal(sockets.length, 2);
+  welcome(sockets[1]);
+  await Promise.resolve();
+  assert.equal(twitch.status.connected, true);
+  assert.equal(engine.state.auction.status, 'paused');
+});
+test('manual disconnect cancels a queued reconnect', async t => {
+  const { twitch, sockets, welcome } = lifecycle(t);
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  t.after(() => t.mock.timers.reset());
+  twitch.tokens = { access_token: 'fixture' };
+  t.mock.method(twitch, 'api', async () => ({}));
+  const connected = twitch.connect();
+  welcome(sockets[0]);
+  await connected;
+  sockets[0].close();
+  assert.ok(twitch.retryTimer);
+  twitch.disconnect();
+  t.mock.timers.tick(60000);
+  assert.equal(sockets.length, 1);
+  assert.equal(twitch.retryTimer, null);
+  assert.equal(twitch.status.connected, false);
+});
+test('a late subscription response cannot reconnect after manual disconnect', async t => {
+  const { twitch, sockets, welcome } = lifecycle(t);
+  twitch.tokens = { access_token: 'fixture' };
+  let finishSubscription;
+  t.mock.method(twitch, 'api', () => new Promise(resolve => { finishSubscription = resolve; }));
+  const outcome = twitch.connect().catch(error => error);
+  welcome(sockets[0]);
+  twitch.disconnect();
+  finishSubscription({});
+  await Promise.resolve();
+  assert.match((await outcome).message, /closed before it was ready/);
+  assert.equal(twitch.status.connected, false);
+  assert.equal(twitch.tokens, null);
+});
+test('an EventSub close before welcome rejects immediately', async t => {
+  const { twitch, sockets } = lifecycle(t);
+  const outcome = twitch.connect().catch(error => error);
+  sockets[0].close();
+  assert.match((await outcome).message, /closed before it was ready/);
+  assert.equal(twitch.status.connected, false);
+});

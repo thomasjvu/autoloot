@@ -12,7 +12,7 @@ The differentiator is a Twitch-native AI producer that makes selling a shared li
 
 ## The demo story
 
-Creator uploads a product photo and specifies price/condition. Autoloot drafts a listing. Chat chooses it as the next lot. Creator approves. Mochi introduces it; two real viewers bid; the timer extends; one wins. The winner opens their private order and completes sandbox checkout. Creator sees payment verification and the shipping handoff.
+Creator uploads a product photo and specifies price/condition. Autoloot drafts a listing. Chat chooses it as the next lot. Creator approves. Munny introduces it; two real viewers bid; the timer extends; one wins. The winner opens their private order and completes sandbox checkout. Creator sees payment verification and the shipping handoff.
 
 Keep this sequence under three minutes, including brief evidence of building with Codex. No additional marketplace integrations, analytics suite, social feed or multi-seller platform is required for this narrative.
 
@@ -28,6 +28,6 @@ Keep this sequence under three minutes, including brief evidence of building wit
 
 Implemented: self-hosted Maple Mono; photo input via Codex CLI; server-enforced creator values, review/edit/apply with photo retention; timed chat votes with identity-based deduplication and vote changes; creator-approved winning-lot launch; public vote display; event-driven SVG avatar reactions; optional overlay browser speech with stale-event suppression and reduced motion; show recap; disposable end-to-end demo smoke script.
 
-Verified: real Codex image draft; state machine, HTTP contracts, signed payment fixtures, voting rules and speech event logic; `npm run demo:check` local journey. Local browser control is currently disabled, so the newest UI changes have not been visually tested. Actual Twitch authorization/EventSub and Stripe sandbox checkout need account credentials. OBS voice/audio behavior needs a real OBS Browser Source check.
+Verified: real Codex image draft; state machine, HTTP contracts, signed payment fixtures, voting rules and speech event logic; `npm run demo:check` local journey. Desktop browser verification covered setup shortcuts, widget preset persistence, isolated auction/vote/Munny output, transparent backgrounds and stream interruption/recovery. Mobile-device and actual OBS checks remain outstanding. Actual Twitch authorization/EventSub and Stripe sandbox checkout need account credentials. OBS voice/audio behavior needs a real OBS Browser Source check.
 
 Judges evaluate innovation, impact, implementation/use of Codex and design/fun-to-watch quality: https://twitchcon-codex.devpost.com/

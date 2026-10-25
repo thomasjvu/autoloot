@@ -10,6 +10,10 @@ Standard: a bid accepted with less than 10 seconds remaining resets remaining ti
 
 Verify Twitch with two real accounts, complete Stripe sandbox checkout and webhook delivery, restore Metadata API access, validate recognition against real packs/cards and check OBS audio. Capture one short end-to-end run before adding more commerce formats.
 
+## Agent-led run direction
+
+Autoloot remains standalone. A bounded runner for existing item auctions and fixed-price sales is implemented. Personal pack openings and inventory-backed card breaks with disclosed entitlements remain next. See [Agent-led runs](agent-led-runs.md) for planned formats, arming limits, deterministic allocation, payment/fulfillment boundaries and the build sequence. Only the bounded auction/buy-now runner is enabled; new break formats remain planned.
+
 ## Phase 2: private max bids
 
 Introduce a private per-buyer ceiling in integer cents, visible only to its owner and the bid resolver. Resolve competition atomically by the existing increment schedule; never exceed a ceiling. Earliest accepted ceiling wins an equal-ceiling tie. Public events expose only the resulting payable bid, never private budgets. Specify raising/lowering, blocked bidders, cancellation and anti-sniping behavior before implementation. Verify concurrency, retries, deadline boundaries, privacy and order price snapshots.
@@ -31,3 +35,7 @@ Build expiring seller-approved offers and timed fixed prices on the existing res
 Continuous screen/camera reveal recognition, user-correctable identities, explicit physical-copy tracking, durable pull sessions and provenance-preserving collection export. Keep market guides distinct from sold comparisons and never infer grade, authenticity or guaranteed returns. Stage-test latency and false matches before enabling automatic public card/price announcements.
 
 Whatnot synchronization is outside this roadmap. Twitch is the primary venue; Metadata supplies TCG identity and market data.
+
+## Beta release communication
+
+Defer the public changelog and its navigation entry until the beta is ready. At beta, publish the first release notes with verified shipped features and known limits.

@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { CohostPlayer } from "../public/showtime.js";
 function setup() {
-  const spoken = [];
+  const spoken = [], classes = new Map();
   globalThis.window = {
     speechSynthesis: {
       cancel() {},
@@ -16,9 +16,9 @@ function setup() {
       this.text = text;
     }
   };
-  globalThis.document = { body: { dataset: {}, classList: { toggle() {} } } };
+  globalThis.document = { body: { dataset: {}, classList: { toggle:(name,value)=>classes.set(name,value) } } };
   const player = new CohostPlayer();
-  return { player, spoken, cleanup: () => clearTimeout(player.voiceTimer) };
+  return { player, spoken, classes, cleanup: () => clearTimeout(player.voiceTimer) };
 }
 test("cohost ignores initial history and speaks each fresh event once", () => {
   const { player, spoken, cleanup } = setup();
@@ -50,9 +50,11 @@ test("cohost ignores initial history and speaks each fresh event once", () => {
     cleanup();
   }
 });
-test("cohost countdown is deterministic and resets after clock extension", () => {
+test("cohost countdown resets after a clock extension", t => {
   const { player, spoken, cleanup } = setup();
   try {
+    let now=100000;
+    t.mock.method(Date,'now',()=>now);
     const s = {
       companion: {
         enabled: true,
@@ -68,12 +70,15 @@ test("cohost countdown is deterministic and resets after clock extension", () =>
     s.auction.endsAt = Date.now() + 2000;
     player.update(s);
     assert.equal(spoken.at(-1), "2");
+    s.auction.endsAt=now+10000;player.update(s);
+    now+=7500;player.update(s);player.update(s);
+    assert.deepEqual(spoken,['3','2','3']);
   } finally {
     cleanup();
   }
 });
 test("avatar-only mode never speaks and reduced motion is reflected", () => {
-  const { player, spoken, cleanup } = setup();
+  const { player, spoken, classes, cleanup } = setup();
   try {
     const s = {
       companion: {
@@ -90,6 +95,7 @@ test("avatar-only mode never speaks and reduced motion is reflected", () => {
     player.update(s);
     assert.equal(spoken.length, 0);
     assert.equal(document.body.dataset.mood, "paused");
+    assert.equal(classes.get("reduce-cohost-motion"),true);
   } finally {
     cleanup();
   }

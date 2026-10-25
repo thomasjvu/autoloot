@@ -1,4 +1,4 @@
-# Mochi
+# Munny
 
 Original imagegen VTuber-style character portrait for Autoloot. Transparent PNG, generated 2026-10-24. Lavender cat ears/bob, ivory hoodie, mint star pendant. Used in companion panel and OBS overlay. This is a static illustration with event-driven whole-character reactions, not a Live2D rig or lip-synced model. Existing voice playback is independent of the image. Original generation preserved under Codex generated_images.
 

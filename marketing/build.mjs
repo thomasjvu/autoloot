@@ -1,0 +1,24 @@
+import {mkdir,readFile,writeFile,copyFile,rm} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import {join,dirname} from 'node:path';
+const root=dirname(fileURLToPath(import.meta.url)),dist=join(root,'dist');
+const raw=process.env.WORKSPACE_URL||'http://localhost:4173';
+const url=new URL(raw);
+if(url.username||url.password||url.search||url.hash||url.pathname!=='/'||!['https:','http:'].includes(url.protocol)||url.protocol==='http:'&&!['localhost','127.0.0.1','[::1]'].includes(url.hostname))throw Error('WORKSPACE_URL must be an HTTPS origin or local HTTP origin.');
+if(process.env.CF_PAGES && !process.env.WORKSPACE_URL)throw Error('Set WORKSPACE_URL for the Pages build.');
+const escape=value=>value.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');
+await rm(dist,{recursive:true,force:true});await mkdir(dist,{recursive:true});
+await writeFile(join(dist,'index.html'),(await readFile(join(root,'index.html'),'utf8')).replaceAll('{{WORKSPACE_URL}}',escape(url.origin)));
+await copyFile(join(root,'styles.css'),join(dist,'styles.css'));
+// Explicit shared brand assets only. No app code, data, credentials or backend files.
+const assets={
+ 'icon-192.png':'icon-192.png','favicon.ico':'favicon.ico',
+ 'characters/mochi-hero-wave.png':'characters/mochi-hero-wave.png',
+ 'services/twitch.svg':'brand/services/twitch.svg','services/stripe.svg':'brand/services/stripe.svg',
+ 'services/README.md':'brand/services/README.md',
+ 'fonts/MapleMono-Variable.woff2':'fonts/MapleMono-Variable.woff2','fonts/OFL.txt':'fonts/OFL.txt','fonts/AUTHORS.txt':'fonts/AUTHORS.txt','fonts/SOURCE.md':'fonts/SOURCE.md'
+};
+for(const [destination,source]of Object.entries(assets)){const target=join(dist,'assets',destination);await mkdir(dirname(target),{recursive:true});await copyFile(join(root,'../public',source),target);}
+await copyFile(join(root,'_headers'),join(dist,'_headers'));
+await writeFile(join(dist,'404.html'),'<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Not found · Autoloot</title><link rel="stylesheet" href="/styles.css"><body class="marketing"><main class="marketing-last"><h1>Page not found</h1><a class="btn primary" href="/">Back to Autoloot</a></main></body></html>');
+console.log('Static marketing site built: marketing/dist');

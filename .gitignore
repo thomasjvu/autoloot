@@ -7,3 +7,13 @@ node_modules/
 documentation/
 __pycache__/
 *.pyc
+
+# Local databases and backup copies may contain private commerce data
+*.sqlite
+*.sqlite-*
+*.sqlite.partial
+
+# Local UI verification captures
+output/ui/
+
+marketing/dist/

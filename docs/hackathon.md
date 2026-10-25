@@ -7,10 +7,10 @@ Autoloot turns a Twitch stream into a live commerce show. Chat bids on products,
 ## Demo under three minutes
 
 - **0:00–0:20:** show the creator juggling products, chat, timer and orders. Introduce the Autoloot control screen.
-- **0:20–0:45:** upload a product photo with creator-confirmed quantity, condition and price. Show Mochi’s draft, edit/approve it, and verify Twitch/buyer connections.
+- **0:20–0:45:** upload a product photo with creator-confirmed quantity, condition and price. Show Munny’s draft, edit/approve it, and verify Twitch/buyer connections.
 - **0:45–1:25:** show chat voting for the next product, approve its launch, then run an auction on Twitch. Bid from a second account, show anti-sniping and the OBS overlay, then close the lot.
 - **1:25–1:55:** show the winner’s private order and Stripe sandbox checkout with verified payment. If credentials are not configured, demonstrate the explicitly labeled local demo checkout and describe the provider adapter accurately.
-- **1:55–2:20:** show Mochi reacting on the overlay and introducing the next product. Demonstrate the optional voice/motion controls and show recap.
+- **1:55–2:20:** show Munny reacting on the overlay and introducing the next product. Demonstrate the optional voice/motion controls and show recap.
 - **2:20–2:45:** show how Codex built the engine, interface and tests. Explain deterministic money/timing and signed payment updates.
 - **2:45–3:00:** show a buy-now listing and tracking handoff. Close with the project name and repository.
 

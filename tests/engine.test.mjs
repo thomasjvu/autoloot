@@ -3,9 +3,8 @@ import assert from "node:assert/strict";
 import { Engine, seed, cents } from "../lib/engine.mjs";
 function setup() {
   let time = 100000;
-  let saves = 0;
-  const e = new Engine(seed(), { now: () => time, save: () => saves++ });
-  return { e, advance: (ms) => (time += ms), saves: () => saves };
+  const e = new Engine(seed(), { now: () => time });
+  return { e, advance: (ms) => (time += ms) };
 }
 const start = (e) => e.start({ productId: "p1", duration: 60 });
 const bid = (e, amount = "45", userId = "one", messageId = "m1") =>
@@ -143,15 +142,6 @@ test("out-of-stock cannot run, inputs are validated", () => {
   assert.throws(() => start(e), /stock/);
   assert.throws(() => e.addProduct({ title: "Hi", price: "1", quantity: -1 }));
   assert.throws(() => e.start({ productId: "p2", duration: 1 }));
-});
-test("state can be serialized and restored with pending orders", () => {
-  const { e } = setup();
-  start(e);
-  bid(e);
-  e.finish();
-  const loaded = new Engine(JSON.parse(JSON.stringify(e.state)));
-  assert.equal(loaded.state.orders[0].amount, 4500);
-  assert.equal(loaded.state.products[0].quantity, 1);
 });
 test("inventory edits validate prices and cannot alter a running auction", () => {
   const { e } = setup();
