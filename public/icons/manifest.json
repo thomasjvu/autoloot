@@ -1,0 +1,146 @@
+{
+  "studio": {
+    "src": "/icons/studio.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      0,
+      0
+    ]
+  },
+  "bag": {
+    "src": "/icons/bag.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      1,
+      0
+    ]
+  },
+  "orders": {
+    "src": "/icons/orders.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      2,
+      0
+    ]
+  },
+  "spark": {
+    "src": "/icons/spark.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      3,
+      0
+    ]
+  },
+  "users": {
+    "src": "/icons/users.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      0,
+      1
+    ]
+  },
+  "settings": {
+    "src": "/icons/settings.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      1,
+      1
+    ]
+  },
+  "plus": {
+    "src": "/icons/plus.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      2,
+      1
+    ]
+  },
+  "play": {
+    "src": "/icons/play.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      3,
+      1
+    ]
+  },
+  "pause": {
+    "src": "/icons/pause.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      0,
+      2
+    ]
+  },
+  "check": {
+    "src": "/icons/check.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      1,
+      2
+    ]
+  },
+  "arrow": {
+    "src": "/icons/arrow.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      2,
+      2
+    ]
+  },
+  "close": {
+    "src": "/icons/close.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      3,
+      2
+    ]
+  },
+  "clock": {
+    "src": "/icons/clock.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      0,
+      3
+    ]
+  },
+  "external": {
+    "src": "/icons/external.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      1,
+      3
+    ]
+  },
+  "trash": {
+    "src": "/icons/trash.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      2,
+      3
+    ]
+  },
+  "search": {
+    "src": "/icons/search.png",
+    "width": 256,
+    "height": 256,
+    "sheetCell": [
+      3,
+      3
+    ]
+  }
+}
