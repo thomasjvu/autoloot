@@ -50,3 +50,11 @@ test('fulfillment exports and tracking imports exclude live Stripe test payments
  assert.equal(fulfillmentCsv([o]).includes(o.id),false);assert.equal(pirateShipCsv([o]).includes(o.id),false);
  const preview=previewImport(e,{kind:'tracking',csv:`Order,Carrier,Tracking\n${o.id},USPS,123`});assert.equal(preview.valid,false);assert.equal(o.status,'paid');
 });
+
+test('external payment provenance survives shipping and restart and remains exportable',()=>{
+ const e=fresh();const o=e.buyNow({productId:'p4',userId:'demo-buyer',username:'buyer',requestId:'external'});o.mode='live';
+ e.orderUpdate(o.id,'confirm-paid');e.orderUpdate(o.id,'ship','USPS · 123');
+ const restarted=new Engine(JSON.parse(JSON.stringify(e.state)));const saved=restarted.order(o.id);
+ assert.equal(saved.paymentSource,'external');assert.equal(saved.status,'shipped');assert.equal(fulfillmentCsv([saved]).includes(saved.id),true);
+ const legacy={...saved};delete legacy.paymentSource;assert.equal(fulfillmentCsv([legacy]).includes(legacy.id),true);
+});

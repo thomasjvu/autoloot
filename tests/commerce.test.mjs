@@ -498,3 +498,13 @@ test('live physical fulfillment requires real Stripe funds; external and practic
  }
  const {e,order}=fixture();order.status='paid-external';e.orderUpdate(order.id,'ship','external-tracking');assert.equal(order.status,'shipped');
 });
+
+test('test-funded live orders retain refund actions while fulfillment stays hidden',async()=>{
+ const {readFileSync}=await import('node:fs');const source=readFileSync(new URL('../public/app.js',import.meta.url),'utf8');
+ const fragment=source.slice(source.indexOf('const physicalFundsVerified='),source.indexOf('function orders()'));
+ const actions=new Function('state','isNftOrder','icon','nftOrderDetails','esc',fragment+';return {orderActions,shippingAction};')({payments:{configured:true}},()=>false,()=>'',()=> '',String);
+ const o={id:'order',mode:'live',status:'paid',paymentLive:false};
+ const markup=actions.orderActions(o);assert.match(markup,/data-order-action="refund"/);assert.doesNotMatch(markup,/data-order-action="ship"/);assert.equal(actions.shippingAction(o),'');
+ o.refundId='refund';assert.match(actions.orderActions(o),/Check refund/);
+ o.status='shipped';o.paymentSource='external';delete o.paymentLive;o.shipment={status:'purchased'};assert.match(actions.shippingAction(o),/data-shipping-order="order"/);
+});
