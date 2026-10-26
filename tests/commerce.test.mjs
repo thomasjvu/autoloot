@@ -445,3 +445,46 @@ test('pending or lost refund responses persist a fulfillment hold through restar
  c.refunds.create=async()=>({id:'re_fixture',status:'succeeded'});
  await p.refund(order.id);assert.equal(order.status,'refunded');assert.equal(e.product('p4').quantity,3);
 });
+
+test('definite pre-creation Stripe rejection releases the marker but uncertain errors keep the reservation',async()=>{
+ const {e,order}=fixture(),c=client(order),p=new Payments(e,{client:c,secret:'fixture'});
+ c.checkout.sessions.create=async()=>{throw Object.assign(Error('Invalid parameters'),{type:'StripeInvalidRequestError'});};
+ await assert.rejects(p.checkout(order.id),/Invalid/);assert.equal(order.checkoutCreated,undefined);
+ await p.cancel(order.id);assert.equal(order.status,'cancelled');assert.equal(e.product('p4').quantity,3);
+});
+
+test('checkout retries keep the same payload past thirty minutes and stop before idempotency retention expires',async()=>{
+ const {e,order}=fixture(),c=client(order),p=new Payments(e,{client:c,secret:'fixture'});let first;
+ c.checkout.sessions.create=async args=>{first=args;throw Error('lost');};await assert.rejects(p.checkout(order.id),/lost/);
+ assert.equal(first.expires_at,undefined);
+ const restoreNow=Date.now;try{
+  const after=(order.checkoutCreated+1900)*1000;Date.now=()=>after;
+  c.checkout.sessions.create=async args=>{assert.deepEqual(args,first);throw Error('still lost');};await assert.rejects(p.checkout(order.id),/still lost/);
+  Date.now=()=>after+24*3600*1000;await assert.rejects(p.checkout(order.id),/reconciliation/);
+ }finally{Date.now=restoreNow;}
+ assert.ok(order.checkoutCreated);await assert.rejects(p.cancel(order.id),/unknown/);
+});
+
+test('terminal refund failure releases fulfillment hold and a new attempt uses a distinct key',async()=>{
+ const {e,order}=fixture(),c=client(order),p=new Payments(e,{client:c,secret:'fixture'});
+ await p.checkout(order.id);e.paymentEvent('paid-failure','checkout.session.completed',session(order));
+ const keys=[];c.refunds.create=async(_,options)=>{keys.push(options.idempotencyKey);return {id:'re_failed',status:'failed'};};
+ await p.refund(order.id);assert.equal(order.status,'paid');assert.equal(order.refundRequestedAt,undefined);assert.equal(order.refundAttempts.length,1);
+ c.refunds.create=async(_,options)=>{keys.push(options.idempotencyKey);return {id:'re_ok',status:'succeeded'};};await p.refund(order.id);
+ assert.notEqual(keys[0],keys[1]);assert.equal(order.status,'refunded');assert.equal(e.product('p4').quantity,3);
+});
+
+test('reconciliation verifies provider identity and amount before recovering unknown checkout',async()=>{
+ const {e,order}=fixture(),c=client(order),p=new Payments(e,{client:c,secret:'fixture'});order.checkoutCreated=Math.floor(Date.now()/1000)-90000;order.paymentLive=false;
+ c.checkout.sessions.retrieve=async()=>session(order,{status:'open',url:'https://checkout.stripe.com/fixture'});
+ await p.reconcileCheckout(order.id,'cs_fixture');assert.equal(order.checkoutId,'cs_fixture');
+ const other=fixture(),otherClient=client(other.order),otherPayments=new Payments(other.e,{client:otherClient,secret:'fixture'});other.order.paymentLive=false;
+ otherClient.checkout.sessions.retrieve=async()=>session(other.order,{amount_total:other.order.total+1});
+ await assert.rejects(otherPayments.reconcileCheckout(other.order.id,'cs_fixture'),/does not match/);assert.equal(other.order.checkoutId,undefined);
+});
+
+test('delayed pending refund response cannot undo already verified refund success',()=>{
+ const {e,order}=fixture(),p=new Payments(e,{client:client(order),secret:'fixture'});order.status='paid';order.refundRequestedAt=e.now();
+ p.applyRefund(order,{id:'re_done',status:'succeeded'});p.applyRefund(order,{id:'re_done',status:'pending'});
+ assert.equal(order.status,'refunded');assert.equal(order.refundStatus,'succeeded');assert.equal(e.product('p4').quantity,3);
+});

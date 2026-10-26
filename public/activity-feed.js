@@ -24,4 +24,14 @@ function categoryFor(event){
  return 'show';
 }
 function rows(events){return events.map(event=>{const id=categoryFor(event),category=categories[id],date=new Date(event.at);return `<li class="feed-${id}"><span class="feed-icon">${feedIcon(category.symbol,/\btwitch\b/i.test(event.text)?'twitch':null,18)}</span><div><div class="feed-meta"><span class="feed-category">${category.label}</span><time datetime="${date.toISOString()}">${escape(date.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}))}</time></div><p>${escape(event.text)}</p></div></li>`;}).join('');}
-export function activityFeed(state){return `<div class="munny-activity">${state.activity?.length?`<ol>${rows(state.activity.slice(0,80))}</ol>`:'<div class="munny-empty"><h3>A fresh start.</h3><p>Your show’s activity will appear here.</p></div>'}${state.run?.events?.length?`<details><summary>Current run · ${state.run.events.length} events</summary><ol>${rows(state.run.events.slice(-30).reverse().map(event=>({...event,type:'run'})))}</ol></details>`:''}</div>`;}
+function auditText(event){
+ const parts=event.action.split(' '),path=parts[1]||'',extra=parts.slice(2).join(' '),section=path.replace(/^\/api\//,'').split('/').join(' · ').replaceAll('-',' ');
+ const labels={'companion/settings':'Companion preferences','companion/profile':'Companion profile','companion/ask':'Message companion','rip/frame':'Scan card','rip/confirm':'Confirm pull','rip/select':'Select card','rip/search':'Search cards','rip/provider':'Vision provider','products':'Add inventory','products/edit':'Edit inventory','products/reorder':'Reorder inventory','operator':'Seller policies','automation':'Automation preferences','workspace/demo':'Practice content','order':'Update order','upload':'Upload image'};
+ return `${labels[path.replace(/^\/api\//,'')]||section||'Admin action'}${extra?' '+extra:''} · ${event.outcome}${event.status>=400?' ('+event.status+')':''}`;
+}
+export function activityFeed(state,{historyButton=true}={}){
+ const finished=new Set((state.audit||[]).filter(event=>event.outcome!=='started').map(event=>event.requestId));
+ const audit=(state.audit||[]).filter(event=>event.outcome!=='started'||!finished.has(event.requestId)).map(event=>({...event,type:/payment|refund|checkout/.test(event.action)?'payment':/shipping|nft/.test(event.action)?'delivery':'system',text:auditText(event)}));
+ const events=[...(state.activity||[]),...audit].sort((a,b)=>b.at-a.at).slice(0,100);
+ return `<div class="munny-activity">${events.length?`<ol>${rows(events)}</ol>`:'<div class="munny-empty"><h3>A fresh start.</h3><p>Your show’s activity will appear here.</p></div>'}${audit.length&&historyButton?'<button class="text-btn" data-action="audit-history">Audit history →</button>':''}${state.run?.events?.length?`<details><summary>Current run · ${state.run.events.length} events</summary><ol>${rows(state.run.events.slice(-30).reverse().map(event=>({...event,type:'run'})))}</ol></details>`:''}</div>`;
+}

@@ -17,3 +17,6 @@ __pycache__/
 output/ui/
 
 marketing/dist/
+
+.venv-vision/
+__pycache__/

@@ -36,4 +36,4 @@ Autoloot turns a Twitch stream into a live commerce show. Chat bids on products,
 
 ## After the hackathon
 
-Prioritize a transactional database, durable sessions, reservation expiry and buyer payment eligibility, then shipping labels, tax configuration and disputes. Add a Live2D/VRM avatar or voice provider if the companion proves useful. The core remains Twitch commerce; no external marketplace dependency is planned.
+SQLite, durable buyer sessions, reservation expiry and Shippo label workflows are implemented. Remaining launch work includes real-account rehearsals, buyer payment eligibility, tax configuration and disputes. Add a Live2D/VRM avatar or voice provider if the companion proves useful. The core remains Twitch commerce; no external marketplace dependency is planned.

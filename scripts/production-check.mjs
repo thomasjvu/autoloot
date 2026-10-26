@@ -1,3 +1,5 @@
+import {Vision} from '../lib/vision.mjs';
+import {spawnSync} from 'node:child_process';
 import {readWorkspace} from '../lib/storage.mjs';
 import {DatabaseSync} from 'node:sqlite';
 import {existsSync,statSync,readFileSync} from 'node:fs';
@@ -25,6 +27,21 @@ try {
    check('Workspace commit integrity',true);
    check('Live workspace',state.mode==='live');
    check('Seller policies configured',operatorConfigured(state.operator));
+   check('No practice stock in live inventory',!state.products.some(p=>p.practiceOnly));
+   check('No scripted companion in live mode',state.companion.provider!=='demo');
+   if(state.companion.provider==='codex'){
+    const login=spawnSync(process.env.CODEX_BIN||'codex',['login','status'],{stdio:'ignore',timeout:10000});
+    check('Companion CLI authenticated',login.status===0);
+   }else console.log('SKIP Companion is offline; AI hosting is unavailable.');
+   if(process.env.AUTOLOOT_REQUIRE_VISION==='1'){
+    const vision=new Vision(),mode=vision.mode(state.companion);
+    if(mode==='cloud')check('Prime vision credentials',vision.status(state.companion).cloudConfigured);
+    else {
+     let healthy=false;
+     try{const response=await fetch(vision.localUrl+'/health',{signal:AbortSignal.timeout(3000),redirect:'error'});const health=await response.json();healthy=response.ok&&health.ready===true&&health.model===vision.model;}catch{}
+     check('Local vision model ready',healthy);
+    }
+   }else console.log('SKIP Vision is optional; set AUTOLOOT_REQUIRE_VISION=1 for a vision-led show.');
    if(state.products.some(p=>p.fulfillment?.type==='nft')) {
     const rpc=JSON.parse(process.env.NFT_RPC_CONFIG||'{}');
     check('NFT RPC for every inventory chain',state.products.filter(p=>p.fulfillment?.type==='nft').every(p=>Boolean(rpc[p.fulfillment.chain])));

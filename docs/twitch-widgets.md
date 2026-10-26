@@ -44,3 +44,7 @@ Do not build bidding, physical-item checkout or a storefront link into an Extens
 ## Verification
 
 `npm test` includes OAuth state expiry/replay, identity validation, token refresh, EventSub subscriptions/migration, revocation, validation failure and disconnect/reconnect pause behavior using local fixtures. Widget parsing, capability-free output URLs, setup checks and bid amount guidance also have tests. `npm run check` checks the integration helper and Twitch setup script along with the application. `npm run demo:check` exercises the local commerce loop in disposable data. These checks do not contact real Twitch or Stripe accounts.
+
+## Confirmed-pull widgets
+
+Settings → OBS layout includes **Pull spotlight** (640 × 200) and **Recent pulls** (1280 × 200). Copy the preset link into an OBS Browser Source with those dimensions. They show only streamer-confirmed names, collector numbers, sets and catalog rarity. No buyer/order data, market prices, synthetic events, sound effects or replayed celebrations are included. Confirmed pulls survive restart; a disconnected overlay labels the displayed records as offline. Recent pulls displays up to five cards. Cosmetic chat-vote reactions remain planned.

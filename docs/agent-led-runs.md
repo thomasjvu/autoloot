@@ -1,6 +1,6 @@
 # Agent-led runs
 
-Status: the bounded runner for existing item auctions and fixed-price sales is implemented. Break allocation, wallet signing and new payment providers remain planned. See the operator guide below for the implemented limits.
+Status: the bounded runner for existing item auctions and fixed-price sales is implemented. Break allocation and new payment providers remain planned. A constrained wallet bridge is implemented; the operator supplies and verifies the signer. See the operator guide below for the implemented limits.
 
 ## Product boundary
 
@@ -76,7 +76,7 @@ In Studio, open Agent-led run → Configure run. Select 1–20 products with exa
 
 Arming snapshots the queue and show terms. Run inventory cannot be edited/removed, show mode/terms cannot change and demo inventory cannot be reset until the run stops. Queued run listings are unpublished and cannot be purchased early. Only the current fixed-price item is listed. Non-run inventory remains independent.
 
-Auctions use the normal bid engine and its existing clock. An unsold auction advances; a sold auction or fixed-price order waits for payment, then waits for a recorded shipment before advancing. Payment alone never completes fulfillment. Expired/cancelled/refunded orders and unexpected auction outcomes pause for operator review rather than automatically reselling the step. Physical shipment remains a human action.
+Auctions use the normal bid engine and its existing clock. An unsold auction advances; a sold auction or fixed-price order waits for payment, then waits for recorded physical dispatch or verified NFT delivery before advancing. Payment alone never completes fulfillment. Expired/cancelled/refunded orders and unexpected auction outcomes pause for operator review rather than automatically reselling the step. Physical shipment remains a human action.
 
 Pause unpublishes run listings and pauses a current run auction. Resume requires a still-valid arming window and healthy live prerequisites. Stop leaves a current auction paused for manual resolution and retains orders; it does not pretend to cancel or refund them. Run deadlines stop new sales, while existing orders remain actionable. Restart always pauses an active run; explicit resume continues its existing auction/order rather than replaying it.
 
@@ -93,3 +93,7 @@ See [NFT delivery](nft-delivery.md) for the implemented digital terminal state, 
 Settings saves a next-run automation style: manual operation, review each lot, or continue an approved queue. Starting a queue still requires its explicit authorization. The run dialog snapshots `reviewEachLot` and can override the saved preference. Active runs reject preference changes.
 
 Review runs wait in `waiting-review` before each new sale; no auction or listing opens until the operator approves that run ID and step index through `/api/run/approve`. Stale approvals fail. Approval never marks payment or fulfillment complete and does not authorize wallet spending. Restart recovery still pauses the run; resuming a pending review leaves it waiting for approval. Manual companion suggestions still require Apply.
+
+## Companion presentation
+
+Companion → Customize companion changes its name, tone, response preferences and optional uploaded avatar. Restore Munny restores the default profile without changing the provider or voice switches. Preferences affect Codex presentation; scripted demo replies remain rule-based. Profile settings do not grant automation, wallet or payment permissions.

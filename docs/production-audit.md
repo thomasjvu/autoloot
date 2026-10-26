@@ -17,7 +17,7 @@ Scope: single-streamer backend, payment and NFT transitions, SQLite recovery/bac
 
 Removed the standalone JSON stringify/parse constructor test (covered by actual SQLite/restart flows) and the trivial bid-display arithmetic test (business amount enforcement remains covered). Removed the unused save-counter fixture. Kept security, identity, stock conservation, provider races, finality, crash recovery and HTTP ownership coverage.
 
-Strengthened existing tests rather than adding a parallel audit suite: backup retention now checks actual pruning and preserves a manual backup in the managed directory; corrupted commit checks cover startup/backup/CLI; refund tests check repeat effects and already shipped orders; speech tests actually exercise clock extension and reduced-motion output; readiness rejects test credentials. Added one refund-in-flight/restart regression. NFT coverage now exercises test-payment and refund holds. The suite has 96 tests and runs locally in roughly two seconds.
+Strengthened existing tests rather than adding a parallel audit suite: backup retention now checks actual pruning and preserves a manual backup in the managed directory; corrupted commit checks cover startup/backup/CLI; refund tests check repeat effects and already shipped orders; speech tests actually exercise clock extension and reduced-motion output; readiness rejects test credentials. Added one refund-in-flight/restart regression. NFT coverage now exercises test-payment and refund holds. This records the suite at the time of the audit; use `npm test` for the current count and result.
 
 ## Launch blockers and unverified boundaries
 

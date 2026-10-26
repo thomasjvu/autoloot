@@ -45,7 +45,7 @@ The bundled Maple Mono font is licensed under SIL OFL 1.1. Preserve `public/font
 
 The current lot is the main workspace focus. Put its image, price, clock, and primary controls ahead of the lineup and history. Keep optional form settings in disclosures.
 
-Desktop uses one top navigation row with secondary tools under **More**. The current header is 80px tall with 40px horizontal padding. Main content is constrained to approximately 1500px. At 700px and below, the header wraps and navigation stays in normal document flow. Specialized catalog and Rip layouts collapse from columns to one column at their own breakpoints.
+Desktop uses the fixed sidebar described below; mobile uses a dismissible navigation drawer. Main content is constrained to approximately 1500px. Catalog and Rip layouts collapse to one column at their own breakpoints.
 
 Working panels generally use 20–26px corners and 24–28px padding. Controls use approximately 10–14px corners. Group related information through surface color and spacing; use thin borders and restrained shadows. Stronger outlines and a small offset shadow are reserved for the floating Munny control and transient menus.
 
@@ -116,13 +116,13 @@ The cohost’s public name is **Munny** throughout the app, assistant prompts, H
 
 Use a fixed 232px desktop sidebar (204px at intermediate widths) with icons and visible labels. Keep all workspace sections reachable without a More menu. At 760px and below, use a compact brand header and an explicit navigation toggle; the menu opens as a drawer with a dismissible backdrop. Choosing a section closes the drawer. Preserve keyboard focus and Escape dismissal.
 
-The workspace toolbar contains a notification bell. Notifications reflect current actionable state—lot review, paused run, unpaid orders, fulfillment, backup failure and disconnected channel—and link to the relevant section. They clear when the underlying condition resolves; they are not fabricated activity, push notifications or a historical inbox.
+Notifications live in Munny’s floating panel, not a header toolbar. They reflect current actionable state and clear when the underlying condition resolves; they are not a historical inbox or push service.
 
 Remove ornamental page subtitles. Keep useful counts, status and task-specific instructions. The marketing site is a separate static build in `marketing/`, published at its own origin; `/` on the Node server remains the local workspace. Marketing describes implemented features and clearly labels the current pre-beta status; a public changelog remains deferred.
 
 ## Munny side panel
 
-Do not repeat the current section title in a toolbar above the page. The floating bottom-right Munny launcher includes a bell and the count of current actionable notifications. Opening it reveals a full-height right-side panel, with Chat, Notifications and Activity tabs. Notifications jump to the relevant workspace section and close the panel. Activity uses recorded show/run events; it is not a fabricated chat transcript. Chat retains the existing proposal/Apply boundaries and preserves unsent text across tab switches and live updates.
+Do not repeat the current section title in a toolbar above the page. The floating bottom-right Munny launcher includes a red numeric count of current actionable notifications. Opening it reveals a full-height right-side panel, with Chat, Notifications and Activity tabs. Notifications jump to the relevant workspace section and close the panel. Activity uses recorded show/run events; it is not a fabricated chat transcript. Chat retains the existing proposal/Apply boundaries and preserves unsent text across tab switches and live updates.
 
 The panel uses paper/ink surfaces, a compact avatar header and a dark selected tab. On desktop it is at most 480px wide; on mobile it uses the viewport width. Background controls are inert while open. Support Escape, backdrop dismissal, focus containment/return and arrow-key tab navigation. Keep the launcher above the mobile safe area. Do not add a second notification entry point to the header.
 
@@ -134,9 +134,9 @@ Use distinct outline icons for Seller details (identity card), Shipping (deliver
 
 ## Optional guided tour
 
-Show a quiet first-visit invitation rather than forcing a modal on arrival. “Show me around” begins a five-step tour of Studio, Inventory, Orders, automation in Settings, and the floating Munny panel. Every step has Skip; Back and Next let users control the pace. Escape skips. The tour only navigates and highlights—it never creates inventory, starts a sale, changes permissions or sends a message.
+Show a dismissible chat bubble above Munny rather than forcing a modal on arrival. “Show me around” begins a five-step tour of Studio, Inventory, Orders, automation in Settings, and the floating Munny panel. Every step has Skip; Back and Next let users control the pace. Escape skips. The tour only navigates and highlights—it never creates inventory, starts a sale, changes permissions or sends a message.
 
-Use a native modal dialog for focus containment once the tour starts, clear step progress and a visible focus outline on the related control/surface. Keep the dialog compact and usable on mobile. Remember started/skipped/completed locally under a versioned key; unavailable storage must not break navigation. Settings offers “Take a tour” to replay it. Do not show the operator tour on the storefront, stream overlay or marketing page.
+Use the native modal spotlight described below for focus containment, clear step progress and an undimmed target window. Keep the dialog compact and usable on mobile. Remember started/skipped/completed locally under a versioned key; unavailable storage must not break navigation. Settings offers “Take a tour” to replay it. Do not show the operator tour on the storefront, stream overlay or marketing page.
 
 The optional tour invitation is a chat bubble directly above Munny’s floating launcher, with her name, a short invitation, “Show me around” and an accessible close button. Never insert it as a page banner. Hide it while Munny’s panel is open and remember dismissal locally. Browse/search actions say **Catalog**; Metadata is attributed as a data provider, not used as the feature name.
 
@@ -146,7 +146,7 @@ Workspace navigation is rendered by `public/workspace-navigation.js`; notificati
 
 Place Companion immediately after Studio. Keep the signed-in Twitch channel (or explicit local-workspace state), sign-in/switch-account action, and Settings in the sidebar footer. This is the existing Twitch broadcaster login, not a new cloud admin identity.
 
-Use compact, solid-colored feed rows: lime Review, sand Payment, sage Delivery, peach System, lavender Connection, neutral Show. Every row includes an icon and a category label so meaning never depends on color. Activity combines category and timestamp on one line; details use small readable text with tight spacing. Notifications retain their section jump.
+Use compact, solid-colored feed rows: lime Review, sand Payment, sage Delivery, peach System, lavender Connection, neutral Show. Each notification includes a descriptive title and icon; activity rows also include a compact category label. Meaning never depends on color alone. Activity combines category and timestamp on one line; details use small readable text with tight spacing. Notifications retain their section jump.
 
 The marketing target owns its HTML/CSS and deploys only `marketing/dist` to Cloudflare Pages. It has no workspace JavaScript, API/session access or database dependency. Shared visual assets are copied using an explicit build allowlist. Configure the workspace origin via `WORKSPACE_URL`; never deploy the backend directory as a Pages site.
 
@@ -175,3 +175,15 @@ Agent replies use a compact sage message bubble with a 30px Munny avatar alongsi
 ## Lightweight sales accounting
 
 Sales & numbers is a seller-only view of collected money, refunds, awaiting payment and recorded costs. Use simple filter controls, paper summary cards and a sage contribution summary. Separate real orders from practice/test activity by default. Store item cost, payment fees, delivery costs, other costs and notes separately from buyer-visible orders. Blank means unknown; zero means confirmed zero. Label incomplete costs and estimated contribution clearly. This is an operational worksheet, not tax accounting, profit certification, provider payout reconciliation or a bank balance. CSV export includes all orders with an explicit mode column.
+
+## Companion profiles and integrated catalog
+
+Munny is the default profile, not a mandatory identity. Companion → Customize companion edits name, tone, response preferences and an optional uploaded avatar. Restore Munny resets those profile fields while preserving provider, voice and visibility settings. Treat preferences as presentation data; they cannot expand tools or bypass approval/payment guards. Custom avatars must be app uploads, never remote tracking URLs.
+
+Inventory combines Your inventory and Browse catalog views. Remove the separate Catalog sidebar entry. Existing Browse catalog shortcuts select the catalog view within Inventory. Catalog reference selection still needs an owned quantity, price and condition before creating an unlisted product.
+
+### Composer and Rip Studio
+
+The companion composer has a visible message label, a light solid input surface, clear focus outline and a sage/lime Send button with text. Avoid relying on a tiny arrow alone. Rip Studio prioritizes one camera surface and one current-card review panel; provider/crop details sit under Capture settings. Keep manual search below the reveal, market-guide selection optional, and recent pulls compact. Do not present one-frame scans as continuous watching.
+
+Activity mixes compact domain events with private admin audit outcomes; Audit history opens paginated records. Completed HTTP requests must not be labeled as verified payments or deliveries.
