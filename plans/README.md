@@ -79,9 +79,17 @@ Baseline: `2d23cf8` plus current dirty workspace. Four independent plans, execut
 
 | Plan | Priority | Depends on | Status |
 | --- | --- | --- | --- |
-| [002 Physical payment environment](002-physical-payment-environment.md) | P1 | None | IN PROGRESS |
-| [003 Browser-bound OAuth](003-browser-bound-oauth.md) | P1 | None | IN PROGRESS |
-| [004 Auction shipping snapshot](004-auction-shipping-snapshot.md) | P1 | None | IN PROGRESS |
-| [005 Proxy sign-in limits](005-proxy-signin-limits.md) | P2 | None | IN PROGRESS |
+| [002 Physical payment environment](002-physical-payment-environment.md) | P1 | None | DONE — reviewed |
+| [003 Browser-bound OAuth](003-browser-bound-oauth.md) | P1 | None | DONE — reviewed |
+| [004 Auction shipping snapshot](004-auction-shipping-snapshot.md) | P1 | None | DONE — reviewed |
+| [005 Proxy sign-in limits](005-proxy-signin-limits.md) | P2 | None | DONE — reviewed |
 
 Verification before execution: npm run check passed; 145 tests passed; npm audit --omit=dev reported zero advisories. Product direction ideas are deferred; user selected the four concrete defects.
+
+### Review verdict: APPROVE
+
+All four fixes are implemented in `/Users/area/.codex/worktrees/commerce-auth-fixes/live-shopping-companion` on `codex/commerce-auth-fixes`. Copied dirty-workspace baseline: `89217413ffcb4e5ef9c2eb909004afbaef1502f6`. Final implementation: `1f0c31544691d9033c19769329be58cd3cfd4445`. Review compares baseline..final, excluding pre-existing workspace work.
+
+Independent reviewer verification on 2026-10-26: `npm run check` passed; `npm test` 156/156 passed; `npm run demo:check` both commerce journeys and public privacy checks passed; `git diff --check 8921741..HEAD` passed. All 18 changed source/test/config paths are within authorized scope. Full diff and new regression assertions reviewed. No merge or push performed. Original source checkout is unchanged; this plans directory is the canonical review record (the worktree's plans were captured with its baseline).
+
+Deployment note: bundled Caddy requires `AUTOLOOT_TRUSTED_PROXIES=127.0.0.1` to enable per-client anonymous rate buckets. Trust remains disabled by default. Legacy auctions missing stored shipping terms must be cancelled and restarted. Real browser/Twitch/Caddy rehearsal remains unperformed; HTTP provider fixtures verify callback success, browser proof, cookie flags/clearing, replay protection and local-to-public handoff without real provider requests.

@@ -37,3 +37,9 @@ Stop and report if anchors mismatch, a required edit is outside scope, verificat
 
 ## Maintenance
 Future fulfillment/login/auction/proxy entry points must use the same server rule. Preserve recorded payment uncertainty, HttpOnly sessions, immutable order totals and local-only bootstrap. Real Twitch/browser/Caddy rehearsal remains an explicit release gate; automated fixtures cannot certify it.
+
+## Execution review refinements
+Legacy recovery requirements: check missing snapshot before changing auction status or stock; permit explicit cancellation. tick must pause a legacy live auction for cancellation/restart rather than throwing into the global backend halt path. Test no order, no inventory mutation and engine remains available.
+
+## Completion review
+DONE — APPROVED 2026-10-26. Implemented on codex/commerce-auth-fixes in `/Users/area/.codex/worktrees/commerce-auth-fixes/live-shopping-companion`; baseline 8921741, final 1f0c315. Independent reviewer syntax/full tests (156 passed), demo and diff checks passed. See canonical original checkout plans/README.md for review and release limits.
