@@ -12,6 +12,8 @@ For a Linux host, `deploy/autoloot.service` is a hardened systemd template. Crea
 
 `deploy/Caddyfile` provides automatic HTTPS for `AUTOLOOT_DOMAIN` and blocks public bootstrap/setup paths. Preserve the original Host and forwarded headers. Do not rewrite public Host to localhost or publish another route that exposes bootstrap. Only expose the proxy publicly; keep the app port private. The server independently rejects unknown hosts, cross-site mutations and forwarded/remote admin bootstrap requests. Remote admin access would require a separate authentication design.
 
+For the bundled same-host Caddy deployment, set `AUTOLOOT_TRUSTED_PROXIES=127.0.0.1`. The default is empty (no trusted proxy). This is a comma-separated list of exact immediate proxy IPs, not CIDRs. Caddy overwrites `X-Autoloot-Client-IP` with its observed direct client address; the app uses it only for anonymous rate limits when the socket peer matches the configured list. Untrusted or invalid address headers fall back to the socket address. Authenticated buyers retain session-based limits and forwarded requests still cannot bootstrap admin access. Keep the app port private: trusting a proxy peer explicitly allows that peer to assert client addresses. If Caddy itself sits behind another proxy, configure a separate reviewed client-address policy before deploying; this template deliberately uses its direct peer rather than trusting arbitrary forwarding chains.
+
 ## Release checks
 
 Run:

@@ -6,7 +6,7 @@ import {defaultProfile,validateProfile} from './lib/companion-profile.mjs';
 import {accountingRows,recordCosts} from './lib/accounting.mjs';
 import {Shipping, address as shippingAddress} from './lib/shipping.mjs';
 import {encodeCsv,previewImport, applyImport, fulfillmentCsv, pirateShipCsv} from './lib/csv.mjs';
-import { runtimeConfig, requestAllowed, localAdminRequest } from './lib/runtime.mjs';
+import { runtimeConfig, requestAllowed, localAdminRequest, anonymousClientAddress } from './lib/runtime.mjs';
 const runtime = runtimeConfig();
 import http from "node:http";
 import { NftDelivery, walletBridge, isNft } from "./lib/nft.mjs";
@@ -286,7 +286,7 @@ const server = http.createServer(async (req, res) => {
     if ((req.method === "POST" && path !== "/api/stripe/webhook") || path === "/auth/twitch") {
       const key = adminAccess
         ? "admin"
-        : session?.id || req.socket.remoteAddress;
+        : session?.id || anonymousClientAddress(req,runtime);
       const now = Date.now();
       let bucket = buckets.get(key);
       if (!bucket || now - bucket.at > 60000) {
