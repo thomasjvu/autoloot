@@ -45,6 +45,7 @@ catch(error) { storage.close(); throw error; }
 const imageDir = join(data, "images");
 mkdirSync(imageDir, { recursive: true, mode: 0o700 });
 const clients = new Set();
+const oauthHandoffs = new Map();
 const admin = randomBytes(32).toString("hex");
 let engine, twitch, payments, nft, shipping;
 let proposal = null,
@@ -247,7 +248,8 @@ const server = http.createServer(async (req, res) => {
   );
   if (closing) return json(res,{error:'Server is shutting down.'},503);
   if (!runtime.hosts.has(req.headers.host)) return json(res,{error:'Untrusted request host.'},403);
-  if ((req.method === 'POST' || req.url?.startsWith('/api/bootstrap') || req.url?.startsWith('/auth/')) && req.url !== '/api/stripe/webhook' && !requestAllowed(req,runtime))
+  const oauthReturn=req.method==='GET' && ['/auth/twitch/callback','/auth/twitch/handoff'].includes(req.url?.split('?')[0]);
+  if (!oauthReturn && (req.method === 'POST' || req.url?.startsWith('/api/bootstrap') || req.url?.startsWith('/auth/')) && req.url !== '/api/stripe/webhook' && !requestAllowed(req,runtime))
     return json(res,{error:'Cross-origin request rejected.'},403);
   activeRequests++;
   let settled=false;
@@ -357,6 +359,13 @@ const server = http.createServer(async (req, res) => {
       });
       return;
     }
+    if(path === "/auth/twitch/handoff" && req.method === 'GET'){
+      if(req.headers.host!==new URL(base).host)throw Error('Finish sign-in on the public storefront.');
+      const ticket=url.searchParams.get('ticket'),pending=oauthHandoffs.get(ticket);oauthHandoffs.delete(ticket);
+      if(!pending||Date.now()-pending.at>60000)throw Error('Sign-in handoff expired. Start again.');
+      const nonce=randomBytes(32).toString('hex');
+      res.writeHead(302,{Location:twitch.login(pending.role,nonce),'Set-Cookie':`autoloot_oauth=${nonce}; HttpOnly; SameSite=Lax; Path=/auth/twitch/callback; Max-Age=600${base.startsWith('https:')?'; Secure':''}`});return res.end();
+    }
     if (path === "/auth/twitch") {
       const role =
         url.searchParams.get("role") === "streamer" ? "streamer" : "viewer";
@@ -366,7 +375,14 @@ const server = http.createServer(async (req, res) => {
         res.writeHead(302,{Location:role==='streamer'?'/twitch-setup.html':'/shop'});
         return res.end();
       }
-      res.writeHead(302, { Location: twitch.login(role) });
+      if(req.headers.host!==new URL(base).host){
+        for(const [key,value] of oauthHandoffs)if(Date.now()-value.at>60000)oauthHandoffs.delete(key);
+        if(oauthHandoffs.size>=1000)throw Error('Sign-in capacity reached. Try again later.');
+        const ticket=randomBytes(32).toString('hex');oauthHandoffs.set(ticket,{role,at:Date.now()});
+        res.writeHead(302,{Location:base+'/auth/twitch/handoff?ticket='+ticket});return res.end();
+      }
+      const nonce=randomBytes(32).toString("hex");
+      res.writeHead(302, { Location: twitch.login(role,nonce), "Set-Cookie": `autoloot_oauth=${nonce}; HttpOnly; SameSite=Lax; Path=/auth/twitch/callback; Max-Age=600${base.startsWith("https:")?"; Secure":""}` });
       return res.end();
     }
     if (path === "/auth/twitch/callback") {
@@ -375,10 +391,11 @@ const server = http.createServer(async (req, res) => {
       const result = await twitch.callback(
         url.searchParams.get("code"),
         url.searchParams.get("state"),
+        String(req.headers.cookie||"" ).split(";").map(v=>v.trim()).find(v=>v.startsWith("autoloot_oauth="))?.slice(15),
       );
       if(result.role==='streamer')storage.recordAudit({requestId:randomBytes(16).toString('hex'),action:'GET /auth/twitch/callback',outcome:'completed',status:302});
       res.writeHead(302, {
-        "Set-Cookie": `autoloot_session=${result.session}; HttpOnly; SameSite=Lax; Path=/; Max-Age=86400${base.startsWith("https:") ? "; Secure" : ""}`,
+        "Set-Cookie": [`autoloot_session=${result.session}; HttpOnly; SameSite=Lax; Path=/; Max-Age=86400${base.startsWith("https:") ? "; Secure" : ""}`,`autoloot_oauth=; HttpOnly; SameSite=Lax; Path=/auth/twitch/callback; Max-Age=0${base.startsWith("https:")?"; Secure":""}`],
         Location: result.role === "streamer" ? "/" : "/shop",
       });
       return res.end();
