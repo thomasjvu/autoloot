@@ -161,3 +161,22 @@ test("inventory edits validate prices and cannot alter a running auction", () =>
   );
   assert.equal(e.state.auction.product.title, "New title");
 });
+
+test('auction shipping terms survive show edits, pause and restart, while later sales use new terms',()=>{
+ const {e}=setup();e.state.show.shippingPrice=500;start(e);assert.equal(e.state.auction.shippingPrice,500);
+ e.state.show.shippingPrice=1000;bid(e);e.pause();e.state.show.shippingPrice=2500;
+ const restored=new Engine(JSON.parse(JSON.stringify(e.state)),{now:e.now});restored.resume();restored.finish();
+ assert.equal(restored.state.orders[0].shippingPrice,500);assert.equal(restored.state.orders[0].total,5000);
+ restored.start({productId:'p2'});assert.equal(restored.state.auction.shippingPrice,2500);
+ const direct=restored.buyNow({productId:'p4',userId:'demo-buyer',username:'buyer',requestId:'new-show'});assert.equal(direct.shippingPrice,2500);
+});
+test('NFT auction snapshots zero shipping',()=>{
+ const {e}=setup();e.state.show.shippingPrice=500;e.product('p1').fulfillment={type:'nft'};start(e);bid(e);e.finish();
+ assert.equal(e.state.auction.shippingPrice,0);assert.equal(e.state.orders[0].shippingPrice,0);assert.equal(e.state.orders[0].total,4500);
+});
+test('legacy auction missing shipping pauses without halting and can be cancelled safely',()=>{
+ const {e,advance}=setup();start(e);bid(e);delete e.state.auction.shippingPrice;
+ const quantity=e.product('p1').quantity;assert.throws(()=>e.finish(),/shipping terms are missing/);assert.equal(e.state.auction.status,'live');assert.equal(e.product('p1').quantity,quantity);assert.equal(e.state.orders.length,0);
+ advance(61000);e.tick();assert.equal(e.state.auction.status,'paused');assert.equal(e.halted,false);assert.throws(()=>e.resume(),/shipping terms are missing/);assert.throws(()=>bid(e,'46','two','m2'),/No|live auction/);
+ assert.throws(()=>e.finish(),/shipping terms are missing/);e.finish(true);assert.equal(e.state.auction.status,'cancelled');assert.equal(e.product('p1').quantity,quantity);
+});
