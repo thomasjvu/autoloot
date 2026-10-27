@@ -101,3 +101,11 @@ DONE — APPROVED. [Plan](006-chat-command-discovery.md). Implemented at 09e015c
 ## 007–008 architecture audit and execution — complete
 
 [007 Audit](007-architecture-audit.md) and [008 execution/review](008-modular-architecture.md). DONE — APPROVED. All seven stages implemented on codex/modular-architecture, baseline 09e015c to implementation ce5791a. Reviewer independently verified 177 tests, four rendered browser tests with unchanged snapshots, syntax/lexical/import/CSS guards across 94 modules, demo journeys and diff checks. Manual desktop/mobile/OBS review passed. The stage 6 extraction failure was repaired under an explicit handler-policy refinement before approval. No push/merge or real-provider rehearsal.
+
+## 009 — Follow-up hardening and admin setup
+
+[Plan and review](009-follow-up-hardening.md). DONE — APPROVED. Four verified security/correctness defects repaired; administrator routes and storefront extracted; selective panel CSS ownership fixed. User-requested username/strong password setup and admin entry artwork/layout refinements reviewed. Applied by executor to current dirty workspace while preserving prior work; no commit/push. Full suite: 183 tests plus syntax/demo checks. Browser rendering and real-provider rehearsal remain unverified.
+
+## 010 — Current-workspace maintainability
+
+[Execution plan](010-maintainability-refactor.md). DONE — applied and verified against current dirty snapshot. Backend route/policy/SSE and frontend workspace/control/lifecycle ownership extracted; ordered CSS split and shadowed root-variable cleanup guarded by cascade fingerprint; recursive syntax/import/cycle/surface checks. Original verification:198 tests,79 runtime checks, demo/privacy journeys, whitespace and HTTP smoke pass. No commit/push or rendered browser/provider rehearsal. Historical plan008 worktree remained reference only.

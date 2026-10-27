@@ -1,0 +1,771 @@
+/* responsive-base.css — ordered ownership; see README.md. */
+
+@media (min-width: 1550px) {
+  .workspace-main main {
+    padding: 40px;
+  }
+  .studio-grid {
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 27px;
+  }
+  .hero-product {
+    min-height: 320px;
+  }
+  .auction-info h3 {
+    font-size: 26px;
+  }
+  .bid-price > div:first-child > strong {
+    font-size: 37px;
+  }
+  .countdown-wrap > strong {
+    font-size: 25px;
+  }
+  .auction-controls > .btn {
+    font-size: 12px;
+  }
+  .inventory-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 195px;
+    padding: 28px 13px;
+  }
+  .workspace-main {
+    margin-left: 195px;
+  }
+  .wordmark {
+    font-size: 24px;
+  }
+  .brand-mark {
+    width: 33px;
+    height: 33px;
+  }
+  .workspace-main main {
+    padding: 29px 25px;
+  }
+  .studio-grid {
+    grid-template-columns: minmax(0, 1fr) 275px;
+    gap: 18px;
+  }
+  .auction-body {
+    padding: 18px;
+  }
+  .auction-info {
+    padding-top: 21px;
+  }
+  .auction-info h3 {
+    font-size: 22px;
+  }
+  .bid-price {
+    margin-top: 21px;
+  }
+  .queue-item {
+    padding: 14px 13px;
+    gap: 10px;
+  }
+  .queue-text strong {
+    font-size: 10px;
+  }
+  .queue-price {
+    font-size: 10px;
+  }
+  .thumb {
+    width: 47px;
+    height: 42px;
+  }
+  .queue-item > .btn {
+    font-size: 8px;
+    padding: 8px;
+  }
+  .heading-actions > .btn {
+    font-size: 10px;
+    padding: 11px 12px;
+  }
+  .page-heading h1 {
+    font-size: 27px;
+  }
+  .page-heading p {
+    font-size: 11px;
+  }
+  .stat {
+    padding: 0 18px;
+  }
+  .stat > strong {
+    font-size: 21px;
+  }
+  .inventory-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .companion-layout {
+    grid-template-columns: 310px minmax(0, 1fr);
+  }
+  .companion-content {
+    padding: 17px;
+  }
+  .ask-form input {
+    font-size: 9px;
+  }
+  .side-helper {
+    padding: 15px 12px;
+  }
+  .side-helper strong {
+    font-size: 10px;
+  }
+  .top-actions {
+    gap: 13px;
+  }
+}
+
+@media (max-width: 950px) {
+  .sidebar {
+    width: 174px;
+    padding: 25px 9px;
+  }
+  .brand {
+    padding: 0 8px;
+    gap: 7px;
+  }
+  .wordmark {
+    font-size: 23px;
+  }
+  .brand-mark {
+    width: 29px;
+    height: 29px;
+    border-radius: 10px;
+  }
+  .brand-mark svg {
+    width: 24px;
+    height: 24px;
+  }
+  .nav-item {
+    font-size: 12px;
+    padding: 12px;
+    gap: 10px;
+  }
+  .workspace-main {
+    margin-left: 174px;
+  }
+  .workspace-main main {
+    padding: 27px 22px;
+  }
+  .topbar {
+    padding: 0 22px;
+  }
+  .right-column {
+    gap: 18px;
+    align-items: start;
+  }
+  .studio-tip {
+    grid-column: 1/-1;
+  }
+  .auction-body {
+    gap: 20px;
+  }
+  .auction-info {
+    padding: 0;
+  }
+  .auction-info h3 {
+    font-size: 20px;
+  }
+  .description {
+    font-size: 10px;
+  }
+  .bid-price > div:first-child > strong {
+    font-size: 28px;
+  }
+  .countdown-wrap {
+    padding: 8px;
+  }
+  .countdown-wrap > strong {
+    font-size: 19px;
+  }
+  .auction-controls {
+    flex-wrap: wrap;
+  }
+  .auction-footnote {
+    font-size: 7px;
+    flex-wrap: wrap;
+  }
+  .auction-footnote .text-btn {
+    font-size: 8px;
+  }
+  .connections-grid {
+    grid-template-columns: 1fr;
+  }
+  .companion-layout {
+    grid-template-columns: 1fr;
+  }
+  .companion-layout > .companion-full {
+    max-width: 440px;
+  }
+  .side-helper {
+    display: none;
+  }
+  .topbar .breadcrumb {
+    font-size: 10px;
+  }
+  .connection-state {
+    font-size: 9px;
+  }
+  .top-actions > .pill {
+    font-size: 8px;
+  }
+  .companion-stage {
+    height: 240px;
+  }
+  .companion-stage .mochi {
+    height: 185px;
+  }
+  .shop-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .shop-art {
+    height: 250px;
+  }
+  .shop-grid .settings-panel {
+    padding: 21px;
+  }
+  .shop-lot > .settings-panel h2 {
+    font-size: 20px;
+  }
+  .store-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .bid-command {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    position: fixed;
+    inset: 0 0 auto;
+    height: 62px;
+    padding: 0 19px;
+    flex-direction: row;
+    align-items: center;
+    border-right: 0;
+    border-bottom: 1px solid #f0eaf6;
+    background: #fffffffa;
+  }
+  .brand {
+    padding: 0;
+    gap: 8px;
+  }
+  .brand-mark {
+    width: 31px;
+    height: 31px;
+    border-radius: 10px;
+  }
+  .brand-mark svg {
+    width: 24px;
+    height: 24px;
+  }
+  .wordmark {
+    font-size: 25px;
+  }
+  .wordmark > span {
+    font-size: 12px;
+  }
+  .sidebar nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    flex-direction: row;
+    gap: 0;
+    justify-content: space-around;
+    background: #fffffff5;
+    border-top: 1px solid #eae1f1;
+    backdrop-filter: blur(12px);
+    z-index: 20;
+  }
+  .nav-item {
+    padding: 7px 8px 6px;
+    width: auto;
+    min-width: 46px;
+    flex: 1;
+    flex-direction: column;
+    gap: 6px;
+    border-radius: 11px;
+    position: relative;
+    min-height: 48px;
+  }
+  .nav-item > .count {
+    position: absolute;
+    top: 1px;
+    right: 5px;
+    width: 14px;
+    min-width: 14px;
+    height: 14px;
+    font-size: 7px;
+    padding: 0;
+    border-radius: 5px;
+  }
+  .sidebar-bottom {
+    margin: 0 0 0 auto;
+  }
+  .workspace-button {
+    border: 0;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+  }
+  .workspace-button > .account-avatar {
+    width: 30px;
+    height: 30px;
+    font-size: 22px;
+    border-radius: 10px;
+  }
+  .workspace-button > span:nth-child(2),
+  .workspace-button > svg {
+    display: none;
+  }
+  .workspace-main {
+    margin: 62px 0 0;
+    padding-bottom: 85px;
+  }
+  .topbar {
+    height: 48px;
+    padding: 0 18px;
+    background: #fbf9fd;
+  }
+  .breadcrumb > span {
+    margin: 0 5px;
+  }
+  .top-actions {
+    gap: 0;
+  }
+  .connection-state {
+    font-size: 9px;
+    gap: 5px;
+  }
+  .connection-state > svg {
+    display: none;
+  }
+  .top-actions > .pill {
+    display: none;
+  }
+  .workspace-main main {
+    padding: 26px 18px;
+  }
+  .page-heading {
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 23px;
+  }
+  .page-heading h1 {
+    font-size: 28px;
+    letter-spacing: -0.8px;
+  }
+  .page-heading p {
+    line-height: 1.8;
+    margin-top: 8px;
+  }
+  .heading-actions {
+    gap: 6px;
+    padding-top: 4px;
+  }
+  .heading-actions > .btn {
+    font-size: 0;
+    padding: 10px;
+    gap: 0;
+    min-height: 35px;
+    border-radius: 11px;
+    width: 36px;
+    height: 36px;
+  }
+  .heading-actions > .btn svg {
+    width: 15px;
+    height: 15px;
+  }
+  .show-bar {
+    padding: 13px 12px;
+    gap: 10px;
+    border-radius: 14px;
+    margin-bottom: 21px;
+  }
+  .show-avatar {
+    width: 33px;
+    height: 33px;
+    border-radius: 10px;
+    font-size: 23px;
+    flex-shrink: 0;
+  }
+  .show-bar strong {
+    font-size: 12px;
+  }
+  .show-bar small {
+    font-size: 9px;
+  }
+  .show-bar .text-btn {
+    font-size: 9px;
+    gap: 4px;
+  }
+  .show-bar .text-btn svg {
+    width: 12px;
+  }
+  .main-column,
+  .right-column {
+    gap: 21px;
+  }
+  .studio-grid {
+    gap: 21px;
+  }
+  .auction-body {
+    padding: 15px;
+  }
+  .hero-product {
+    border-radius: 12px;
+  }
+  .hero-product .product-art {
+    max-height: 210px;
+    transform: scale(0.92);
+  }
+  .auction-info {
+    padding: 21px 5px 5px;
+  }
+  .auction-info h3 {
+    font-size: 23px;
+    letter-spacing: -0.5px;
+  }
+  .description {
+    font-size: 11px;
+    margin-top: 10px;
+  }
+  .bid-price {
+    margin: 24px 0 14px;
+  }
+  .bid-price > div:first-child > strong {
+    font-size: 34px;
+  }
+  .bid-price > div:first-child > span {
+    font-size: 10px;
+  }
+  .countdown-wrap {
+    padding: 10px 13px;
+  }
+  .countdown-wrap > strong {
+    font-size: 23px;
+  }
+  .countdown-wrap > span {
+    font-size: 9px;
+  }
+  .auction-controls {
+    flex-wrap: nowrap;
+    margin-top: 20px;
+  }
+  .auction-controls .btn {
+    padding: 13px 12px;
+    border-radius: 12px;
+  }
+  .auction-footnote {
+    font-size: 9px;
+    flex-wrap: nowrap;
+  }
+  .auction-footnote .text-btn {
+    font-size: 9px;
+  }
+  .bidder-line {
+    font-size: 11px;
+  }
+  .panel {
+    border-radius: 16px;
+  }
+  .panel-header {
+    padding: 17px;
+    min-height: 55px;
+  }
+  .panel-header h2 {
+    font-size: 13px;
+  }
+  .panel-header > .text-btn {
+    font-size: 10px;
+  }
+  .pill {
+    font-size: 9px;
+    padding: 6px 8px;
+  }
+  .stats-grid {
+    padding: 18px 0;
+    border-radius: 13px;
+  }
+  .stat {
+    padding: 0 16px;
+    gap: 9px;
+  }
+  .stat > span {
+    font-size: 9px;
+  }
+  .stat > strong {
+    font-size: 21px;
+  }
+  .stat strong > svg {
+    width: 10px;
+    margin-left: 1px;
+  }
+  .queue-item {
+    padding: 15px 13px;
+    gap: 10px;
+  }
+  .thumb {
+    width: 48px;
+    height: 43px;
+    border-radius: 9px;
+  }
+  .queue-text strong {
+    font-size: 10px;
+  }
+  .queue-text small {
+    font-size: 9px;
+  }
+  .queue-price {
+    font-size: 10px;
+  }
+  .queue-item > .btn {
+    padding: 9px;
+    gap: 5px;
+    border-radius: 9px;
+  }
+  .queue-item > .btn svg {
+    width: 10px;
+  }
+  .activity-details > summary {
+    font-size: 11px;
+  }
+  .activity-details > summary > span {
+    font-size: 9px;
+  }
+  .right-column > .panel {
+    width: 100%;
+  }
+  .companion-content {
+    padding: 19px;
+  }
+  .mochi-message {
+    margin-top: 12px;
+  }
+  .companion-status {
+    font-size: 11px;
+  }
+  .quick-prompts > button {
+    padding: 8px 12px;
+  }
+  .ask-form input {
+    font-size: 11px;
+    padding: 14px 12px;
+  }
+  .ask-form button {
+    padding-right: 12px;
+  }
+  .chat-stream {
+    min-height: 110px;
+  }
+  .chat-row {
+    font-size: 12px;
+  }
+  .chat-user {
+    font-size: 11px;
+  }
+  .demo-inputs > input,
+  .money-input input {
+    font-size: 12px;
+    padding: 13px 10px;
+  }
+  .chat-panel form .btn {
+    min-height: 42px;
+  }
+  .demo-notice {
+    font-size: 10px;
+  }
+  .studio-tip p {
+    font-size: 11px;
+  }
+  .inventory-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .inventory-image {
+    height: 240px;
+  }
+  .inventory-card-body {
+    padding: 21px;
+  }
+  .inventory-card h3 {
+    font-size: 19px;
+  }
+  .inventory-card p {
+    font-size: 12px;
+    min-height: 0;
+  }
+  .inventory-price small {
+    font-size: 10px;
+  }
+  .inventory-price strong {
+    font-size: 23px;
+  }
+  .inventory-actions > .icon-btn {
+    height: 42px;
+    width: 38px;
+  }
+  .inventory-tools {
+    gap: 12px;
+  }
+  .inventory-tools > input {
+    width: 65%;
+    font-size: 11px;
+  }
+  .inventory-tools > .muted {
+    font-size: 10px;
+  }
+  .page-heading > .btn {
+    font-size: 11px;
+    padding: 11px 13px;
+  }
+  .filter-tabs {
+    gap: 0;
+    max-width: 100%;
+  }
+  .filter-tabs > button {
+    font-size: 11px;
+    padding: 9px 13px;
+  }
+  .settings-panel {
+    padding: 23px;
+  }
+  .mode-settings {
+    display: block;
+  }
+  .mode-settings select {
+    width: 100%;
+    margin: 23px 0 0;
+  }
+  .command-row {
+    gap: 13px;
+  }
+  .command-row span {
+    font-size: 10px;
+  }
+  .companion-layout {
+    display: block;
+  }
+  .companion-layout > .companion-full {
+    max-width: none;
+    margin-bottom: 23px;
+  }
+  .companion-stage {
+    height: 260px;
+  }
+  .companion-stage .mochi {
+    height: 205px;
+  }
+  .shop-header {
+    padding: 20px 18px;
+    gap: 15px;
+  }
+  .shop-channel {
+    max-width: 120px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 10px;
+  }
+  .shop-main {
+    padding: 32px 18px;
+  }
+  .shop-main h1 {
+    font-size: 31px;
+  }
+  .shop-grid {
+    grid-template-columns: 1fr;
+  }
+  .shop-art {
+    height: 260px;
+  }
+  .shop-lot > .settings-panel h2 {
+    font-size: 23px;
+  }
+  .bid-command {
+    flex-direction: row;
+    align-items: center;
+    font-size: 10px;
+  }
+  .store-grid {
+    grid-template-columns: 1fr;
+  }
+  .shop-catalog-heading > .muted {
+    font-size: 9px;
+    max-width: 130px;
+    text-align: right;
+    line-height: 1.8;
+  }
+  .overlay-mochi {
+    right: 16px;
+    bottom: 135px;
+    width: 210px;
+  }
+  .overlay-mochi .mochi {
+    width: 175px;
+    height: 165px;
+  }
+  .overlay-bubble {
+    font-size: 11px;
+    padding: 14px;
+    border-radius: 16px;
+  }
+  .overlay-auction {
+    left: 10px;
+    right: 10px;
+    bottom: 13px;
+    padding: 14px;
+    gap: 12px;
+    border-radius: 16px;
+  }
+  .overlay-thumb {
+    width: 62px;
+    height: 62px;
+    border-radius: 9px;
+  }
+  .overlay-info h2 {
+    font-size: 16px;
+    margin: 9px 0;
+  }
+  .overlay-info small {
+    font-size: 8px;
+  }
+  .overlay-info p {
+    font-size: 10px;
+  }
+  .overlay-price > strong {
+    font-size: 24px;
+  }
+  .overlay-price > span {
+    font-size: 17px;
+  }
+  .overlay-name {
+    font-size: 9px;
+  }
+  .form-row {
+    gap: 12px;
+  }
+  .command-row code {
+    font-size: 11px;
+  }
+  #toast {
+    bottom: 89px;
+    font-size: 12px;
+    padding: 13px 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+  }
+}

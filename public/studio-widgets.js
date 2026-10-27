@@ -1,4 +1,4 @@
-import {loadingProgressBar} from "/progress-bar.js";
+import {loadingProgressBar} from "./progress-bar.js";
 // Snapshot-only dashboard widgets. Actions are wired by the workspace controller.
 import {icon} from './icons.js';
 const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));

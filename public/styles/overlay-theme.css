@@ -1,0 +1,35 @@
+/* overlay-theme.css — ordered ownership; see README.md. */
+
+.overlay-body {
+  background: transparent;
+}
+
+.overlay-bubble {
+  background: var(--coral);
+  border: 0;
+  color: #533728;
+  border-radius: 20px;
+  box-shadow: none;
+}
+
+.overlay-name {
+  color: var(--paper);
+}
+
+.overlay-auction {
+  background: var(--mint);
+  color: var(--ink);
+  border: 0;
+  box-shadow: none;
+}
+
+.overlay-info h2,
+.overlay-price > strong,
+.overlay-price > span {
+  color: var(--ink);
+}
+
+.overlay-info small,
+.overlay-info p {
+  color: #47624d;
+}

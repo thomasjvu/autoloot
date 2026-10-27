@@ -1,0 +1,184 @@
+/* storefront-base.css — ordered ownership; see README.md. */
+
+.shop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 23px 6vw;
+  background: white;
+  border-bottom: 1px solid var(--line);
+}
+
+.shop-channel {
+  margin-left: auto;
+  color: #826f91;
+  font-size: 12px;
+}
+
+.shop-main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 45px 30px;
+}
+
+.shop-main h1 {
+  font-size: 36px;
+  letter-spacing: -1.3px;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 25px;
+  align-items: start;
+}
+
+.shop-art {
+  position: relative;
+  height: 310px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shop-art > .product-art {
+  width: 90%;
+  height: 90%;
+}
+
+.shop-lot > .settings-panel h2 {
+  font-size: 23px;
+  line-height: 1.5;
+  letter-spacing: -0.4px;
+}
+
+.shop-account > .panel {
+  margin-bottom: 23px;
+}
+
+.shop-account .consent {
+  margin: 20px 0;
+}
+
+.shop-account .text-btn {
+  margin-left: 0;
+}
+
+.bid-command {
+  border-top: 1px solid #efe5f7;
+  justify-content: space-between;
+  padding-top: 18px;
+  font-size: 11px;
+  color: #816d90;
+}
+
+.bid-command code {
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.shop-catalog-heading {
+  margin: 40px 0 22px;
+}
+
+.shop-catalog-heading h2 {
+  font-size: 23px;
+  letter-spacing: -0.5px;
+}
+
+.store-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.store-card h3 {
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.3px;
+}
+
+.store-card p {
+  font-size: 11px;
+  margin: 11px 0 22px;
+}
+
+.store-price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.store-price > strong {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 23px;
+  color: #836c95;
+  letter-spacing: -0.5px;
+}
+
+.viewer-order {
+  border-top: 1px solid #efe2f8;
+  padding: 20px 0;
+  margin-top: 21px;
+}
+
+.order-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #836b95;
+}
+
+.order-heading > strong {
+  font-weight: 500;
+}
+
+.viewer-order h3 {
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 12px 0;
+  color: #876a99;
+}
+
+.order-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.order-total > span {
+  font-size: 10px;
+  line-height: 1.8;
+  color: #846e92;
+}
+
+.order-total > strong {
+  font-family: var(--mono);
+  font-size: 17px;
+  font-weight: 400;
+  color: #836c96;
+}
+
+.viewer-order > p {
+  font-size: 11px;
+  margin-top: 12px;
+  color: #806d8c;
+}
+
+.viewer-order > .row-actions {
+  margin-top: 19px;
+  gap: 10px;
+}
+
+.address-lines {
+  font-size: 13px;
+  line-height: 2;
+  color: #806b90;
+  margin: 22px 0;
+}

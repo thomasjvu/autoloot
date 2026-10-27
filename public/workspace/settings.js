@@ -1,0 +1,31 @@
+import {esc,heading} from '../shared/presenters.js';
+import {icon} from '../icons.js';
+import {widgetPresets} from '../integration.js';
+export function settingsPage(state,{selectedWidget='full'}={}) {
+ const companionName=()=>state.companion?.name||'Munny';
+function advancedConnections() {
+ return `<section class="panel settings-panel"><h2>Show preferences</h2><div class="heading-actions"><button class="btn" data-action="edit-show">Edit show</button><button class="btn" data-action="auction-settings">Auction preferences</button><label>Show mode<select id="mode"><option value="live" ${state.mode==='live'?'selected':''}>Live</option><option value="demo" ${state.mode==='demo'?'selected':''}>Practice</option></select></label></div><p><a href="/docs/getting-started/faq">Setup & documentation ↗</a></p></section>`;
+}
+function operatorSettings() {
+ const o=state.operator||{},ready=['name','email','shipping','returns','retention'].every(key=>o[key]);
+ return settingsCard('seller','Seller details',ready?'Published':'Finish setup',ready?esc(o.name):'Your public contact, shipping and returns.',`<button class="btn" data-action="operator-settings">${ready?'Edit details':'Add details'}</button>`);
+}
+function settingsCard(symbol,title,status,copy,action,brand=false) {
+ return `<section class="panel preference-card ${brand ? 'service-card service-card-'+symbol : ''}"><div class="preference-top"><span class="service-icon">${brand?`<img src="/brand/services/${symbol}.svg" alt="">`:icon(symbol,26)}</span><span class="preference-status">${status}</span></div><h2>${title}</h2><p>${copy}</p><div class="preference-actions">${action}</div></section>`;
+}
+function widgetSettings() {
+ const preset=widgetPresets[selectedWidget];
+ return `<section class="panel settings-panel widget-settings"><div class="section-title">${icon('studio',24)}<div><h2>On your stream</h2><p>Choose a layout for OBS.</p></div></div><div class="widget-controls"><label>Layout<select id="widget-preset">${Object.entries(widgetPresets).map(([key,p])=>`<option value="${key}" ${key===selectedWidget?'selected':''}>${p.label}</option>`).join('')}</select></label><span class="muted">${preset.width} × ${preset.height}</span><button class="btn primary" data-action="copy-widget">${icon('link',16)} Copy OBS link</button><button class="btn" data-action="preview-widget">Preview ${icon('external',16)}</button></div></section>`;
+}
+function backendSettings() {
+ const db=state.storage,nft=state.nft;
+ return `<section class="panel settings-panel"><h2>System details</h2><p>Storage: ${db?.healthy?'Healthy':'Needs attention'} · Latest backup: ${db?.lastBackupAt?esc(new Date(db.lastBackupAt).toLocaleString()):'Not recorded'}</p>${db?.backupError?`<p class="error-box">${esc(db.backupError)}</p>`:''}<p>NFT delivery: ${nft?.walletAdapter&&nft?.chains?.length?'Online':'Offline'}</p><p><a href="/docs/getting-started/faq">Installation & troubleshooting ↗</a></p></section>`;
+}
+function automationSettings() {
+ const mode=state.automation?.mode||'manual',running=['running','paused'].includes(state.run?.status);
+ return `<section class="panel automation-settings"><div class="section-title">${icon('spark',26)}<div><h2>How your companion runs the show</h2><p>Choose your pace. You can always pause.</p></div></div><div class="automation-options" role="group" aria-label="Automation style">${[['manual','play','I lead','You start each lot. Munny helps when asked.'],['review','check','Check with me','Review each queued lot before it opens.'],['automatic','spark','Keep it moving','Approve a queue once. Munny runs it within your limits.']].map(([value,symbol,title,copy])=>`<button class="automation-option ${mode===value?'selected':''}" data-automation="${value}" aria-pressed="${mode===value}" ${running?'disabled':''}>${icon(symbol,23)}<strong>${title}</strong><span>${copy}</span>${mode===value?'<small>Selected</small>':''}</button>`).join('')}</div><div class="automation-footer"><span>${running?'Stop your current run to change styles.':'Applies to your next run. Prices and wallet permissions stay yours.'}</span><button class="text-btn" data-tab="studio">Open Studio →</button></div></section>`;
+}
+ const t=state.twitch,p=state.payments;
+ return `${heading('Settings','', '<div class="heading-actions"><button class="btn" data-start-tutorial>Take a tour</button><a class="btn" href="/docs/getting-started/faq">Docs & FAQ '+icon('external',16)+'</a></div>')}<div class="preference-grid">${settingsCard('twitch','Twitch',t.connected?'Online':'Offline',t.error?esc(t.error):t.connected?'@'+esc(t.channel):'Bring your chat into the show.',`${t.configured?'<button class="btn primary" data-action="connect-twitch">'+(t.connected?'Reconnect':'Connect Twitch')+'</button>':'<a class="btn primary" href="/twitch-setup.html">Connect Twitch</a>'}${t.connected?'<button class="text-btn" data-action="disconnect-twitch">Disconnect</button>':''}`,true)}${settingsCard('stripe','Payments',p.configured?(p.environment==='live'?'Online':'Online · Test'):'Offline','Checkout and refunds, handled by Stripe.','<button class="btn" data-action="payment-help">'+(p.configured?'View payment setup':'Set up payments')+'</button>',true)}${operatorSettings()}${settingsCard('shipping','Shipping',state.shippingProvider?.configured?(state.shippingProvider.environment==='live'?'Online':'Online · Test'):'Offline','Shippo labels, saved package presets and Pirate Ship CSV.','<button class="btn" data-action="shipping-settings">Set up shipping</button>')}${settingsCard('companion',esc(companionName()),state.companion.enabled?'Here to help':'Resting','Voice, personality and cohost preferences.','<button class="btn" data-tab="companion">Meet your cohost</button>')}</div>${automationSettings()}${widgetSettings()}<div class="settings-bottom"><details class="settings-disclosure"><summary>${icon('play',18)} Practice show</summary><div><p>Try sample lots without real payments.</p><button class="btn" id="load-demo">Load sample lots</button><button class="btn" id="remove-demo">Clear practice content</button></div></details><details class="advanced-settings settings-disclosure"><summary>${icon('settings',18)} Show & system</summary>${advancedConnections()}${backendSettings()}</details></div>`;
+
+}

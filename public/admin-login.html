@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Welcome · Autoloot</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/styles/app.css">
+  <script type="module" src="/admin-login.js"></script>
+</head>
+<body class="admin-auth-page">
+  <main class="admin-login">
+    <a class="auth-brand" href="/shop" aria-label="Autoloot storefront"><img src="/icon-192.png" alt="" width="56" height="56"><span class="wordmark">autoloot</span></a>
+    <section class="auth-card" aria-labelledby="auth-title">
+      <div class="auth-art" aria-hidden="true"><span class="auth-spark auth-spark-one">✦</span><span class="auth-spark auth-spark-two">✧</span><div class="auth-character-window"><img src="/characters/mochi-hero-welcome.png" alt="" width="1024" height="1536"></div><span class="auth-wave">Hey, streamer.</span></div>
+      <div class="auth-form-content">
+        <h1 id="auth-title">Welcome in.</h1>
+        <p id="auth-description">Getting your workspace ready…</p>
+        <form class="stack-form">
+          <label id="username-label" for="admin-username">Username<input id="admin-username" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" minlength="3" maxlength="32" required aria-describedby="username-hint"></label>
+          <small id="username-hint" hidden>3–32 letters, numbers, underscores or hyphens.</small>
+          <label for="admin-password">Password<span class="auth-password-field"><input id="admin-password" name="password" type="password" required maxlength="256" autocomplete="current-password" aria-describedby="password-hint"><button id="show-password" type="button" aria-label="Show password" aria-pressed="false">Show</button></span></label>
+          <small id="password-hint" hidden>12+ characters with uppercase, lowercase, a number and a symbol.</small>
+          <p id="legacy-login-note" hidden>Password-only sign in for your existing workspace.</p>
+          <label id="confirm-label" for="admin-confirm" hidden>One more time<input id="admin-confirm" name="confirm" type="password" maxlength="256" autocomplete="new-password"></label>
+          <button class="btn primary auth-submit" type="submit" id="auth-submit" disabled>Continue <span aria-hidden="true">↗</span></button>
+          <p role="status" aria-live="polite" id="auth-status"></p>
+        </form>
+      </div>
+    </section>
+    <a class="auth-shop-link" href="/shop">Just browsing? Open the shop <span aria-hidden="true">→</span></a>
+  </main>
+</body>
+</html>

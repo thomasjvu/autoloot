@@ -1,0 +1,81 @@
+/* dialogs-theme.css — ordered ownership; see README.md. */
+
+dialog {
+  background: var(--paper);
+  border: 0;
+  border-radius: 25px;
+  color: var(--ink);
+  box-shadow: 0 20px 100px #27262226;
+}
+
+dialog h2 {
+  color: var(--ink);
+  font-size: 27px;
+  font-weight: 750;
+}
+
+dialog > p,
+.stack-form label {
+  color: #776451;
+}
+
+.modal-close {
+  background: #e9dfd0;
+  color: #796451;
+  border: 0;
+}
+
+.notice {
+  background: var(--butter);
+  color: #6e5521;
+  border: 0;
+  border-radius: 14px;
+}
+
+.form-details {
+  color: #79604b;
+  border-color: #27262222;
+}
+
+.form-details summary:after {
+  color: #876a50;
+}
+
+.auction-summary > span {
+  background: var(--mint);
+  color: #3e5a47;
+  border: 0;
+}
+
+.start-preview {
+  background: var(--butter);
+}
+
+input[type="file"]::file-selector-button {
+  background: var(--lavender);
+  border: 0;
+  color: #503b6d;
+  border-radius: 9px;
+}
+
+#toast {
+  background: var(--ink);
+  color: var(--paper);
+  border: 0;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px #27262222;
+}
+
+.error-box {
+  background: #f3c8b4;
+  color: #873f36 !important;
+  border: 0;
+}
+
+.danger-text {
+  color: #894139;
+}
+
+.urgent {
+  color: #9a482d !important;
+}

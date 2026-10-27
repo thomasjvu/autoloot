@@ -1,3 +1,4 @@
+import {fetch,adminCookie} from './helpers/admin-client.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
@@ -29,7 +30,7 @@ test('OAuth binds browser proof on public origin, supports local streamer handof
   assert.equal((await get('/auth/twitch/callback?code=fixture&state='+state,{Host:'untrusted.example','Sec-Fetch-Site':'cross-site'})).status,403);
   assert.equal((await get('/auth/twitch?role=streamer')).status,400,'public streamer initiation stays restricted');
   const boot=await fetch(base+'/api/bootstrap').then(r=>r.json());
-  const start=await get('/auth/twitch?role=streamer',{Host:`localhost:${port}`,'X-Autoloot-Admin':boot.admin});assert.equal(start.status,302);assert.equal(start.headers['set-cookie'],undefined);
+  const start=await get('/auth/twitch?role=streamer',{Host:`localhost:${port}`,'X-Autoloot-Admin':boot.admin,Cookie:adminCookie(base)});assert.equal(start.status,302);assert.equal(start.headers['set-cookie'],undefined);
   const handoff=new URL(start.headers.location);assert.equal(handoff.origin,'https://shop.example.com');assert.equal(handoff.searchParams.has('admin'),false);
   const publicStart=await get(handoff.pathname+handoff.search,{'Sec-Fetch-Site':'cross-site'});assert.equal(publicStart.status,302);verifyCookie(publicStart);assert.match(new URL(publicStart.headers.location).searchParams.get('scope'),/user:write:chat/);
   assert.equal((await get(handoff.pathname+handoff.search,{'Sec-Fetch-Site':'cross-site'})).status,400,'handoff is one-use');

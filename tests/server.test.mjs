@@ -1,3 +1,4 @@
+import {fetch} from './helpers/admin-client.mjs';
 import { request } from "node:http";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -364,15 +365,20 @@ const fs=require('node:fs');const args=process.argv;const output=args[args.index
     );
     assert.equal(anonymous.includes("Fiction St"), false);
     assert.equal(anonymous.includes("Demo Buyer"), false);
-    await fetch(base + "/api/mode", {
-      method: "POST",
-      headers: { "X-Autoloot-Admin": nextToken },
+    const blockedLive = await fetch(base + "/api/mode", {
+      method: "POST", headers: { "X-Autoloot-Admin": nextToken },
       body: JSON.stringify({ mode: "live" }),
     });
+    assert.equal(blockedLive.status,400,'sample stock cannot enter live sales');
+    const cleared=await fetch(base+'/api/workspace/demo',{method:'POST',headers:{'X-Autoloot-Admin':nextToken},body:JSON.stringify({enabled:false})});
+    assert.equal(cleared.status,200);
+    const added=await fetch(base+'/api/products',{method:'POST',headers:{'X-Autoloot-Admin':nextToken},body:JSON.stringify({title:'Owned card',price:'5',buyNowPrice:'10',listed:true,quantity:1,condition:'Used'})});
+    const realItem=(await added.json()).state.products.find(p=>p.title==='Owned card');
+    assert.ok(realItem);
     assert.equal(
       (
         await buyerPost("/api/viewer/buy", {
-          productId: "p4",
+          productId: realItem.id,
           requestId: "live-spoof",
         })
       ).status,

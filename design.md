@@ -6,9 +6,9 @@ Autoloot is a Twitch selling workspace: calm enough to operate during a live sho
 
 The application loads these styles in order:
 
-1. `public/style.css` — base layout, controls, and component structure.
-2. `public/drop.css` — editorial layout, Maple Mono, display typography, and interaction feedback.
-3. `public/street.css` — current palette and final component overrides.
+1. `public/styles/foundation.css` — base layout, controls, and component structure.
+2. `public/styles/components.css` — editorial layout, Maple Mono, display typography, and interaction feedback.
+3. `public/styles/workspace.css` — current palette and final component overrides.
 
 The **street palette** below is the current direction. Earlier purple, pink, blue, and mint declarations remain in the cascade; they do not define the current global identity. Read the final computed style before reusing an older component color.
 
@@ -29,7 +29,7 @@ The **street palette** below is the current direction. Earlier purple, pink, blu
 
 Use ink on paper, sage, lime, and orange. Primary buttons use paper on ink. Lime identifies a selected or emphasized surface; do not use it as small text on paper. Keep orange occasional, and always label status in words.
 
-Legacy token names such as `--purple`, `--mint`, and `--coral` are compatibility aliases in `street.css`. Prefer semantic roles when adding new tokens.
+Legacy token names such as `--purple`, `--mint`, and `--coral` are compatibility aliases in `workspace.css`. Prefer semantic roles when adding new tokens.
 
 ## Typography
 
@@ -191,3 +191,5 @@ Activity mixes compact domain events with private admin audit outcomes; Audit hi
 ## Autoloot display wordmark
 
 The application and marketing `.wordmark` use the customized **Autoloot Display Black** web font (`public/fonts/AutolootDisplay-Black.woff2`, weight 900), inspired by the selected charcoal submission cover. Keep this face for the brand title; interface typography remains Maple Mono. The installable TTF, character coverage and rebuild instructions are in `public/fonts/AutolootDisplay-README.md`. The v4 title uses an upright a aligned to the o’s, while preserving the cover’s joined o’s, differing t’s and spacing. The original tilted opening is available through `font-feature-settings: "ss01" 1;` and is off by default. The remaining known lowercase letters are traced; absent letters remain inferred extensions from OFL-licensed Fredoka. Retain common ligatures on `.wordmark` so the original lettering renders. Rebuild source lives in `scripts/fonts/build-autoloot-display.py`; retain `public/fonts/AutolootDisplay-OFL.txt`.
+
+Load only `public/styles/app.css`; module ownership and cascade rules are in `public/styles/README.md`. Storefront variants use explicit component classes, never positional selectors for surface colors.

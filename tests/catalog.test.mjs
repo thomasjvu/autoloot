@@ -36,3 +36,24 @@ test('a successful add consumes the reviewed selection and cannot duplicate on r
  c.add(engine,input);assert.throws(()=>c.add(engine,input),/Select and review/);
  assert.equal(engine.state.products.filter(p=>p.metadata?.id==='a').length,1);
 });
+
+test('catalog persists complete provenance and image in one atomic save',async()=>{
+ const card={id:'atomic',name:'Card',imageUrl:'https://images.example/card.png'};
+ const c=new Catalog({get:async()=>({items:[card]}),detail:async()=>({card})});
+ await c.search();await c.select(card.id);
+ const saved=[];const engine=new Engine(seed(),{save:s=>saved.push(structuredClone(s))});
+ const p=c.add(engine,{id:card.id,price:'2',quantity:1,condition:'Raw'});
+ assert.equal(saved.length,1);const stored=saved[0].products.find(x=>x.id===p.id);
+ assert.equal(stored.metadata.id,card.id);assert.equal(stored.image,card.imageUrl);
+});
+
+test('failed catalog persistence leaves no partial product and keeps selection for recovery',async()=>{
+ const card={id:'failed',name:'Card',imageUrl:'http://unsafe.example/card.png'};
+ const c=new Catalog({get:async()=>({items:[card]}),detail:async()=>({card})});await c.search();await c.select(card.id);
+ const initial=seed(),engine=new Engine(initial,{save:()=>{throw Error('disk unavailable');}}),count=engine.state.products.length;
+ const input={id:card.id,price:'2',quantity:1,condition:'Raw'};
+ assert.throws(()=>c.add(engine,input),/disk unavailable/);assert.equal(engine.state.products.length,count);assert.equal(c.state.selected.id,card.id);
+ const recovered=new Engine(engine.state);const product=c.add(recovered,input);assert.equal(product.image,undefined);assert.equal(product.metadata.id,card.id);
+ const ordinary=recovered.addProduct({title:'Untrusted',price:'1',quantity:1,image:'https://unsafe.example/x',metadata:{id:'spoofed'}});
+ assert.equal(ordinary.metadata,undefined);assert.equal(ordinary.image,undefined);
+});

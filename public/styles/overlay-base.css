@@ -1,0 +1,118 @@
+/* overlay-base.css — ordered ownership; see README.md. */
+
+.overlay-body #app {
+  width: 100vw;
+  height: 100vh;
+}
+
+.overlay-canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+}
+
+.overlay-mochi {
+  position: absolute;
+  right: 30px;
+  bottom: 145px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 280px;
+}
+
+.overlay-mochi .mochi {
+  width: 230px;
+  height: 215px;
+}
+
+.overlay-bubble {
+  background: #fffbfff5;
+  border: 1px solid #dfc5f1;
+  padding: 18px 22px;
+  color: #876999;
+  font-size: 13px;
+  line-height: 1.8;
+  box-shadow: 0 8px 30px #5334690c;
+}
+
+.overlay-name {
+  background: #d6bee9;
+  color: #fff;
+  border-radius: 16px;
+  font-size: 11px;
+  padding: 8px 17px;
+}
+
+.overlay-auction {
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 23px;
+  background: #fffbfff5;
+  border: 1px solid #e5d0f2;
+  border-radius: 20px;
+  padding: 18px 23px;
+  box-shadow: 0 10px 40px #53356913;
+}
+
+.overlay-thumb {
+  width: 100px;
+  height: 75px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.overlay-thumb .product-photo {
+  padding: 6px;
+}
+
+.overlay-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.overlay-info small {
+  font-size: 10px;
+  color: #826d91;
+}
+
+.overlay-info h2 {
+  font-size: 24px;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 10px 0;
+  color: #846a96;
+}
+
+.overlay-info p {
+  font-size: 12px;
+  color: #7f6d8a;
+}
+
+.overlay-price {
+  text-align: right;
+  font-family: var(--mono);
+}
+
+.overlay-price > strong {
+  display: block;
+  font-size: 35px;
+  font-weight: 400;
+  letter-spacing: -1.3px;
+  color: #826d93;
+}
+
+.overlay-price > span {
+  display: block;
+  font-size: 20px;
+  margin-top: 10px;
+  color: #806d8b;
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,40 @@
+/* interaction.css — ordered ownership; see README.md. */
+
+/* Small, deliberate feedback. No ambient motion on commerce controls. */:root{--feedback-ease:cubic-bezier(.2,.7,.2,1);--feedback-fast:120ms;--feedback-normal:180ms}
+
+.btn,.icon-btn,.text-btn,.nav-item{transition:background-color var(--feedback-fast) ease,border-color var(--feedback-fast) ease,color var(--feedback-fast) ease,transform var(--feedback-fast) var(--feedback-ease),box-shadow var(--feedback-fast) ease;-webkit-tap-highlight-color:transparent}
+
+.btn:active:not(:disabled),.icon-btn:active:not(:disabled){transform:translateY(1px) scale(.98);transition-duration:65ms}
+
+.text-btn:active:not(:disabled),.nav-item:active{transform:translateY(1px)}
+
+.btn:disabled,.icon-btn:disabled{cursor:not-allowed;transform:none}
+
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #7653d5;outline-offset:4px}
+
+input,textarea,select{transition:border-color var(--feedback-fast) ease,box-shadow var(--feedback-fast) ease}
+
+input:focus-visible,textarea:focus-visible,select:focus-visible{box-shadow:0 0 0 3px #7653d51c}
+
+.toggle span{transition:background-color var(--feedback-normal) ease}
+
+.toggle span::after{transition:transform var(--feedback-normal) var(--feedback-ease)}
+
+#toast{transition:opacity var(--feedback-normal) ease,transform var(--feedback-normal) var(--feedback-ease)}
+
+dialog::backdrop{background:#25243166;animation:backdrop-in 150ms ease-out}
+
+@keyframes backdrop-in{from{background:#25243100}to{background:#25243166}}
+
+@media(hover:hover) and (pointer:fine){
+  .inventory-card:has(button:hover){box-shadow:0 5px 0 #2726220b}
+  .inventory-card{transition:box-shadow var(--feedback-normal) ease}
+  .btn:hover:not(:disabled) svg{transform:translateX(1px)}
+  .btn svg{transition:transform var(--feedback-fast) var(--feedback-ease)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .btn,.icon-btn,.text-btn,.nav-item,input,textarea,select,.toggle span,.toggle span::after,#toast,.inventory-card,.btn svg{transition:none!important}
+  .btn:active:not(:disabled),.icon-btn:active:not(:disabled),.text-btn:active:not(:disabled),.nav-item:active,.btn:hover:not(:disabled) svg{transform:none}
+  dialog::backdrop{animation:none}
+}

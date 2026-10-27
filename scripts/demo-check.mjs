@@ -1,3 +1,4 @@
+import {fetch} from '../tests/helpers/admin-client.mjs';
 // Exercises the public/creator/buyer contract using a disposable workspace.
 import { spawn } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";

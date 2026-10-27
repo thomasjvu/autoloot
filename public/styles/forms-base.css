@@ -1,0 +1,101 @@
+/* forms-base.css — ordered ownership; see README.md. */
+
+.form-details {
+  border-top: 1px solid #eee4f5;
+  padding-top: 15px;
+  font-size: 12px;
+  color: #8c729e;
+}
+
+.form-details summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 28px;
+}
+
+.form-details summary:after {
+  content: "+";
+  font-size: 19px;
+  color: #ab8ec0;
+}
+
+.form-details[open] summary:after {
+  content: "−";
+}
+
+.form-detail-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 19px;
+}
+
+.form-row > .consent {
+  align-self: center;
+}
+
+.start-preview {
+  width: 86px;
+  height: 65px;
+  border-radius: 13px;
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+
+.start-preview .product-photo {
+  padding: 5px;
+}
+
+.auction-summary {
+  display: flex;
+  gap: 10px;
+}
+
+.auction-summary > span {
+  background: #f6f0fc;
+  color: #9275a7;
+  border: 1px solid #eee1f7;
+  border-radius: 9px;
+  padding: 8px 12px;
+  font-size: 11px;
+}
+
+.reorder-tools {
+  padding: 15px 16px;
+  background: #fff;
+  border: 1px solid #eee5f5;
+  border-radius: 13px;
+}
+
+.reorder-tools > p {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.reorder-tools > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 9px 0;
+  font-size: 11px;
+  color: #8e779f;
+}
+
+.reorder-tools .text-btn {
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.pill {
+  text-transform: capitalize;
+}
+
+.btn.primary:hover:not(:disabled) {
+  background: #7c54ac;
+  border-color: #7c54ac;
+  color: #fff;
+}

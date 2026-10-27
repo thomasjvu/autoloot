@@ -1,0 +1,71 @@
+/* storefront-theme.css — ordered ownership; see README.md. */
+
+.shop-body {
+  background: var(--paper);
+}
+
+.shop-header {
+  background: var(--paper);
+  border-color: #2726221f;
+}
+
+.shop-header .brand {
+  padding: 0;
+}
+
+.shop-channel {
+  color: #726252;
+  font-weight: 600;
+}
+
+.shop-main h1 {
+  font-size: 48px;
+  font-weight: 850;
+  letter-spacing: -2.5px;
+}
+
+.shop-lot {
+  background: var(--mint);
+}
+
+.shop-lot .shop-art {
+  background: var(--butter);
+}
+
+.shop-lot .settings-panel {
+  background: var(--mint);
+}
+
+.shop-account > .panel:first-child {
+  background: var(--coral);
+}
+
+.shop-account > .viewer-orders {
+  background: var(--lavender);
+}
+
+.bid-command,
+.viewer-order,
+.order-heading {
+  color: #4f4069;
+  border-color: #27262222;
+}
+
+.viewer-order h3,
+.order-total > strong {
+  color: #44315f;
+}
+
+.order-total > span,
+.viewer-order > p {
+  color: #65517f;
+}
+
+.shop-account .settings-panel p,
+.shop-account .consent {
+  color: #6b4638;
+}
+
+.shop-account .viewer-orders p {
+  color: #5b467c;
+}

@@ -500,9 +500,8 @@ test('live physical fulfillment requires real Stripe funds; external and practic
 });
 
 test('test-funded live orders retain refund actions while fulfillment stays hidden',async()=>{
- const {readFileSync}=await import('node:fs');const source=readFileSync(new URL('../public/app.js',import.meta.url),'utf8');
- const fragment=source.slice(source.indexOf('const physicalFundsVerified='),source.indexOf('function orders()'));
- const actions=new Function('state','isNftOrder','icon','nftOrderDetails','esc',fragment+';return {orderActions,shippingAction};')({payments:{configured:true}},()=>false,()=>'',()=> '',String);
+ const {createOrderPresenters}=await import('../public/workspace/orders.js');
+ const actions=createOrderPresenters({payments:{configured:true}},{nftOrderDetails:()=>''});
  const o={id:'order',mode:'live',status:'paid',paymentLive:false};
  const markup=actions.orderActions(o);assert.match(markup,/data-order-action="refund"/);assert.doesNotMatch(markup,/data-order-action="ship"/);assert.equal(actions.shippingAction(o),'');
  o.refundId='refund';assert.match(actions.orderActions(o),/Check refund/);

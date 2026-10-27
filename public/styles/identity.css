@@ -1,0 +1,47 @@
+/* identity.css — ordered ownership; see README.md. */
+
+.ui-icon{display:inline-block;object-fit:contain;vertical-align:middle;flex-shrink:0;user-select:none;pointer-events:none}
+
+.btn.primary .ui-icon{filter:brightness(0) invert(1)}
+
+.nav-item .ui-icon{width:22px;height:22px}
+
+@media(hover:hover) and (pointer:fine){.btn .ui-icon{transition:transform var(--feedback-fast) var(--feedback-ease)}.btn:hover:not(:disabled) .ui-icon{transform:translateX(1px)}}
+
+@media(prefers-reduced-motion:reduce){.btn .ui-icon{transition:none}.btn:hover:not(:disabled) .ui-icon{transform:none}}
+
+/* SVG core stays neutral; opt-in themes use currentColor. */.ui-icon{filter:none}
+
+.btn.primary .ui-icon{filter:none;color:inherit}
+
+.icon-theme-mint{color:#28735c}
+
+.icon-theme-lavender{color:#7653d5}
+
+.icon-theme-coral{color:#a94f3b}
+
+.metadata-badge{display:inline-flex;margin-top:18px;border-radius:16px}
+
+.metadata-badge img{display:block}
+
+.metadata-badge:hover{opacity:.8}
+
+.twitch-setup{max-width:650px;margin:60px auto;padding:24px}
+
+.twitch-setup section{margin-top:24px;background:#e9e3d8}
+
+.twitch-setup li{margin:14px 0;line-height:1.6}
+
+.twitch-setup code{overflow-wrap:anywhere}
+
+.mochi.mochi-vtuber{object-fit:contain;object-position:center bottom;width:230px;height:245px;transform-origin:50% 90%}
+
+.companion-stage:has(.mochi-vtuber){height:310px;padding-top:15px;overflow:hidden;background:#eee7db}
+
+.companion-stage .mochi-vtuber{height:265px;width:240px}
+
+.mini-mochi{display:inline-flex;width:34px;height:34px;overflow:hidden;align-items:flex-start;justify-content:center;background:#eee7db}
+
+.mini-mochi img{width:36px;flex-shrink:0}
+
+.overlay-mochi .mochi-vtuber{width:230px;height:285px}

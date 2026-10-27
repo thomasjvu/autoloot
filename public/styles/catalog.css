@@ -1,0 +1,65 @@
+/* catalog.css — ordered ownership; see README.md. */
+
+.rip-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:24px}
+
+.rip-camera{background:#bff2da;padding:24px}
+
+.rip-match{background:#d6c6ff;padding:24px}
+
+.rip-log{background:#ffe99c;padding:24px;margin-top:24px}
+
+.rip-title h1{font-size:clamp(32px,5vw,56px)}
+
+#rip-preview{background:#252431;border-radius:24px;overflow:hidden;min-height:240px;display:grid;place-items:center}
+
+#rip-preview video{width:100%;max-height:480px;object-fit:contain}
+
+.rip-buttons{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0}
+
+.rip-grid label{display:grid;gap:8px;margin:16px 0}
+
+.rip-grid input,.rip-grid select{max-width:100%;padding:12px;border-radius:14px;border:1px solid #555;background:#fff}
+
+.rip-candidates{margin:16px 0}
+
+.rip-candidates button{display:grid;text-align:left;white-space:normal}
+
+.rip-log article{display:grid;gap:6px;padding:16px 0;border-top:1px solid #0003}
+
+.rip-grid p,.rip-log p{line-height:1.6}
+
+@media(max-width:900px){.rip-grid{grid-template-columns:1fr}}
+
+/* Real card scans and slabs retain the entire printed card and label. */.hero-product > .product-photo{max-height:390px;padding:22px;filter:drop-shadow(0 12px 10px #0002)}
+
+.inventory-image > .product-photo{max-height:320px;padding:22px;filter:drop-shadow(0 8px 8px #0002)}
+
+.catalog-search{background:#d6c6ff;padding:26px}
+
+.catalog-search form{display:flex;gap:16px;align-items:end;flex-wrap:wrap}
+
+.catalog-search label,.catalog-review label{display:grid;gap:8px}
+
+.catalog-search input,.catalog-review input{padding:13px;border:1px solid #0005;border-radius:14px;max-width:100%;background:#fff}
+
+.catalog-search label:first-child{flex:1;min-width:220px}
+
+.catalog-review{background:#bff2da;padding:26px;margin-top:24px}
+
+.catalog-review-inner{display:grid;grid-template-columns:200px 1fr;gap:28px}
+
+.catalog-review img{max-width:100%;max-height:350px;object-fit:contain}
+
+.catalog-review form{display:grid;gap:14px}
+
+.catalog-pagination{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:24px 0}
+
+@media(max-width:650px){.catalog-review-inner{grid-template-columns:1fr}.catalog-search form{display:grid}.catalog-pagination{flex-wrap:wrap}}
+
+.catalog-search select{padding:13px;border:1px solid #0005;border-radius:14px;background:#fff;font:inherit}
+
+.catalog-image-missing{padding:24px;text-align:center;color:#494252}
+
+.catalog-search [role=status]{margin:0;min-height:1.5em}
+
+.catalog-review input:focus-visible,.catalog-search input:focus-visible,.catalog-search select:focus-visible{outline:3px solid #7653d5;outline-offset:3px}

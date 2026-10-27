@@ -1,0 +1,4 @@
+{
+  "sha256": "0fda4890e4f6c2dedd72782619879366686702cb28de2cbc03cb8013444f10d2",
+  "note": "Plan010 baseline ordered stylesheet stream, after removing only shadowed unconditional :root custom properties. No rendered visual baseline."
+}

@@ -1,0 +1,211 @@
+/* commerce-theme.css — ordered ownership; see README.md. */
+
+.inventory-card:nth-child(4n + 1),
+.store-card:nth-child(4n + 1) {
+  background: var(--lavender);
+}
+
+.inventory-card:nth-child(4n + 2),
+.store-card:nth-child(4n + 2) {
+  background: var(--coral);
+}
+
+.inventory-card:nth-child(4n + 3),
+.store-card:nth-child(4n + 3) {
+  background: var(--mint);
+}
+
+.inventory-card:nth-child(4n + 4),
+.store-card:nth-child(4n + 4) {
+  background: var(--blue);
+}
+
+.inventory-card .inventory-image,
+.store-card .inventory-image {
+  background: #2726220b;
+}
+
+.inventory-card h3,
+.store-card h3 {
+  font-weight: 750;
+  font-size: 18px;
+  letter-spacing: -0.5px;
+}
+
+.inventory-card p,
+.store-card p,
+.product-tags,
+.inventory-price small {
+  color: #54465e;
+}
+
+.inventory-price strong,
+.store-price > strong {
+  color: var(--ink);
+}
+
+.inventory-card .text-btn {
+  color: #4e3a60;
+}
+
+.inventory-actions .btn,
+.inventory-actions .icon-btn {
+  border-color: #27262233;
+  background: transparent;
+  color: var(--ink);
+}
+
+.inventory-tools > input {
+  background: #e9e0d3;
+  border: 0;
+  color: #544b40;
+  border-radius: 20px;
+}
+
+.product-tags {
+  font-size: 10px;
+}
+
+.lot-stamp,
+.condition-stamp {
+  background: var(--paper);
+  color: #54473c;
+  border: 0;
+  border-radius: 20px;
+}
+
+.orders-panel {
+  background: var(--blue);
+}
+
+.filter-tabs {
+  background: #e6ddcf;
+  border-radius: 22px;
+}
+
+.filter-tabs > button {
+  color: #776752;
+  border-radius: 20px;
+}
+
+.filter-tabs > button.active {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: none;
+}
+
+th {
+  color: #334e67;
+  background: #9fc4ed;
+  font-weight: 650;
+}
+
+td {
+  color: #385570;
+  border-color: #2726221a;
+}
+
+td > small,
+td > strong + small {
+  color: #506d88;
+}
+
+td > strong,
+.tracking {
+  color: #2c435b;
+}
+
+.settings-panel {
+  background: var(--blue);
+}
+
+.connections-grid > .settings-panel:nth-child(2) {
+  background: var(--mint);
+}
+
+.connections-grid > .settings-panel:nth-child(3) {
+  background: var(--coral);
+}
+
+.connections-grid > .settings-panel:nth-child(4) {
+  background: var(--lavender);
+}
+
+.settings-panel p,
+.field-label,
+.field-help,
+.setting-row small,
+.connection-details span,
+.connection-details strong,
+.settings-panel details,
+.settings-panel summary,
+.settings-panel details p,
+.output-row strong,
+.output-row p,
+.command-row span,
+.mode-settings p {
+  color: #435666;
+}
+
+.settings-panel details,
+.setting-row,
+.connection-details > div,
+.command-row,
+.output-row {
+  border-color: #2726221f;
+}
+
+input,
+select,
+textarea {
+  color: #38332d;
+  background: #fbf5e9;
+  border-color: #27262224;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #897c6d;
+}
+
+code {
+  background: #27262210;
+  color: #483b51;
+}
+
+.code-snippet {
+  background: #2726220b;
+  color: #584036;
+  border: 0;
+  border-radius: 14px;
+}
+
+.mode-settings {
+  background: var(--butter);
+}
+
+.companion-stage {
+  background: #ffbb9d;
+  border-color: #27262214;
+}
+
+.mochi-name {
+  color: #774936;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.proposal {
+  background: #ffcfb2;
+  border-color: #70422c33;
+}
+
+.proposal > strong,
+.draft-preview,
+.draft-preview p {
+  color: #6e4431;
+}
+
+.section-note {
+  color: #786a5b;
+}
