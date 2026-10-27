@@ -86,3 +86,15 @@ test('zero or ambiguous reconciliation results never unlock another purchase',as
   await assert.rejects(adapter.refresh({id:'order-1'}));assert.equal(adapter.order('order-1').shipment.status,'unknown');await assert.rejects(adapter.quote({id:'order-1',parcel:box}));
  }
 });
+
+test('Stripe test or unverified live payments cannot request rates, buy labels or dispatch',async()=>{
+ for(const paymentLive of [false,undefined]){
+  const f=fixture(),o=f.engine.order('order-1');Object.assign(o,{mode:'live',status:'paid',paymentLive});f.shipping.token='shippo_live_fixture';
+  await assert.rejects(f.quote(),/test or unverified/);await assert.rejects(f.shipping.buy({id:o.id}),/test or unverified/);
+  o.shipment={status:'purchased',test:false,rate:{carrier:'USPS'},trackingNumber:'123'};
+  assert.throws(()=>f.shipping.dispatch({id:o.id,confirmed:true}),/test or unverified/);
+  assert.equal(f.calls.length,0);assert.equal(o.status,'paid');
+ }
+ const f=fixture(),o=f.engine.order('order-1');Object.assign(o,{mode:'live',status:'paid',paymentLive:true});f.shipping.token='shippo_live_fixture';assert.doesNotThrow(()=>f.shipping.eligible(o));
+ o.status='paid-external';delete o.paymentLive;assert.doesNotThrow(()=>f.shipping.eligible(o));
+});

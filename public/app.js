@@ -1,4 +1,5 @@
 import {giveawaysPage,wireGiveaways} from "/giveaways.js";
+
 import {pullWidget} from '/overlay-widgets.js';
 import {accountingPage,wireAccounting} from '/accounting.js';
 import {studioWidgets,setupChecklist} from '/studio-widgets.js';
@@ -58,6 +59,7 @@ const companionName=()=>state?.companion?.name||'Munny';
 const companionAvatar=()=>state?.companion?.avatar||'/characters/mochi-street-v3.png';
 function mochi() {
   return `<img class="mochi mochi-vtuber" src="${esc(companionAvatar())}" alt="${esc(companionName())}, your cohost" width="320" height="480" decoding="async">`;
+
 }
 
 let state,
@@ -297,14 +299,15 @@ function inventory() {
   );
   return `${heading("Inventory", `${state.products.length} lots`, `<div class="heading-actions"><button class="btn" data-action="import-inventory">Import CSV</button><button class="btn" data-tab="catalog">Browse catalog</button><button class="btn" data-action="photo-draft">Photo → listing ${icon("spark", 16)}</button><button class="btn primary" data-action="add-product">${icon("plus", 16)} Add product</button></div>`)}${inventoryTabs()}<div class="inventory-tools"><input id="search" value="${esc(search)}" placeholder="Find a product…" aria-label="Search inventory"><span class="muted">USD / ${state.products.reduce((n, p) => n + p.quantity, 0)} units</span></div><div class="inventory-grid">${products.map((p, i) => `<article class="panel inventory-card"><div class="inventory-image art-${p.art}"><span class="lot-stamp">${String(i + 1).padStart(3, "0")}</span>${visual(p, true)}<span class="condition-stamp">${esc(p.condition)}</span></div><div class="inventory-card-body"><div class="product-tags"><span>${esc(p.category)}</span><span>${p.quantity} units</span></div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="inventory-price"><div><small>Auction from</small><strong>${usd(p.price)}</strong></div><div><small>${p.listed ? "Buy now" : "Unlisted"}</small><strong>${p.buyNowPrice ? usd(p.buyNowPrice) : "—"}</strong></div></div><div class="inventory-actions"><button class="btn full" data-start="${p.id}" ${p.quantity < 1 || active() ? "disabled" : ""}>Auction ${icon("play", 14)}</button><button class="icon-btn" aria-label="Edit ${esc(p.title)}" data-edit="${p.id}">${icon("settings", 16)}</button><button class="icon-btn" aria-label="Remove ${esc(p.title)}" data-remove="${p.id}">${icon("trash", 16)}</button></div>${p.listed && p.buyNowPrice && state.mode === "demo" ? `<button class="text-btn" data-demo-buy="${p.id}" ${p.quantity < 1 ? "disabled" : ""}>Test direct purchase ↗</button>` : ""}</div></article>`).join("") || '<p class="empty">No matching products.</p>'}</div>`;
 }
-function shippingAction(o) {return !isNftOrder(o)&&(['paid','paid-external','test-paid'].includes(o.status)||o.status==='shipped'&&o.shipment)?`<button class="btn small" data-shipping-order="${esc(o.id)}">${o.shipment?`Shipping · ${esc(o.shipment.status)}`:'Create shipping label'}</button>`:'';}
+const physicalFundsVerified=o=>o.mode!=='live'||o.status==='paid-external'||(['paid','shipped'].includes(o.status)&&o.paymentLive===true)||(o.status==='shipped'&&(o.paymentSource==='external'||(o.paymentLive===undefined&&!o.checkoutId&&!o.paymentIntent)));
+function shippingAction(o) {return physicalFundsVerified(o)&&!isNftOrder(o)&&(['paid','paid-external','test-paid'].includes(o.status)||o.status==='shipped'&&o.shipment)?`<button class="btn small" data-shipping-order="${esc(o.id)}">${o.shipment?`Shipping · ${esc(o.shipment.status)}`:'Create shipping label'}</button>`:'';}
 function orderActions(o) {
   if(o.mode==='live' && (o.status==='pending' && o.checkoutCreated && !o.checkoutId || o.status==='paid' && o.refundRequestedAt && !o.refundId))return `<button class="btn small" data-order="${o.id}" data-order-action="${o.status==='pending'?'reconcile-checkout':'reconcile-refund'}">Reconcile with Stripe</button>`;
   if (o.status === "pending")
     return `<div class="row-actions">${o.mode === "demo" ? `<button class="btn small" data-order="${o.id}" data-order-action="test-pay">Test payment</button>` : !state.payments.configured && !o.checkoutId ? `<button class="btn small" data-order="${o.id}" data-order-action="confirm-paid">Confirm external payment</button>` : '<span class="muted">Awaiting checkout</span>'}<button class="text-btn danger-text" data-order="${o.id}" data-order-action="cancel">Cancel</button></div>`;
   if (["paid", "test-paid", "paid-external"].includes(o.status))
     if (isNftOrder(o)) return `${nftOrderDetails(o,true)}${o.mode==='demo'?`<button class="btn small" data-nft-order="${o.id}">Simulate NFT delivery</button>`:!o.delivery?`<button class="btn small" data-nft-authorize="${o.id}">Authorize NFT delivery</button>`:`<span class="muted">Waiting for finalized transfer</span>`}`;
-    else return `<div class="row-actions"><button class="btn small" data-order="${o.id}" data-order-action="ship">Ship ${icon("arrow", 13)}</button>${o.status !== "paid-external" ? `<button class="text-btn danger-text" data-order="${o.id}" data-order-action="refund">${o.refundId ? "Check refund" : "Refund"}</button>` : ""}</div>`;
+    else return physicalFundsVerified(o)?`<div class="row-actions"><button class="btn small" data-order="${o.id}" data-order-action="ship">Ship ${icon("arrow", 13)}</button>${o.status !== "paid-external" ? `<button class="text-btn danger-text" data-order="${o.id}" data-order-action="refund">${o.refundId ? "Check refund" : "Refund"}</button>` : ""}</div>`:`<span class="muted">Test payment · physical fulfillment unavailable</span><button class="text-btn danger-text" data-order="${o.id}" data-order-action="refund">${o.refundId ? 'Check refund' : 'Refund'}</button>`;
   if (["delivered","test-delivered"].includes(o.status)) return nftOrderDetails(o,true);
   return o.status === "shipped"
     ? `<span class="tracking">${esc(o.tracking)}</span>`
@@ -314,7 +317,7 @@ function orders() {
   const list = state.orders.filter(
     (o) =>
       filter === "all" ||
-      (filter === "ready" && ["paid","paid-external","test-paid"].includes(o.status) && !isNftOrder(o) && o.refundRequestedAt == null) ||
+      (filter === "ready" && physicalFundsVerified(o) && ["paid","paid-external","test-paid"].includes(o.status) && !isNftOrder(o) && o.refundRequestedAt == null) ||
       (filter === "pending"
         ? ["pending", "processing"].includes(o.status)
         : filter === "shipped"
@@ -344,6 +347,7 @@ async function auditHistoryDialog(before){
  modal(`<h2>Admin audit</h2><p class="field-help">Local streamer actions and request outcomes. A completed request does not by itself verify payment or delivery.</p>${activityFeed({audit:page.events,activity:[]},{historyButton:false})}<div class="heading-actions"><button class="text-btn" id="audit-newest">Newest</button>${page.nextBefore?'<button class="btn" id="audit-earlier">Earlier actions</button>':''}</div>`);
  $('#audit-newest').onclick=()=>auditHistoryDialog().catch(error=>toast(error.message));
  $('#audit-earlier')?.addEventListener('click',()=>auditHistoryDialog(page.nextBefore).catch(error=>toast(error.message)));
+
 }
 function companionProfileDialog(){
  const c=state.companion;
@@ -397,6 +401,7 @@ function automationSettings() {
 function connections(){
  const t=state.twitch,p=state.payments;
  return `${heading('Settings','', '<div class="heading-actions"><button class="btn" data-start-tutorial>Take a tour</button><a class="btn" href="/docs/getting-started/faq">Docs & FAQ '+icon('external',16)+'</a></div>')}<div class="preference-grid">${settingsCard('twitch','Twitch',t.connected?'Online':'Offline',t.error?esc(t.error):t.connected?'@'+esc(t.channel):'Bring your chat into the show.',`${t.configured?'<button class="btn primary" data-action="connect-twitch">'+(t.connected?'Reconnect':'Connect Twitch')+'</button>':'<a class="btn primary" href="/twitch-setup.html">Connect Twitch</a>'}${t.connected?'<button class="text-btn" data-action="disconnect-twitch">Disconnect</button>':''}`,true)}${settingsCard('stripe','Payments',p.configured?(p.environment==='live'?'Online':'Online · Test'):'Offline','Checkout and refunds, handled by Stripe.','<button class="btn" data-action="payment-help">'+(p.configured?'View payment setup':'Set up payments')+'</button>',true)}${operatorSettings()}${settingsCard('shipping','Shipping',state.shippingProvider?.configured?(state.shippingProvider.environment==='live'?'Online':'Online · Test'):'Offline','Shippo labels, saved package presets and Pirate Ship CSV.','<button class="btn" data-action="shipping-settings">Set up shipping</button>')}${settingsCard('companion',esc(companionName()),state.companion.enabled?'Here to help':'Resting','Voice, personality and cohost preferences.','<button class="btn" data-tab="companion">Meet your cohost</button>')}</div>${automationSettings()}${widgetSettings()}<div class="settings-bottom"><details class="settings-disclosure"><summary>${icon('play',18)} Practice show</summary><div><p>Try sample lots without real payments.</p><button class="btn" id="load-demo">Load sample lots</button><button class="btn" id="remove-demo">Clear practice content</button></div></details><details class="advanced-settings settings-disclosure"><summary>${icon('settings',18)} Show & system</summary>${advancedConnections()}${backendSettings()}</details></div>`;
+
 }
 function clock(a) {
   if (!liveConnection) return "—";
@@ -426,6 +431,7 @@ function render() {
   const activityExpanded = $("#show-activity")?.open || false;
   $("#app").innerHTML =
     `${workspaceNavigation({tab,mobileMenuOpen,twitch:state.twitch,companion:state.companion,companionError:state.companionError,brand:brand()})}<div class="workspace-main">${header()}<main>${{ studio, inventory, orders, audience, giveaways:()=>giveawaysPage(state), companion: companionPage, connections, rip: () => ripPage(state), catalog: () => inventory(), accounting:()=>accountingPage(state) }[tab]()}</main></div><footer class="app-footer"><span>© ${new Date().getFullYear()} Autoloot. All rights reserved.</span><nav aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/docs/getting-started/faq">Docs</a></nav></footer>${mochiQuick()}`;
+
   if ($("#show-activity")) $("#show-activity").open = activityExpanded;
   if ($(".run-audit")) $(".run-audit").open = runAuditExpanded;
   if(mochiQuickOpen) {
@@ -509,6 +515,7 @@ function renderShop() {
   const bidFocused=document.activeElement?.hasAttribute('data-copy-bid');
   $("#app").innerHTML =
     `<header class="shop-header"><a class="brand" href="/shop">${brand()}</a><span class="shop-channel">${esc(state.show.title)}</span><span class="pill ${state.mode === "live" ? "green" : ""}">${state.mode==='demo'?'Practice':''}</span></header><main class="shop-main"><div class="drop-shop-heading"><div><h1>${esc(state.show.title)}</h1></div><a class="drop-room-pass" href="#shop-orders">Your orders <span>${viewer?.orders.length||0}</span> ↗</a></div><div class="shop-grid"><section class="panel shop-lot drop-stage" aria-label="Current drop">${dropHero({state,viewer,connected:liveConnection,now:Date.now()-serverOffset,esc,usd,visual,assetDescription,nextBid})}</section><div class="shop-account"><section class="panel settings-panel"><h2>${viewer?.user ? "@" + esc(viewer.user.login) : "Sign in"}</h2>${viewer?.user ? `<p>${viewer.user.kind === "demo" ? "Demo buyer / simulated purchases only." : ""}</p><button class="text-btn" id="viewer-logout">Sign out</button>` : `<p></p>${state.mode === "demo" ? '<button class="btn primary full" id="demo-login">Enter as demo buyer →</button>' : `<label class="consent"><input type="checkbox" id="agree"> I agree to the <a href="/terms" target="_blank" rel="noopener">Terms</a> and listed price and condition, and have read <a href="#shop-policies">seller policies</a> and <a href="/privacy" target="_blank" rel="noopener">Privacy</a>.</label><details class="buyer-bid-terms"><summary>Bidding & shipping</summary><p>Bids are offers to buy in USD. Shipping: ${usd(state.show.shippingPrice || 0)} per physical order. NFT delivery has no shipping charge here; provider redemption fees may apply. Unpaid reservations expire after 15 minutes unless checkout has started.</p></details><button class="btn primary full" id="viewer-login" disabled ${!viewer?.configured ? 'data-unconfigured="true"' : ""}>Sign in with Twitch →</button>`}`}</section><section class="panel settings-panel viewer-orders" id="shop-orders"><h2>Your orders <span class="soft-count">${viewer?.orders.length || 0}</span></h2>${viewer?.orders.length ? viewer.orders.map(buyerOrder).join("") : "<p>No orders yet.</p>"}</section></div></div>${lineupMarkup(state,{esc,usd,visual})}${state.vote ? votePanel(true) : ""}<div class="page-heading shop-catalog-heading"><div><h2>Buy now</h2></div><span class="muted">${usd(state.show.shippingPrice || 0)} shipping / order</span></div><div class="store-grid">${
+
       state.products
         .filter((p) => p.listed && p.buyNowPrice)
         .map(
@@ -932,6 +939,7 @@ async function ask(prompt) {
 }
 function wire() {
   wireGiveaways({api,toast,refresh:async()=>{state=await api("/api/state");render();}});
+
  document.querySelectorAll('[data-inventory-view]').forEach(button=>button.onclick=()=>{inventoryView=button.dataset.inventoryView;render();});
 
  wireAccounting({state,api,modal,toast,refresh:async(fetchState=false)=>{if(fetchState)state=await api('/api/state');render();}});

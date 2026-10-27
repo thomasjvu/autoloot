@@ -87,19 +87,22 @@ function lifecycle(t) {
 }
 test('OAuth rejects expired/replayed state and validates identity before creating a session', async t => {
   const { twitch } = lifecycle(t);
-  const state = new URL(twitch.login('viewer')).searchParams.get('state');
+  const state = new URL(twitch.login('viewer','a'.repeat(64))).searchParams.get('state');
   t.mock.method(globalThis, 'fetch', async url => new Response(JSON.stringify(String(url).endsWith('/token')
     ? { access_token: 'fixture-token' }
     : { client_id: 'test-client', user_id: 'buyer', login: 'buyer' }), { status: 200 }));
-  const result = await twitch.callback('fixture-code', state);
+  await assert.rejects(twitch.callback('fixture-code',state),/browser/);
+  await assert.rejects(twitch.callback('fixture-code',state,'b'.repeat(64)),/browser/);
+  assert.equal(globalThis.fetch.mock.callCount(),0,'wrong-browser callbacks never exchange credentials');
+  const result = await twitch.callback('fixture-code', state,'a'.repeat(64));
   assert.equal(twitch.session(`autoloot_session=${result.session}`).id, 'buyer');
-  await assert.rejects(twitch.callback('fixture-code', state), /expired/);
-  const expired = new URL(twitch.login()).searchParams.get('state');
+  await assert.rejects(twitch.callback('fixture-code', state,'a'.repeat(64)), /expired/);
+  const expired = new URL(twitch.login('viewer','a'.repeat(64))).searchParams.get('state');
   twitch.pending.get(expired).at = Date.now() - 600001;
-  await assert.rejects(twitch.callback('fixture-code', expired), /expired/);
-  const invalid = new URL(twitch.login()).searchParams.get('state');
+  await assert.rejects(twitch.callback('fixture-code', expired,'a'.repeat(64)), /expired/);
+  const invalid = new URL(twitch.login('viewer','a'.repeat(64))).searchParams.get('state');
   globalThis.fetch.mock.mockImplementation(async url => new Response(JSON.stringify(String(url).endsWith('/token') ? { access_token: 'fixture' } : { client_id: 'wrong-client' })));
-  await assert.rejects(twitch.callback('fixture-code', invalid), /identity validation/);
+  await assert.rejects(twitch.callback('fixture-code', invalid,'a'.repeat(64)), /identity validation/);
 });
 test('API refreshes an expired token and retries with the replacement token', async t => {
   const { twitch } = lifecycle(t);

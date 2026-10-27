@@ -49,10 +49,11 @@ test('HTTP runner enforces creator access, reconciles a sale and recovers withou
     assert.equal(published.operator.name,policy.name);
     assert.equal(published.operator.acknowledgedAt,undefined);
     assert.ok((await state()).operator.acknowledgedAt);
-    for(const page of ['/terms','/privacy','/help']) {
+    for(const page of ['/terms','/privacy']) {
       const response=await fetch(base+page);assert.equal(response.status,200);
       const html=await response.text();assert.ok(html.includes('operator-policy'));assert.ok(html.includes('/legal.js'));
     }
+    const help=await fetch(base+'/help',{redirect:'manual'});assert.equal(help.status,302);assert.equal(help.headers.get('location'),'/docs/getting-started/faq');
     assert.equal((await post('/api/run/arm',{},false)).status,403);
     const malformed=await fetch(base+'/api/run/arm',{method:'POST',headers:{'Content-Type':'application/json','X-Autoloot-Admin':'é'.repeat(64)},body:'{}'});
     assert.equal(malformed.status,403);assert.equal((await fetch(base+'/api/health')).status,200);

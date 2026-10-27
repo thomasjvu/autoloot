@@ -6,5 +6,7 @@
     reverse_proxy 127.0.0.1:4173 {
         # Preserve public host and forwarded metadata; do not rewrite Host to localhost.
         header_up Host {http.request.host}
+        # Overwrite caller input; app trusts this only from explicitly configured proxy peers.
+        header_up X-Autoloot-Client-IP {http.request.remote.host}
     }
 }

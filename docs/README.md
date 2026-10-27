@@ -5,6 +5,7 @@
 - [Quick walkthrough](walkthrough.md)
 - [FAQ](faq.md)
 
+
 ## Setup and operation
 
 | Guide | Purpose |
@@ -33,4 +34,3 @@
 - [Marketing deployment](../marketing/README.md): independent Cloudflare Pages target.
 
 Documentation describes the single-streamer implementation. Tests and local previews do not establish real payment, provider custody or funded-wallet integration success.
-

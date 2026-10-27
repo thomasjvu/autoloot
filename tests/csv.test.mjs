@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Engine,seed} from '../lib/engine.mjs';
-import {parseCsv,encodeCsv,previewImport,applyImport,fulfillmentCsv} from '../lib/csv.mjs';
+import {parseCsv,encodeCsv,previewImport,applyImport,fulfillmentCsv,pirateShipCsv} from '../lib/csv.mjs';
 const fresh=()=>new Engine(seed());
 const inventory={kind:'inventory',csv:'sku,title,quantity,condition,price,buyNowPrice,image\r\nA,"Card, blue",2,Used,12.50,15.00,https://example.com/card.jpg'};
 const apply=(e,input)=>{const p=previewImport(e,input);assert.equal(p.valid,true,JSON.stringify(p.rows));applyImport(e,{...input,fingerprint:p.fingerprint});return p;};
@@ -42,4 +42,19 @@ test('shipping export includes addresses and stable IDs, omits unpaid/refund/dig
  const refund=order('4');refund.refundRequestedAt=1;const nft=order('3');nft.product.fulfillment={type:'nft'};
  const {headers,rows}=parseCsv(fulfillmentCsv([order('1'),order('2','pending'),nft,refund]));
  assert.equal(rows.length,1);assert.equal(rows[0][headers.indexOf('Postal code')],'00123');assert.equal(rows[0][headers.indexOf('Order ID')],'1');assert.equal(rows[0][headers.indexOf('Mode')],'demo');
+});
+
+test('fulfillment exports and tracking imports exclude live Stripe test payments',()=>{
+ const e=fresh();const o=e.buyNow({productId:'p4',userId:'demo-buyer',username:'buyer',requestId:'funds'});
+ Object.assign(o,{mode:'live',status:'paid',paymentLive:false});
+ assert.equal(fulfillmentCsv([o]).includes(o.id),false);assert.equal(pirateShipCsv([o]).includes(o.id),false);
+ const preview=previewImport(e,{kind:'tracking',csv:`Order,Carrier,Tracking\n${o.id},USPS,123`});assert.equal(preview.valid,false);assert.equal(o.status,'paid');
+});
+
+test('external payment provenance survives shipping and restart and remains exportable',()=>{
+ const e=fresh();const o=e.buyNow({productId:'p4',userId:'demo-buyer',username:'buyer',requestId:'external'});o.mode='live';
+ e.orderUpdate(o.id,'confirm-paid');e.orderUpdate(o.id,'ship','USPS · 123');
+ const restarted=new Engine(JSON.parse(JSON.stringify(e.state)));const saved=restarted.order(o.id);
+ assert.equal(saved.paymentSource,'external');assert.equal(saved.status,'shipped');assert.equal(fulfillmentCsv([saved]).includes(saved.id),true);
+ const legacy={...saved};delete legacy.paymentSource;assert.equal(fulfillmentCsv([legacy]).includes(legacy.id),true);
 });
