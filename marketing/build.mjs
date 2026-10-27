@@ -16,6 +16,8 @@ const assets={
  'characters/mochi-hero-wave.png':'characters/mochi-hero-wave.png',
  'services/twitch.svg':'brand/services/twitch.svg','services/stripe.svg':'brand/services/stripe.svg',
  'services/README.md':'brand/services/README.md',
+ 'fonts/AutolootDisplay-OFL.txt':'fonts/AutolootDisplay-OFL.txt',
+ 'fonts/AutolootDisplay-Black.woff2':'fonts/AutolootDisplay-Black.woff2',
  'fonts/MapleMono-Variable.woff2':'fonts/MapleMono-Variable.woff2','fonts/OFL.txt':'fonts/OFL.txt','fonts/AUTHORS.txt':'fonts/AUTHORS.txt','fonts/SOURCE.md':'fonts/SOURCE.md'
 };
 for(const [destination,source]of Object.entries(assets)){const target=join(dist,'assets',destination);await mkdir(dirname(target),{recursive:true});await copyFile(join(root,'../public',source),target);}

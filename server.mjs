@@ -1,3 +1,9 @@
+import {publicGiveaway} from './lib/giveaways.mjs';
+import {RipSession} from './lib/rip-session.mjs';
+import {publicCompanion,publicPulls} from './lib/public-state.mjs';
+import {Vision} from './lib/vision.mjs';
+const vision=new Vision();
+import {defaultProfile,validateProfile} from './lib/companion-profile.mjs';
 import {accountingRows,recordCosts} from './lib/accounting.mjs';
 import {Shipping, address as shippingAddress} from './lib/shipping.mjs';
 import {encodeCsv,previewImport, applyImport, fulfillmentCsv, pirateShipCsv} from './lib/csv.mjs';
@@ -8,15 +14,14 @@ import { NftDelivery, walletBridge, isNft } from "./lib/nft.mjs";
 import { Storage } from "./lib/storage.mjs";
 process.umask(0o077);
 import {emptyWorkspace,demoContent} from "./lib/workspace.mjs";
-import { mkdtempSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { Metadata, visionSchema, visionTask, rawQuotes, hostPull } from "./lib/rip.mjs";
+import { Metadata } from "./lib/rip.mjs";
 import { Catalog } from "./lib/catalog.mjs";
 const metadata = new Metadata();
 const catalog = new Catalog(metadata);
-let rip = { observation: null, candidates: [], selected: null, pulls: [], error: "" };
+let rip;
 import {
   readFileSync,
+  statSync,
   writeFileSync,
   mkdirSync,
   renameSync,
@@ -51,6 +56,7 @@ function publicState() {
   return {
     mode: s.mode,
     vote: publicVote(s.vote),
+    giveaway:publicGiveaway(s.giveaway),
     show: s.show,
     operator: operatorProfile(s.operator),
     products: s.products,
@@ -73,7 +79,8 @@ function publicState() {
       source: b.source,
       voided: Boolean(b.voided),
     })),
-    companion: s.companion,
+    companion: publicCompanion(s.companion),
+    pulls:publicPulls(s.pulls),
     serverTime: Date.now(),
   };
 }
@@ -95,7 +102,9 @@ function stateFor(role) {
         twitch: twitch.status,
         proposal,
         companionBusy: busy,
-        rip: {...rip, source: metadata.base},
+        companionError: engine.state.companion.lastError || null,
+        audit:storage.auditPage().events,
+        rip: rip.snapshot(),
         catalog: {...catalog.state, source:metadata.base},
         serverTime: Date.now(),
       }
@@ -116,6 +125,7 @@ engine = new Engine(initial, {
   save: (s) => storage.save(s),
   onChange: broadcast,
 });
+rip = new RipSession(engine,metadata,vision);
 twitch = new Twitch(engine, broadcast, storage.sessionStore());
 const shippingConfigFile=join(data,'shippo.json');
 let shippoToken=process.env.SHIPPO_API_TOKEN || '';
@@ -200,6 +210,7 @@ const timer = setInterval(() => {
   if (storage.failed || engine.halted) return;
   try {
   engine.tick();
+  if(engine.state.giveaway?.status==='open' && Date.now()>=engine.state.giveaway.endsAt)engine.closeGiveaway();
   runs.tick();
   const a = engine.state.auction;
   if (a?.runId && a.status === "live" && a.id !== announcedRunAuction) {
@@ -252,7 +263,26 @@ const server = http.createServer(async (req, res) => {
   catch { return json(res,{error:"Invalid request URL."},400); }
   const path = url.pathname;
   const adminAccess = isAdmin(req, url);
+  const nftAgent=Boolean(process.env.NFT_AGENT_TOKEN && equal(req.headers['x-autoloot-nft-agent'],process.env.NFT_AGENT_TOKEN));
+  const auditContext={};
   try {
+    const auditRead=['/api/orders.csv','/api/fulfillment.csv','/api/pirateship.csv'];
+    if((adminAccess || nftAgent&&path==='/api/nft/submit') && (req.method==='POST'&&path!=='/api/stripe/webhook'||auditRead.includes(path)||path==='/auth/twitch'&&url.searchParams.get('role')==='streamer')){
+      const requestId=randomBytes(16).toString('hex'),action=req.method+' '+path.slice(0,160);
+      auditContext.action=action;
+      storage.recordAudit({requestId,actor:adminAccess?'Local streamer':'NFT agent',action,outcome:'started'});
+      let recorded=false;
+      const complete=()=>{
+        if(recorded)return;recorded=true;
+        try{storage.recordAudit({requestId,actor:adminAccess?'Local streamer':'NFT agent',action:auditContext.action.slice(0,180),outcome:res.writableFinished?(res.statusCode>=400?'rejected':'completed'):'interrupted',status:res.writableFinished?res.statusCode:null});broadcast();}
+        catch{engine.halted=true;console.error('Audit storage failed; backend halted.');}
+      };
+      res.once('finish',complete);res.once('close',complete);
+    }
+    if(path==='/api/audit' && req.method==='GET'){
+      if(!adminAccess)return json(res,{error:'Streamer access required.'},403);
+      return json(res,storage.auditPage(url.searchParams.get('before')||undefined));
+    }
     if (path === "/api/health") return json(res, {ok:!engine.halted && !storage.failed, storage:"sqlite"}, engine.halted || storage.failed ? 503 : 200);
     if ((engine.halted || storage.failed) && path.startsWith("/api/")) return json(res, {error:"Backend halted. No further sales are accepted; operator recovery required."},503);
     const session = twitch.session(req.headers.cookie);
@@ -291,7 +321,6 @@ const server = http.createServer(async (req, res) => {
         state: stateFor("admin"),
       });
     }
-    const nftAgent=Boolean(process.env.NFT_AGENT_TOKEN && equal(req.headers['x-autoloot-nft-agent'],process.env.NFT_AGENT_TOKEN));
     if(path==='/api/nft/jobs' && req.method==='GET') {
       if(!adminAccess && !nftAgent)return json(res,{error:'NFT agent or streamer access required.'},403);
       return json(res,{jobs:engine.state.orders.filter(o=>isNft(o)&&o.delivery&&['paid','paid-external'].includes(o.status)&&(adminAccess||o.delivery.allowTransfer)).map(o=>({...nft.manifest(o),status:o.delivery.status,transactionId:o.delivery.transactionId || null,error:o.delivery.error || null}))});
@@ -352,6 +381,7 @@ const server = http.createServer(async (req, res) => {
         url.searchParams.get("code"),
         url.searchParams.get("state"),
       );
+      if(result.role==='streamer')storage.recordAudit({requestId:randomBytes(16).toString('hex'),action:'GET /auth/twitch/callback',outcome:'completed',status:302});
       res.writeHead(302, {
         "Set-Cookie": `autoloot_session=${result.session}; HttpOnly; SameSite=Lax; Path=/; Max-Age=86400${base.startsWith("https:") ? "; Secure" : ""}`,
         Location: result.role === "streamer" ? "/" : "/shop",
@@ -550,23 +580,11 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "POST" && path === "/api/rip/frame") {
       if (!adminAccess) return json(res, {error:"Streamer access required."},403);
       if (req.headers.origin && req.headers.origin !== `http://${req.headers.host}` && req.headers.origin !== `https://${req.headers.host}`) return json(res,{error:"Cross-origin request rejected."},403);
-      if (busy) throw Error("Mochi is already working. Wait for this frame to finish.");
       if(req.headers['content-type'] !== 'image/jpeg') throw Error('Send a JPEG frame.');
-      const chunks=[]; let size=0;
-      for await(const chunk of req) { size+=chunk.length; if(size>2000000) throw Error('Frame too large.'); chunks.push(chunk); }
-      const image=Buffer.concat(chunks);
-      if(image[0]!==255 || image[1]!==216) throw Error('Invalid JPEG.');
-      const dir=mkdtempSync(join(tmpdir(),'autoloot-rip-'));
-      busy=true; broadcast();
-      try {
-        const imagePath=join(dir,'frame.jpg'); writeFileSync(imagePath,image,{mode:0o600});
-        const observation=await codexReply('',engine.state,{imagePath,outputSchema:visionSchema,task:visionTask});
-        rip.observation=observation; rip.selected=null; rip.candidates=[]; rip.error='';
-        if(['card','pack'].includes(observation.kind)) {
-          try { rip.candidates=await metadata.search(observation); } catch(e) {rip.error=e.message;}
-        }
-        return json(res,rip);
-      } finally {rmSync(dir,{recursive:true,force:true});busy=false;broadcast();}
+      const chunks=[];let size=0;
+      for await(const chunk of req){size+=chunk.length;if(size>2000000)throw Error('Frame too large.');chunks.push(chunk);}
+      const image=Buffer.concat(chunks);if(image[0]!==255||image[1]!==216)throw Error('Invalid JPEG.');
+      await rip.scan(image);return json(res,rip.snapshot());
     }
     if (req.method === "POST" && path.startsWith("/api/")) {
       const origin = req.headers.origin;
@@ -579,6 +597,13 @@ const server = http.createServer(async (req, res) => {
       if (!adminAccess)
         return json(res, { error: "Streamer access required." }, 403);
       const b = await body(req, path.startsWith("/api/import/") ? 1500000 : 32768);
+      if(auditContext.action){
+        const operation=['ship','cancel','refund','test-pay','confirm-paid'].includes(b.action)?b.action:null;
+        const target=engine.state.orders.find(order=>order.id===b.id)?.number || engine.state.products.find(product=>product.id===b.id)?.id;
+        if(operation)auditContext.action+=' · '+operation;
+        if(target)auditContext.action+=' ['+target+']';
+      }
+
       switch (path) {
         case "/api/accounting/costs": recordCosts(engine,b);break;
         case "/api/accounting/export": return json(res,{csv:encodeCsv([['Order','Item','Status','Mode','Date','Collected USD','Refunded USD','Net USD','Recorded costs USD','Estimated contribution USD','Costs complete','Item cost USD','Payment fees USD','Delivery cost USD','Other cost USD','Private note'],...accountingRows(engine.state).map(row=>[row.number,row.title,row.status,row.mode,new Date(row.at).toISOString(),...['received','refund','net','expenses','margin'].map(key=>row[key]===null?'':(row[key]/100).toFixed(2)),row.complete,...['itemCost','paymentFees','deliveryCost','otherCost'].map(key=>row[key]===null?'':(row[key]/100).toFixed(2)),row.note])])});
@@ -641,28 +666,12 @@ const server = http.createServer(async (req, res) => {
           await catalog.select(b.id); break;
         case "/api/catalog/add":
           catalog.add(engine,b); catalog.state.selected=null; break;
-        case "/api/rip/search":
-          rip.selected=null; rip.observation=null; rip.candidates=await metadata.search({kind:b.kind==='pack'?'pack':'card',name:b.query}); rip.error=''; break;
-        case "/api/rip/select": {
-          const candidate=rip.candidates.find(c=>c.id===b.id);
-          if(!candidate) throw Error('Search for the card first.');
-          if(rip.observation?.kind==='pack' && !candidate.number) throw Error('Pack set candidate: hold up a card and scan its reveal to log a pull.');
-          const detail=await metadata.detail(candidate.id);
-          if(!detail.card?.id) throw Error('Metadata returned no card detail.');
-          rip.selected={...candidate,rarity:detail.card.rarity || '',variants:rawQuotes(detail)}; break;
-        }
-        case "/api/rip/confirm": {
-          if(!rip.selected) throw Error('Select and review a card first.');
-          const selected=rip.selected;
-          const price=b.variant ? selected.variants.find(v=>v.key===b.variant):null;
-          if(b.variant && !price) throw Error('Choose an available variant.');
-          const pull={id:randomBytes(12).toString('hex'),name:selected.name,number:selected.number,setName:selected.setName,rarity:selected.rarity,metadataId:selected.id,price,at:new Date().toISOString()};
-          rip.pulls.unshift(pull); rip.pulls=rip.pulls.slice(0,200);
-          rip.selected=null; rip.observation=null; rip.candidates=[];
-          engine.say(hostPull(pull),'happy'); break;
-        }
-        case "/api/rip/clear":
-          rip.observation=null; rip.selected=null; rip.candidates=[]; rip.error=''; break;
+        case "/api/payments/reconcile-refund": await payments.reconcileRefund(b.id,b.refundId);break;
+        case "/api/payments/reconcile-checkout": await payments.reconcileCheckout(b.id,b.sessionId);break;
+        case "/api/rip/search": await rip.search(b);break;
+        case "/api/rip/select": await rip.select(b.id);break;
+        case "/api/rip/confirm": rip.confirm(b);break;
+        case "/api/rip/clear": rip.clear();break;
 
         case "/api/import/preview": {
           const {state: discarded, ...preview} = previewImport(engine, b);
@@ -748,8 +757,7 @@ const server = http.createServer(async (req, res) => {
           if (runActive(engine.state.run)) throw Error("Stop the agent run before changing demo inventory.");
           if(shipping.locks.size || engine.state.orders.some(o=>o.mode==='demo'&&['purchasing','unknown','pending','purchased','refund-pending'].includes(o.shipment?.status)))throw Error("Resolve practice shipping labels before clearing demo content.");
           if(typeof b.enabled!=='boolean')throw Error('Choose load or remove demo content.');
-          writeFileSync(join(data,'before-demo-change-'+Date.now()+'.json'),JSON.stringify(engine.state),{mode:0o600});
-          demoContent(engine,b.enabled);proposal=null;rip={observation:null,candidates:[],selected:null,pulls:[],error:''};broadcast();break;
+          demoContent(engine,b.enabled);proposal=null;rip.clear();broadcast();break;
         case "/api/mode":
           engine.setMode(b.mode);
           break;
@@ -792,6 +800,17 @@ const server = http.createServer(async (req, res) => {
             .slice(0, 100);
           engine.commit();
           break;
+        case "/api/giveaway/open":
+          engine.openGiveaway(b);break;
+        case "/api/giveaway/close":
+          engine.closeGiveaway(Boolean(b.cancel));break;
+        case "/api/giveaway/draw":
+          engine.drawGiveaway();break;
+        case "/api/giveaway/demo":
+          if(engine.state.mode!=='demo')throw Error('Practice mode only.');
+          engine.enterGiveaway({userId:'demo-'+String(b.username),username:b.username,source:'demo'});break;
+        case "/api/points/settings":
+          engine.state.pointsRewardId=String(b.rewardId||'').trim().slice(0,100);engine.commit();break;
         case "/api/vote/open":
           engine.openVote(b);
           await announce(
@@ -828,6 +847,7 @@ const server = http.createServer(async (req, res) => {
             throw Error("Quantity must be 1–10,000.");
           const notes = String(b.notes || "").slice(0, 1500),
             condition = String(b.condition || "Used").slice(0, 40);
+          if(engine.state.mode!=='demo' && engine.state.companion.provider!=='codex')throw Error('Connect a real companion provider in Companion settings first.');
           busy = true;
           broadcast();
           try {
@@ -857,11 +877,20 @@ const server = http.createServer(async (req, res) => {
           }
           break;
         }
+        case "/api/rip/provider":
+          if(!['cloud','local'].includes(b.mode))throw Error('Choose cloud or local vision.');
+          engine.state.companion.visionMode=b.mode;rip.clear();engine.commit();break;
+        case "/api/companion/profile": {
+          if(b.reset===true)Object.assign(engine.state.companion,defaultProfile);
+          else {const profile=validateProfile(b);if(profile.avatar.startsWith('/media/')&&!existsSync(join(imageDir,profile.avatar.slice(7))))throw Error('Upload the avatar first.');Object.assign(engine.state.companion,profile);}
+          engine.commit();break;
+        }
         case "/api/companion/settings":
-          if (b.provider && !["demo", "codex"].includes(b.provider))
+          if (b.provider && !["offline", "demo", "codex"].includes(b.provider))
             throw new Error("Unknown provider.");
           for (const k of ["enabled", "voice", "overlayVoice", "reducedMotion"])
             if (typeof b[k] === "boolean") engine.state.companion[k] = b[k];
+          if(b.provider==='demo'&&engine.state.mode!=='demo')throw Error('Scripted replies are available only in practice mode.');
           if (b.provider) engine.state.companion.provider = b.provider;
           engine.commit();
           break;
@@ -873,6 +902,8 @@ const server = http.createServer(async (req, res) => {
             b.prompt.length > 2000
           )
             throw new Error("Enter a request under 2,000 characters.");
+          if(engine.state.mode!=='demo' && engine.state.companion.provider!=='codex')throw Error('Connect a real companion provider in Companion settings first.');
+          engine.state.companion.lastError=null;
           busy = true;
           broadcast();
           try {
@@ -896,6 +927,9 @@ const server = http.createServer(async (req, res) => {
               `Companion replied (${engine.state.companion.provider}).`,
             );
             engine.commit();
+          } catch(error) {
+            engine.state.companion.lastError='Companion request failed';
+            throw error;
           } finally {
             busy = false;
             broadcast();
@@ -997,7 +1031,18 @@ const server = http.createServer(async (req, res) => {
       });
       return res.end(rows.map((r) => r.map(cell).join(",")).join("\r\n"));
     }
-    const contentPages={'/privacy':'privacy','/terms':'terms','/help':'help','/404':'404'};
+    if(path==='/help' || path==='/help.html'){
+      res.writeHead(302,{Location:'/docs/getting-started/faq'});return res.end();
+    }
+    const docsDir=join(root,'documentation','dist');
+    const docsRequest=path==='/docs'||path.startsWith('/docs/')||path.startsWith('/assets/')||path.startsWith('/docs-content/')||path.startsWith('/pagefind/')||['/docs-index.json','/docs-collection.json','/docs-last-updated.json','/docs-references.json','/file.svg','/folder.svg'].includes(path);
+    if(docsRequest && /^\/[a-zA-Z0-9_./-]+$/.test(path) && !path.includes('..')){
+      const relative=path==='/docs'?'/docs.html':path;
+      const candidates=[join(docsDir,relative),join(docsDir,relative+'.html'),join(docsDir,relative,'index.html')];
+      const file=candidates.find(p=>existsSync(p)&&statSync(p).isFile());
+      if(file){const type={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.wasm':'application/wasm','.svg':'image/svg+xml','.woff2':'font/woff2','.png':'image/png','.webp':'image/webp'}[extname(file)]||'application/octet-stream';res.writeHead(200,{'Content-Type':type,'Cache-Control':'no-store'});return res.end(readFileSync(file));}
+    }
+    const contentPages={'/privacy':'privacy','/terms':'terms','/404':'404'};
     if(contentPages[path] && req.method==='GET'){
       res.writeHead(path==='/404'?404:200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
       return res.end(readFileSync(join(root,'public',contentPages[path]+'.html')));

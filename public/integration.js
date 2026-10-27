@@ -1,5 +1,7 @@
 // Shared presentation rules; these never authorize bids or change auction state.
 export const widgetPresets = {
+  pull: {label:'Pull spotlight',width:640,height:200},
+  ribbon: {label:'Recent pulls',width:1280,height:200},
   full: { label: 'Full show', width: 1280, height: 720 },
   auction: { label: 'Compact auction', width: 960, height: 200 },
   vote: { label: 'Chat vote', width: 480, height: 540 },

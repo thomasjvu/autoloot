@@ -53,7 +53,7 @@ Verify the configured API with real catalog searches. Test a small labeled set o
 
 There is no configured production deployment. Choose either a local-first streamer installation with a public viewer tunnel, or a hosted viewer/payment service with a deliberately designed local Codex connection. Do not expose localhost admin bootstrap publicly.
 
-Before real sales, choose persistent storage/backups, durable admin identity and buyer sessions, monitoring and restore procedures. Specify unpaid-winner handling, shipping, taxes, refunds and disputes. Multi-process hosting requires transactional persistence; the current SQLite store deliberately enforces a single writer; multi-process entity coordination is not implemented.
+Before real sales, configure encrypted persistent storage/off-site backups, monitoring and tested restore procedures. Buyer sessions persist in SQLite; creator access remains localhost-only. Specify unpaid-winner handling, shipping, taxes, refunds and disputes. Multi-process hosting requires transactional persistence; the current SQLite store deliberately enforces a single writer; multi-process entity coordination is not implemented.
 
 ## Release housekeeping
 

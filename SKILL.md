@@ -49,9 +49,13 @@ The public `/shop` includes the live drop countdown, accepted-bid feed, sold res
 2. **Live control / Studio:** start an eligible lot, inspect bids, pause/resume or finish/cancel it. Bid voiding requires a paused auction. The server decides accepted bids, anti-sniping extensions and winners.
 3. **Orders:** inspect the order and payment status before fulfillment. Demo Test payment is a simulation. Live Stripe payment is established by verified provider events, never by a success URL or an agent assertion. Record real tracking only when shipment has occurred. NFT delivery uses its separate verified transfer flow.
 4. **Companion:** select scripted Demo or locally authenticated Codex. Ask for a proposal, review every proposed field, then Apply when covered by the user's instruction. Pending proposals are not completed actions. The embedded Codex adapter cannot directly control payment or winner state.
-5. **Connections / Settings:** configure Twitch, checkout and OBS as needed for the requested workflow. Share the public `/shop` URL with buyers; keep creator bootstrap local. An HTTPS tunnel must preserve its external Host header.
+5. **Settings:** configure Twitch, checkout and OBS as needed for the requested workflow. Share the public `/shop` URL with buyers; keep creator bootstrap local. An HTTPS tunnel must preserve its external Host header.
 
 Useful creator POST routes include `/api/products`, `/api/products/edit`, `/api/auction/start`, `/api/auction/pause`, `/api/auction/resume`, `/api/auction/finish`, `/api/auction/cancel`, `/api/order`, `/api/show`, `/api/companion/ask` and `/api/companion/apply`. These are guarded business commands, not unrestricted object updates. Read their handlers for exact field names and constraints. Use stable request IDs on routes that support them; after an uncertain payment/transfer response, reconcile the existing operation before retrying.
+
+## Sales accounting
+
+Sales & numbers contains seller-only collected/refunded totals and private cost annotations. Read [Accounting](docs/accounting.md) for formulas and export scope. Do not claim payout reconciliation or profit; unknown costs remain unknown.
 
 ## Bounded agent-led sales
 
