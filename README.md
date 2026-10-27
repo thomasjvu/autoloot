@@ -11,7 +11,7 @@ npm ci
 npm start
 ```
 
-Open **http://localhost:4173**. Fresh workspaces start empty in live mode. For a credential-free practice show, use **Settings → Practice show → Load sample lots**. Sample TCG images are reference assets, not seller-owned stock; see [image sources](public/demo/SOURCES.md).
+Open **http://localhost:4173**. Fresh workspaces start empty in live mode. For a credential-free practice show, use **Settings → Practice show → Load sample lots**. Sample lots use text and built-in placeholders; no third-party card scans or seller photographs are bundled.
 
 Copy `.env.example` to `.env` when configuring integrations. The example enables production mode. Keep credentials and `.data/` private. One server owns one local SQLite data directory.
 
