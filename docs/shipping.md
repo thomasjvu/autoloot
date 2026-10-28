@@ -57,3 +57,11 @@ Shipment snapshots persist with each order, including the purchase attempt, prov
 `tests/shipping.test.mjs` exercises the domain/provider adapter with injected responses. `tests/shipping-http.test.mjs` launches a disposable server using an explicit test-only fetch preload and checks access, setup, rates, purchase, tracking, refund guards and dispatch. The preload is never loaded by normal startup. Browser QA also uses that isolated fixture server. No real Shippo API label transaction or live postage purchase has been executed during this implementation. Configure your test token and verify real provider rates/labels before switching to live.
 
 Official references: [Shippo label flow](https://docs.goshippo.com/guides/generate-shipping-label), [Shippo testing](https://docs.goshippo.com/guides/testing), [Pirate Ship API boundary](https://support.pirateship.com/en/articles/2309246-does-pirate-ship-have-an-api), [Pirate Ship spreadsheets](https://www.pirateship.com/integrations/spreadsheets).
+
+## Order attention and packing
+
+Orders → **Needs attention** collects unpaid/processing orders, incomplete recipient addresses, unverified live payments, unresolved checkout/refund/label outcomes and failed digital transfers. Follow the displayed next step and existing order controls; an uncertain provider outcome is not permission to repeat a purchase or transfer.
+
+**Packing by buyer** groups eligible paid, unshipped physical orders by verified buyer ID, live/practice mode and matching recipient destination. Different buyers, addresses or modes stay separate. Missing identities/addresses, refund requests, unverified live payments and active labels are excluded and listed for review. The view includes item/order counts and actual totals, including separately charged shipping.
+
+This is a packing reference, not combined shipping: order records, label purchases, shipping charges and dispatch remain separate. Do not use one order's label to represent fulfillment of the group. Use each order's existing shipping controls; combined-package labels and shipping-charge adjustments require a future fulfillment workflow.
