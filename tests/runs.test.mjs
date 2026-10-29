@@ -115,3 +115,85 @@ test('review mode requires current-lot approval, survives restart and rejects st
  recovered.approve({runId:run.id,index:1});recovered.tick();assert.equal(restored.product(b.id).listed,true);
  assert.equal(restored.state.auction.id,auctionId);
 });
+
+function biddingRun() {
+  const f=fixture();
+  f.e.state.show.bidDuration=3600;
+  f.arm([{productId:f.a.id,format:'auction'}]);f.runs.tick();
+  const direct=()=>f.e.bid({userId:'new-buyer',username:'new-buyer',amount:'6'});
+  const maximum=()=>f.e.maximumBid({auctionId:f.e.state.auction.id,requestId:'new-max',userId:'new-buyer',username:'new-buyer',amount:'20'});
+  const resolved=()=>f.e.resolveDirectBid({userId:'new-buyer',username:'new-buyer',price:600,source:'demo',messageId:'resolved'});
+  return {...f,direct,maximum,resolved};
+}
+test('run bid authorization expires at the exact deadline without polling or state mutation',()=>{
+  for(const entry of ['direct','maximum','resolved'])for(const offset of [0,1])for(const auctionDue of [false,true]){
+    const f=biddingRun();
+    f.e.bid({userId:'buyer',username:'buyer',amount:'5'});
+    if(auctionDue)f.e.state.auction.endsAt=f.e.state.run.expiresAt;
+    f.advance(10*60000+offset);
+    const before=structuredClone(f.e.state);
+    assert.throws(f[entry],/not authorized/);
+    assert.deepEqual(f.e.state,before,`${entry}, offset ${offset}, due ${auctionDue}`);
+  }
+});
+test('run direct and maximum bids remain accepted immediately before expiry',()=>{
+  for(const entry of ['direct','maximum']){
+    const f=biddingRun();f.advance(10*60000-1);f[entry]();
+    assert.equal(f.e.state.auction.highest.userId,'new-buyer');
+    assert.equal(f.e.state.auction.bidCount,1);
+  }
+});
+test('run maximum raises and request replays cannot change state at expiry',()=>{
+  const f=biddingRun(),args={auctionId:f.e.state.auction.id,userId:'buyer',username:'buyer',requestId:'first',amount:'10'};
+  f.e.maximumBid(args);f.advance(10*60000);
+  const before=structuredClone(f.e.state);
+  for(const request of [args,{...args,requestId:'raise',amount:'20'}]){
+    assert.throws(()=>f.e.maximumBid(request),/not authorized/);
+    assert.deepEqual(f.e.state,before);
+  }
+});
+test('all run bid entry points reject invalid owning run authority without side effects',()=>{
+  const invalid={
+    paused:f=>{f.e.state.run.status='paused';},
+    stopped:f=>{f.e.state.run.status='stopped';},
+    missing:f=>{delete f.e.state.run;},
+    id:f=>{f.e.state.run.id='different-run';},
+    index:f=>{f.e.state.run.index=1;},
+    product:f=>{f.e.state.run.steps[0].productId='other-product';},
+    format:f=>{f.e.state.run.steps[0].format='buy-now';},
+    runMode:f=>{f.e.state.run.mode='live';},
+    showMode:f=>{f.e.state.mode='live';},
+    expiry:f=>{f.e.state.run.expiresAt=null;},
+  };
+  for(const [reason,mutate] of Object.entries(invalid))for(const entry of ['direct','maximum','resolved']){
+    const f=biddingRun();mutate(f);const before=structuredClone(f.e.state);
+    assert.throws(f[entry],/not authorized/,`${reason}: ${entry}`);
+    assert.deepEqual(f.e.state,before);
+  }
+});
+test('non-run auctions remain independent of an expired or missing run',()=>{
+  for(const entry of ['direct','maximum'])for(const missing of [false,true]){
+    const f=biddingRun();delete f.e.state.auction.runId;delete f.e.state.auction.runStep;
+    if(missing)delete f.e.state.run;else f.e.state.run.expiresAt=0;
+    f[entry]();assert.equal(f.e.state.auction.highest.userId,'new-buyer');
+  }
+});
+test('auction deadline still settles accepted bids before run expiry',()=>{
+  for(const entry of ['direct','maximum']){
+    const f=biddingRun();f.e.state.auction.endsAt-=3590000;
+    f.e.bid({userId:'buyer',username:'buyer',amount:'5'});
+    f.advance(10000);assert.throws(f[entry],/no live/i);
+    assert.equal(f.e.state.auction.status,'sold');assert.equal(f.e.state.orders[0].amount,500);
+  }
+});
+test('accepted run bids can settle by clock or manual finish and orders remain payable after expiry',()=>{
+  for(const manual of [false,true]){
+    const f=biddingRun();f.e.bid({userId:'buyer',username:'buyer',amount:'5'});
+    f.advance(10*60000);
+    if(manual){f.runs.tick();assert.equal(f.e.state.auction.status,'paused');f.e.finish();}
+    else {f.e.state.auction.endsAt=f.e.state.run.expiresAt;f.e.tick();}
+    const order=f.e.state.orders[0];assert.equal(order.amount,500);assert.equal(order.runId,f.e.state.run.id);
+    f.e.orderUpdate(order.id,'test-pay');assert.equal(order.status,'test-paid');
+    f.e.orderUpdate(order.id,'ship','tracking');assert.equal(order.status,'shipped');
+  }
+});

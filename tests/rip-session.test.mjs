@@ -33,3 +33,22 @@ test('failed persistence never publishes a confirmed pull',async()=>{
  const engine=new Engine(emptyWorkspace(),{save:()=>{throw Error('disk');}}),session=new RipSession(engine,metadata,vision);
  await session.search({query:'card'});await session.select('card');assert.throws(()=>session.confirm({selectionId:session.snapshot().selected.selectionId}),/disk/);assert.equal(session.snapshot().pulls.length,0);
 });
+
+test('malformed provider guides leave a review usable without a price and cannot create ghost pulls',async()=>{
+ for(const quotes of [{currency:'invalid',variants:[{key:'raw',label:'Raw',mid:1}]},{currency:'USD',variants:{}},{currency:'USD',variants:[null,{},[]]}]){
+  let saved;const engine=new Engine(emptyWorkspace(),{save:s=>{saved=structuredClone(s);}}),session=new RipSession(engine,{...metadata,detail:async()=>({card,quotes})},vision);
+  await session.search({query:'card'});await session.select('card');const selected=structuredClone(session.state.selected),before=structuredClone(engine.state);
+  assert.equal(selected.variants.length,0);assert.throws(()=>session.confirm({selectionId:selected.selectionId,variant:'raw'}),/available/);assert.deepEqual(engine.state,before);assert.deepEqual(session.state.selected,selected);
+  engine.chat('fixture','unrelated');assert.equal(saved.pulls.length,0);
+  session.confirm({selectionId:selected.selectionId});assert.equal(saved.pulls.length,1);assert.throws(()=>session.confirm({selectionId:selected.selectionId}),/changed/);
+ }
+});
+test('announcement formatting is completed before any pull or companion mutation',async()=>{
+ let saved;const engine=new Engine(emptyWorkspace(),{save:s=>{saved=structuredClone(s);}}),session=new RipSession(engine,metadata,vision);
+ await session.search({query:'card'});await session.select('card');session.state.selected.variants=[{key:'raw',label:'Raw',price:1,currency:'invalid'}];
+ const before=structuredClone(engine.state),selection=structuredClone(session.state.selected);
+ assert.throws(()=>session.confirm({selectionId:selection.selectionId,variant:'raw'}),/currency/);assert.deepEqual(engine.state,before);assert.deepEqual(session.state.selected,selection);
+ engine.chat('fixture','unrelated');assert.equal(saved.pulls.length,0);
+ session.state.selected.variants[0].currency='EUR';session.confirm({selectionId:selection.selectionId,variant:'raw'});assert.equal(saved.pulls.length,1);assert.match(saved.companion.message,/€1\.00/);
+ assert.throws(()=>session.confirm({selectionId:selection.selectionId,variant:'raw'}),/changed/);
+});

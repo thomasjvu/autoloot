@@ -19,3 +19,9 @@ test('raw quotes retain decimal USD and provenance, exclude graded and missing p
  assert.match(hostPull({name:'Pikachu',number:'25',price:quotes[0]}),/stale quote/);
  assert.doesNotMatch(hostPull({name:'Pikachu'}),/\$/);
 });
+
+test('malformed provider guides never become usable quotes or silently change currency',()=>{
+ for(const quotes of ['invalid',[],{}, {currency:'invalid',variants:[]},{currency:null,variants:[]},{currency:'USD',variants:{}}])assert.throws(()=>rawQuotes({quotes}),/invalid/);
+ assert.deepEqual(rawQuotes({quotes:{currency:'EUR',variants:[null,[],{}, {key:'raw',label:'Raw',mid:2}]}}).map(q=>q.currency),['EUR']);
+ assert.deepEqual(rawQuotes({quotes:null}),[]);
+});
