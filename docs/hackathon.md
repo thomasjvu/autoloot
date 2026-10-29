@@ -20,7 +20,7 @@ Autoloot turns a Twitch stream into a live commerce show. Chat bids on products,
 - Publish source, assets and run instructions to an eligible repository host.
 - Include the primary development Codex session ID from `/status`. Companion runtime sessions are ephemeral and are not that development record.
 - Upload an English public YouTube demo under three minutes showing actual Twitch operation and Codex development.
-- Describe the project honestly: local single-streamer implementation, Stripe setup required, basic SVG companion, browser voice, manual tracking. No label purchasing, tax automation, multi-seller payout platform or marketplace synchronization.
+- Describe the project honestly: local single-streamer implementation with server-verified Stripe checkout and Shippo single-order/combined-package labels. Operator accounts, production configuration and real-provider rehearsals are still required. The companion uses a basic SVG avatar and optional browser voice. Tax automation, multi-seller payouts and marketplace synchronization are not implemented.
 - Verify account eligibility and integration permissions.
 - Submit by **November 2, 2026, 5 p.m. Eastern**.
 
