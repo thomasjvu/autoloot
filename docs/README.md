@@ -35,3 +35,5 @@
 - [Marketing deployment](../marketing/README.md): independent Cloudflare Pages target.
 
 Documentation describes the single-streamer implementation. Tests and local previews do not establish real payment, provider custody or funded-wallet integration success.
+
+- [Bidding and private maximums](bidding.md) — buyer terms, resolver rules and moderation.
