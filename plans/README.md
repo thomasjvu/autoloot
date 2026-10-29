@@ -144,3 +144,25 @@ Plan017 DONE — APPROVED. Independent cold reviewer and parent verified fixes f
 ## 019 — Help fallback and submission guide
 
 [Plan](019-help-and-submission-fixes.md). DONE — APPROVED. Executor isolated branch codex/help-fallback, baselinee5479ac. FAQ aliases now prefer optional rich docs and serve tracked usable help otherwise; existing help302 remains. Corrected hackathon label feature description and documented fallback. Reviewer inspected all source/docs/tests; independent check82/tests247/demo/privacy/whitespace pass. Browser /help followed to styled bundled FAQ200 with no optional build;390px mobile has no horizontal overflow and payments anchor exists. Tests cover tracked-only deployment, internal links, HEAD, rich docs/assets priority, unknown paths and raw traversal404. Promotion authorized; implementation commit and main merge recorded in git history.
+
+## 020 — Rip confirmation and inline-form audit
+
+[Report](020-rip-and-form-audit.md), baseline49c7c59. Read-only standard pass; check82/tests247 pass, zero dependency advisories. Two independently reproduced findings: malformed quote formatting leaves ghost pull before commit; workspace draft capture loses textarea/select state and global same-name tracking restore can target wrong prize form. Recommend both fixes; no implementation plans/source fixes yet. Prior Help/submission and commerce findings remain resolved; rejected interpretations/limits in report.
+
+## 021 — Atomic pulls and entity-scoped drafts
+
+[Plan](021-rip-and-draft-fixes.md). DONE — APPROVED. Commit283f098 on codex/rip-draft-fixes at /Users/area/.codex/worktrees/rip-draft-fixes/live-shopping-companion. Provider guide structures/currency validated; host announcement prepared before ledger mutation, malformed guide retains no-price review. Giveaway opt-in draft keys preserve exact entity/mode/recipient revision; pending submit guards survive rerenders. Focused safe search controls bind stable control ID+form ID+surface; no global name restore, secrets/modal/max excluded.
+
+Reviewer independently ran check82/tests258/demo/privacy/whitespace. Cold reviewer caught initial focused Rip search regression, executor fixed Rip/Catalog scoped restoration and added tests; final cold review approved18 focused tests. Actual browser preserved title/rules/nondefault selects, two separate prize tracking values+checkboxes+textarea focus across unrelated chat; revised Rip search query/focus also survived SSE, no JS errors. Docs/vision+architecture shipped in same commit. Scope11 files; original source unchanged, no merge/push/live-provider calls. Plan020 findings resolved in isolated implementation; original checkout has report/plan records only.
+
+## 022 — Latest implementation run-expiry audit
+
+[Report](022-run-expiry-audit.md), baseline283f098 (unmerged latest worktree). Read-only standard pass; check82/tests258 pass, zero advisories. One independently reproduced finding: direct/max auction bids lack synchronous owning-run expiry enforcement and can enter between arming expiry and200ms runner poll. Recommend shared boundary guard + exact-expiry regressions. No new NFT/draft/Rip defect found; considered/rejected and validation limits recorded. Awaiting selection; no source changes or implementation plan.
+
+## 023 — Run expiry guard
+
+[Plan](023-run-expiry-guard.md). IN PROGRESS — authorized execution based on approved283f098, isolated executor and independent review. Reject expired or invalid run-owned auction bidding synchronously; preserve accepted-bid settlement and existing orders.
+
+### 023 execution review — DONE / APPROVED
+
+Commit54dc8c0 on codex/run-expiry-guard at /Users/area/.codex/worktrees/run-expiry/live-shopping-companion, based283f098 and including its prior Rip/draft fixes. Reviewer read all four changed files and meaningful regression assertions; independently ran check82/tests265/demo journeys/privacy successfully. Whitespace clean, isolated commit clean, scope compliant. Shared pre-tick guard rejects invalid/expired run ownership before direct/private offer mutation, including exact expiry and coincident auction end. Existing accepted bids can settle and orders remain payable/fulfillable. No merge/push or live provider calls. Plan022 finding resolved in isolated implementation.
