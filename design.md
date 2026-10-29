@@ -4,11 +4,7 @@ Autoloot is a Twitch selling workspace: calm enough to operate during a live sho
 
 ## Source of truth
 
-The application loads these styles in order:
-
-1. `public/styles/foundation.css` — base layout, controls, and component structure.
-2. `public/styles/components.css` — editorial layout, Maple Mono, display typography, and interaction feedback.
-3. `public/styles/workspace.css` — current palette and final component overrides.
+The application loads the ordered imports in [`public/styles/app.css`](public/styles/app.css). Follow the [stylesheet ownership guide](public/styles/README.md) when editing or adding styles; it records the current cascade and verification rules.
 
 The **street palette** below is the current direction. Earlier purple, pink, blue, and mint declarations remain in the cascade; they do not define the current global identity. Read the final computed style before reusing an older component color.
 

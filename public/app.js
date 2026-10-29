@@ -595,6 +595,7 @@ function wire() {
 
 }
 const connection=createLiveConnection({
+ getViewer:()=>viewer,
  surface:isShop?'shop':isOverlay?'overlay':'workspace',api,getAdminToken:()=>adminToken,
  applyBootstrap:data=>{adminToken=data.admin;overlayUrl=data.overlayUrl;viewerUrl=data.viewerUrl;state=data.state;},
  applySnapshot:(freshState,freshViewer)=>{state=freshState;if(isShop)viewer=freshViewer;},
