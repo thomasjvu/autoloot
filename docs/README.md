@@ -14,6 +14,7 @@
 | [Twitch and OBS](twitch-widgets.md) | Channel login, chat commands and stream widgets |
 | [Seller policies](operator-policies.md) | Public identity, support, fulfillment and privacy notices |
 | [Agent-led runs](agent-led-runs.md) | Queue limits, per-lot review, pause and recovery |
+| [Giveaways](giveaways.md) | Free entry, private prize claims and history |
 | [Shipping](shipping.md) | Shippo labels, dispatch and Pirate Ship workflow |
 | [CSV](csv-and-shipping.md) | Inventory mapping, exports and tracking imports |
 | [NFT delivery](nft-delivery.md) | Supported assets, wallet adapter and verified fulfillment |
