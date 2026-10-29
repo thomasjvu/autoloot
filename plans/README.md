@@ -140,3 +140,7 @@ Plan017 DONE — APPROVED. Independent cold reviewer and parent verified fixes f
 ## 018 — Promoted main audit
 
 [Report](018-promoted-main-audit.md), audited8f4ef80 after main promotion/push. Standard read-only pass; check82/test244/demo/privacy pass, zero dependency advisories. Two verified findings: optional docs build missing leaves Help/FAQ404 on tracked-only deployments, and hackathon guide incorrectly denies label purchasing. No new high-confidence commerce/security/atomicity defect found. Considered/rejected and limits recorded in report. Awaiting selection; no source fixes or implementation plans written.
+
+## 019 — Help fallback and submission guide
+
+[Plan](019-help-and-submission-fixes.md). DONE — APPROVED. Executor isolated branch codex/help-fallback, baselinee5479ac. FAQ aliases now prefer optional rich docs and serve tracked usable help otherwise; existing help302 remains. Corrected hackathon label feature description and documented fallback. Reviewer inspected all source/docs/tests; independent check82/tests247/demo/privacy/whitespace pass. Browser /help followed to styled bundled FAQ200 with no optional build;390px mobile has no horizontal overflow and payments anchor exists. Tests cover tracked-only deployment, internal links, HEAD, rich docs/assets priority, unknown paths and raw traversal404. Promotion authorized; implementation commit and main merge recorded in git history.
