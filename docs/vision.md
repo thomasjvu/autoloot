@@ -41,3 +41,5 @@ Set `MOONDREAM_MODEL=moondream2` in Autoloot's `.env` as well. The Python comman
 Camera tracks stop when you leave Rip Studio. Crop and variant choices survive unrelated live updates; changing the reviewed identity resets the variant. Revision IDs prevent late responses from replacing a newer review, and confirmation requires the exact reviewed selection.
 
 For a vision-led show, set `AUTOLOOT_REQUIRE_VISION=1` before running `npm run production:check`. Local readiness checks the loaded model via the loopback adapter’s `/health`; cloud preflight checks configured credentials, not recognition quality or account credit.
+
+Market-guide data is validated before review. Malformed quote structures or currency codes leave the card available for confirmation without a guide and show an error; Autoloot does not relabel an unknown currency as USD. Confirmation prepares the host announcement before changing the pull ledger. A rejected guide or formatting failure does not add a pull, and unrelated later saves cannot persist that rejected confirmation.
