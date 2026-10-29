@@ -29,7 +29,7 @@ const render=(orders,filter)=>ordersPage({orders,payments:{configured:true,envir
 test('orders filters render actionable attention, grouped packing, exclusions and escaped values',()=>{
  const o=order({buyer:'<buyer>',product:{title:'<card>'}});
  const html=render([o,order({id:'b',shipping:{}})],'packing');
- assert.match(html,/packing suggestions only/);assert.match(html,/&lt;buyer&gt;/);assert.match(html,/&lt;card&gt;/);assert.match(html,/Review before packing/);assert.match(html,/data-shipping-order="a"/);
+ assert.match(html,/Buyer shipping charges stay unchanged/);assert.match(html,/&lt;buyer&gt;/);assert.match(html,/&lt;card&gt;/);assert.match(html,/Review before packing/);assert.match(html,/data-shipping-order="a"/);
  const attention=render([order({id:'uncertain',status:'pending',checkoutCreated:1}),o],'attention');
  assert.match(attention,/reconcile-checkout/);assert.match(attention,/Checkout outcome uncertain/);assert.doesNotMatch(attention,/<strong>&lt;card&gt;<\/strong>/);
  assert.match(render([o],'all'),/&lt;card&gt;/);assert.match(render([o],'ready'),/&lt;card&gt;/);assert.doesNotMatch(render([o],'pending'),/&lt;card&gt;/);

@@ -28,7 +28,7 @@ export function packingBlockers(o) {
  if (o.refundRequestedAt != null) reasons.push('Refund requested.');
  if (!o.userId) reasons.push('Verified buyer identity missing.');
  if (!completeAddress(o)) reasons.push('Shipping address incomplete.');
- if (labelLiabilities.includes(o.shipment?.status)) reasons.push('Existing label must be handled separately.');
+ if (o.shipment?.packageId || labelLiabilities.includes(o.shipment?.status)) reasons.push('Existing label must be handled separately.');
  return reasons;
 }
 export function packingGroups(orders) {
