@@ -24,7 +24,7 @@ Add scheduled lots with explicit open/close times and immutable bidding terms. A
 
 ## Phase 4: giveaways
 
-Separate free entry from purchases/bids. Publish eligibility and entry window, deduplicate verified identities and freeze the eligible roster at close. Use cryptographic randomness and persist the roster digest, draw record and result. Specify reroll/disqualification and private winner contact before release. No payment required; no paid odds.
+Implemented: free entry separate from purchases/bids, published eligibility and entry window, verified-identity deduplication, frozen roster and cryptographic draw evidence. Terminal giveaways now archive their roster, draw and private claim. Winners submit a private US recipient address through their verified account before a configurable deadline; the seller records prize dispatch without creating a sales order. Rerolls, disqualification and automatic prize labels remain outside this release. No payment required; no paid odds. See [giveaway claims and history](giveaways.md).
 
 ## Phase 5: offers and flash sales
 
