@@ -18,7 +18,7 @@ import {workspaceNavigation} from '/workspace-navigation.js';
 import {notifications,notificationFeed,activityFeed} from '/activity-feed.js';
 import {mountTutorial,tutorialStatus} from '/tutorial.js';
 import {updateDropClock} from '/drop-shop.js';
-import {shippingSettingsDialog, shippingOrderDialog} from '/shipping.js';
+import {shippingSettingsDialog, shippingOrderDialog, shippingPackageDialog} from '/shipping.js';
 import { icon } from "/icons.js";
 import { enterSection, openDialog, closeDrawer } from "/motion.js";
 import { catalogPage, wireCatalog } from "/catalog.js";
@@ -448,6 +448,7 @@ function wire() {
  $('#nav-backdrop')?.addEventListener('click',()=>{mobileMenuOpen=false;render();});
  $('.sidebar')?.addEventListener('keydown',event=>{if(event.key==='Escape'){mobileMenuOpen=false;render();$('#mobile-menu-toggle')?.focus();}});
 
+  document.querySelectorAll('[data-shipping-package]').forEach(button=>button.onclick=()=>shippingPackageDialog({orderIds:JSON.parse(button.dataset.shippingPackage),getState:()=>state,api,modal,refresh:async()=>{state=await api('/api/state');render();}}));
   document.querySelectorAll('[data-shipping-order]').forEach(button=>button.onclick=()=>shippingOrderDialog({id:button.dataset.shippingOrder,getState:()=>state,api,modal,refresh:async()=>{state=await api('/api/state');render();}}));
  document.querySelectorAll('[data-automation]').forEach(button=>button.onclick=async()=>{try{await api('/api/automation',{mode:button.dataset.automation});state=await api('/api/state');render();toast('Automation style saved.');}catch(error){toast(error.message);}});
 
@@ -594,6 +595,7 @@ function wire() {
 
 }
 const connection=createLiveConnection({
+ getViewer:()=>viewer,
  surface:isShop?'shop':isOverlay?'overlay':'workspace',api,getAdminToken:()=>adminToken,
  applyBootstrap:data=>{adminToken=data.admin;overlayUrl=data.overlayUrl;viewerUrl=data.viewerUrl;state=data.state;},
  applySnapshot:(freshState,freshViewer)=>{state=freshState;if(isShop)viewer=freshViewer;},

@@ -19,7 +19,7 @@ A `shippo_test_` token supports demo orders only. A `shippo_live_` token support
 5. Open/print the PDF label. The label link contains private address information; do not share it publicly. Carrier status refresh retrieves the latest state on demand. It does not automatically mark an order fulfilled.
 6. After handing off the package, confirm dispatch. The order becomes **shipped**, using the label's carrier and tracking. For demo orders this is explicitly a simulated dispatch.
 
-Autoloot retains the buyer's already-agreed flat shipping charge. Postage cost is stored separately in the shipment's chosen rate. This integration does not retroactively charge the buyer a postage difference. Carrier adjustments, insurance, customs, combined packages, pickups, hazardous goods declarations and live checkout rates are outside this initial flow.
+Autoloot retains the buyer's already-agreed flat shipping charge. Postage cost is stored separately in the shipment's chosen rate. This integration does not retroactively charge the buyer a postage difference. Carrier adjustments, insurance, customs, pickups, hazardous goods declarations and live checkout rates are outside this initial flow.
 
 ## Failure/recovery
 
@@ -57,3 +57,23 @@ Shipment snapshots persist with each order, including the purchase attempt, prov
 `tests/shipping.test.mjs` exercises the domain/provider adapter with injected responses. `tests/shipping-http.test.mjs` launches a disposable server using an explicit test-only fetch preload and checks access, setup, rates, purchase, tracking, refund guards and dispatch. The preload is never loaded by normal startup. Browser QA also uses that isolated fixture server. No real Shippo API label transaction or live postage purchase has been executed during this implementation. Configure your test token and verify real provider rates/labels before switching to live.
 
 Official references: [Shippo label flow](https://docs.goshippo.com/guides/generate-shipping-label), [Shippo testing](https://docs.goshippo.com/guides/testing), [Pirate Ship API boundary](https://support.pirateship.com/en/articles/2309246-does-pirate-ship-have-an-api), [Pirate Ship spreadsheets](https://www.pirateship.com/integrations/spreadsheets).
+
+## Order attention and packing
+
+Orders → **Needs attention** collects unpaid/processing orders, incomplete recipient addresses, unverified live payments, unresolved checkout/refund/label outcomes and failed digital transfers. Follow the displayed next step and existing order controls; an uncertain provider outcome is not permission to repeat a purchase or transfer.
+
+**Packing by buyer** groups eligible paid, unshipped physical orders by verified buyer ID, live/practice mode and matching recipient destination. Different buyers, addresses or modes stay separate. Missing identities/addresses, refund requests, unverified live payments and active labels are excluded and listed for review. The view includes item/order counts and actual totals, including separately charged shipping.
+
+Choose **Create combined package** on a matching group, select 2–50 orders and confirm the recipient and unchanged buyer charges. The package holds those exact orders. Open Shipping from any member to measure the complete parcel, obtain rates and buy one label. After carrier handoff, **Dispatch all N orders** marks every member shipped together with the same tracking. Practice packages use simulated dispatch. Existing buyer shipping charges and totals remain unchanged; creating a package does not issue refunds or consolidate checkout.
+
+You cannot edit member addresses, refund individual members, buy separate labels or dispatch members through manual/CSV tracking while they belong to a package. **Release package** is available before a label purchase attempt, or after Shippo confirms failure or a refunded/voided label. Release retains package and label history. Unknown, pending, purchased or refund-pending labels must be reconciled first. Refresh from any member recovers the original attempt and never purchases another label. A failure after a provider call keeps the committed purchase hold through restart.
+
+The first member is the canonical shipment authority. Every member stores an independent snapshot with the same package ID, immutable member IDs, buyer, mode and destination. Mutations project the canonical shipment to every member in one storage commit; dispatch also changes all member statuses in that commit. This survives JSON/SQLite reloads without relying on shared object references. Buyer APIs expose only existing shipment status/tracking fields, not package membership or provider evidence.
+
+Creator-only API additions:
+
+- `POST /api/shipping/package`: `{orderIds:["order-id-1","order-id-2"],confirmed:true}`.
+- `POST /api/shipping/package/release`: `{id:"any-member-order-id",confirmed:true}`.
+- Existing rates, buy, refresh, track and dispatch routes accept any member order ID and operate on its shared package.
+
+Domain and fixture HTTP tests cover combined purchase/dispatch, ownership and destination validation, member bypass guards, recovery after JSON reload, concurrency holds and storage failures. No live postage purchase is performed by these checks.

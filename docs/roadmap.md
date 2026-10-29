@@ -14,9 +14,9 @@ Verify Twitch with two real accounts, complete Stripe sandbox checkout and webho
 
 Autoloot remains standalone. A bounded runner for existing item auctions and fixed-price sales is implemented. Personal pack openings and inventory-backed card breaks with disclosed entitlements remain next. See [Agent-led runs](agent-led-runs.md) for planned formats, arming limits, deterministic allocation, payment/fulfillment boundaries and the build sequence. Only the bounded auction/buy-now runner is enabled; new break formats remain planned.
 
-## Phase 2: private max bids
+## Phase 2: private max bids — implemented
 
-Introduce a private per-buyer ceiling in integer cents, visible only to its owner and the bid resolver. Resolve competition atomically by the existing increment schedule; never exceed a ceiling. Earliest accepted ceiling wins an equal-ceiling tie. Public events expose only the resulting payable bid, never private budgets. Specify raising/lowering, blocked bidders, cancellation and anti-sniping behavior before implementation. Verify concurrency, retries, deadline boundaries, privacy and order price snapshots.
+Buyers can submit a private, raise-only ceiling for the current auction. One resolver handles ceilings and exact chat bids in integer cents, with deterministic tie priority, deadline rules and payable-price order snapshots. Private ceilings are excluded from creator/public/cohost snapshots. Auctions with maximums use cancellation rather than individual bid voiding for disputes. See [bidding and maximums](bidding.md) for binding terms, limits and rehearsal boundaries.
 
 ## Phase 3: pre-bids
 
@@ -24,7 +24,7 @@ Add scheduled lots with explicit open/close times and immutable bidding terms. A
 
 ## Phase 4: giveaways
 
-Separate free entry from purchases/bids. Publish eligibility and entry window, deduplicate verified identities and freeze the eligible roster at close. Use cryptographic randomness and persist the roster digest, draw record and result. Specify reroll/disqualification and private winner contact before release. No payment required; no paid odds.
+Implemented: free entry separate from purchases/bids, published eligibility and entry window, verified-identity deduplication, frozen roster and cryptographic draw evidence. Terminal giveaways now archive their roster, draw and private claim. Winners submit a private US recipient address through their verified account before a configurable deadline; the seller records prize dispatch without creating a sales order. Rerolls, disqualification and automatic prize labels remain outside this release. No payment required; no paid odds. See [giveaway claims and history](giveaways.md).
 
 ## Phase 5: offers and flash sales
 
