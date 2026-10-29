@@ -44,7 +44,7 @@ Start with the [documentation index](docs/README.md). Key guides:
 - [Storage and recovery](docs/storage.md), [architecture](docs/architecture.md), [seller policies](docs/operator-policies.md)
 - [Design](design.md), [roadmap](docs/roadmap.md), [hackathon demo](docs/hackathon.md)
 
-`documentation/` is an ignored, separate Papers checkout. Its content/build is not included in this repository's commits. When present, use Node 24+ and `npm run docs:dev` to preview it at http://localhost:3333. The tracked guides in `docs/` are the portable source of operational guidance.
+`documentation/` is an ignored, separate Papers checkout. Its content/build is not included in this repository's commits. When present, use Node 24+ and `npm run docs:dev` to preview it at http://localhost:3333. The tracked guides in `docs/` are the portable source of operational guidance. Help and FAQ links serve a bundled quick guide when the optional documentation build is absent; a built FAQ in `documentation/dist` takes precedence.
 
 ## Separate marketing site
 

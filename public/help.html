@@ -1,1 +1,50 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=/docs/getting-started/faq"><title>Documentation · Autoloot</title><link rel="stylesheet" href="/styles/app.css"></head><body><a href="/docs/getting-started/faq">Open documentation and FAQ</a></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Help & FAQ · Autoloot</title>
+  <link rel="stylesheet" href="/styles/app.css">
+</head>
+<body>
+<main class="legal-page">
+  <header><a href="/">← Autoloot workspace</a><nav aria-label="Help navigation"><a href="/shop">Shop</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></nav></header>
+  <h1>Help & FAQ</h1>
+  <p>This quick guide is included with Autoloot, so help is available without the optional documentation site.</p>
+
+  <section aria-labelledby="start"><h2 id="start">Start a show</h2>
+    <p>Sellers: open Settings, connect Twitch, publish your seller details and policies, configure checkout, and add a lot. Keep streamer access on localhost. Use a second buyer account to rehearse the full sale before going live.</p>
+    <p>To practice without moving money, use Settings → Practice show → Load sample lots. Practice payments and shipping labels are simulations; use fictional addresses. Clearing practice content is not a full deletion of stored data.</p>
+  </section>
+
+  <section aria-labelledby="bidding"><h2 id="bidding">Buy or bid</h2>
+    <p>Open the <a href="/shop">shop</a>, review the seller's price, condition and policies, sign in with Twitch and register to bid. Send an exact bid such as <code>!bid 25.00</code> in the connected Twitch chat. The server's receipt time and the shop timer determine acceptance; stream video can be delayed.</p>
+    <p>Signed-in buyers can also set a private maximum on the current lot. A maximum is binding and can only be raised, not lowered or withdrawn. The public bid rises only as competition requires, up to your ceiling. Shipping is separate. A winning bid creates a private order; it is not proof of payment.</p>
+  </section>
+
+  <section aria-labelledby="payments"><h2 id="payments">Checkout and uncertain payments</h2>
+    <p>Buyers: open Your orders in the shop to pay or resume an existing checkout. Payment is confirmed by the server using the provider's signed events, not by returning from a success page. Do not send another payment when an earlier attempt is uncertain; contact the seller.</p>
+    <p>Sellers: configure your own Stripe account, set <code>STRIPE_API_KEY</code> and <code>STRIPE_WEBHOOK_SECRET</code> in the server environment, and restart Autoloot. Set <code>PUBLIC_URL</code> to the public HTTPS storefront origin and register the signed webhook at <code>/api/stripe/webhook</code> before live sales. Rehearse in Stripe sandbox first. Opening Stripe Dashboard alone does not connect this app. For an uncertain payment or refund, use Orders → Reconcile with Stripe to verify the existing provider reference instead of creating a second transaction.</p>
+  </section>
+
+  <section aria-labelledby="shipping"><h2 id="shipping">Shipping and tracking</h2>
+    <p>Your private order shows recorded shipping and tracking updates. Contact the seller for missing addresses, delivery questions, returns or refunds; their support details and policies are published in the shop.</p>
+    <p>Sellers can configure Shippo, measure a package, request rates and explicitly approve a label purchase. Matching paid orders can share a combined-package label. Buyer charges stay unchanged. Buying a label does not mark a package shipped: confirm dispatch only after handoff to the carrier. Reconcile an uncertain label purchase before retrying. Test labels are not valid postage.</p>
+  </section>
+
+  <section aria-labelledby="giveaways"><h2 id="giveaways">Giveaways and prize claims</h2>
+    <p>Free giveaways use <code>!enter</code> in chat, with one entry per eligible verified account. Purchases and Channel Points do not improve the odds. Winners sign in with the same Twitch account and open Your prizes in the shop to submit a private US shipping address before the claim deadline.</p>
+    <p>Sellers retain prize claims and draw history after opening the next giveaway. Arrange prize postage separately and record dispatch after handoff. An on-time claim can still be fulfilled after its submission deadline.</p>
+  </section>
+
+  <section aria-labelledby="obs"><h2 id="obs">Twitch, OBS and the companion</h2>
+    <p>In Settings → Twitch, configure your developer application and its displayed callback URL, then authorize your broadcaster account. In Settings, choose an OBS output layout and copy its URL into an OBS Browser Source with the displayed dimensions. Enable voice on only one source to avoid duplicate speech.</p>
+    <p>Choose a provider in Companion. Review AI listing drafts and card matches before applying them; generated output can be wrong. Camera or screen capture begins only after you choose a source and grant permission. Stop sharing when finished.</p>
+  </section>
+
+  <section aria-labelledby="support"><h2 id="support">Support and privacy</h2>
+    <p>The seller/operator running this installation handles support, returns and privacy requests. Find their published contact and policies in the shop. Review <a href="/privacy">Privacy</a> and <a href="/terms">Terms</a> before using real buyer information.</p>
+  </section>
+</main>
+</body>
+</html>
