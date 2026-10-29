@@ -109,3 +109,30 @@ DONE — APPROVED. [Plan](006-chat-command-discovery.md). Implemented at 09e015c
 ## 010 — Current-workspace maintainability
 
 [Execution plan](010-maintainability-refactor.md). DONE — applied and verified against current dirty snapshot. Backend route/policy/SSE and frontend workspace/control/lifecycle ownership extracted; ordered CSS split and shadowed root-variable cleanup guarded by cascade fingerprint; recursive syntax/import/cycle/surface checks. Original verification:198 tests,79 runtime checks, demo/privacy journeys, whitespace and HTTP smoke pass. No commit/push or rendered browser/provider rehearsal. Historical plan008 worktree remained reference only.
+
+## 011 — Post-refactor maintainability audit
+
+[Read-only report](011-maintainability-audit.md), baseline5a5190b. Architecture acceptable for continued development. User-approved follow-through completed: split-UTF8 JSON decoding and rejected-setting mutations fixed; repeatable lexical gate now runs through CI check. Verification:202 tests,80 runtime syntax/binding/import checks, demo/privacy checks and zero dependency advisories. No live-provider/browser certification or commit/push for this follow-through.
+
+## 012 — Order attention and buyer packing
+
+[Plan](012-order-operations.md). DONE — APPROVED for first stage: Needs attention queue and buyer packing reference. Executor branch `codex/order-operations`, commit `bd0258d`, worktree `/Users/area/.codex/worktrees/order-operations/live-shopping-companion`. Reviewer read all four implementation files and independently verified 81 runtime checks, 208 passing tests, demo/privacy journeys and clean whitespace. Dirty baseline preserved separately; original source unchanged; no merge/push. Combined package labels, dispatch and shipping-charge adjustments remain unimplemented. Browser/provider rehearsal unperformed.
+
+## 013 — Combined-package shipping
+
+[Plan](013-combined-package-shipping.md). DONE — APPROVED. Commit `20a9103` on `codex/order-operations` in `/Users/area/.codex/worktrees/order-operations/live-shopping-companion`. Implements creator-confirmed 2–50 order packages, shared label recovery through any member, member holds and single-commit dispatch. Buyer charges remain unchanged. Reviewer independently verified check81, tests217, demo/privacy and whitespace; desktop browser fixture created a 2-order package from 3 matching paid orders, purchased one test label and dispatched both members with same tracking, leaving third unshipped. Reviewed shipping authority/projections, guards, API/UI/docs and regression tests; source baseline dirty edits preserved outside implementation commit. Mobile viewport inspected only; no real provider/postage validation. Original checkout source unchanged; no merge/push.
+
+## 014–017 — Audit follow-through
+
+User authorized execution of all audited improvements and direction options. Work is isolated on `codex/order-operations` at `/Users/area/.codex/worktrees/order-operations/live-shopping-companion`; original source remains unchanged.
+
+- [014 Refresh/design](014-refresh-and-design.md): implemented `6788260`; reviewer read connection/revision/design diff, independent integrated233 tests/check81 passed. Public chat-only updates skip buyer requests and identical rebuilds, keyed invalidation protects private contents.
+- [015 Postage](015-postage-costs.md): implemented `788f22f`; exact package cents allocation/manual overrides/provenance reviewed, accounting regression and integrated233 tests passed.
+- [016 Claims](016-giveaway-claims.md): implemented `5083772`, docs followup `9dcce8e`; domain/API/privacy/history/deadline review passed. Reviewer browser fixture submitted winner's private address through actual storefront; on-time claims remain fulfillable after deadline. Independent integrated233 tests/check81 passed before final docs-only followup.
+- [017 Maximum bids](017-private-max-bids.md): IN PROGRESS. Shared resolver, ownership/privacy and UI in development; reviewer identified tied-leader ceiling raise incorrectly increasing payable price and max draft loss on live rerender; fixes/regression tests required before approval.
+
+### 014–017 final execution review — approved
+
+All five requested items complete. Final maximum-bid commit `2fb1564`, branch `codex/order-operations`; preceding feature commits `788f22f`, `6788260`, `5083772`, `9dcce8e`. Reviewer independently verified final combined source: `npm run check`82 runtime modules, `npm test`244/244, `npm run demo:check` all journeys/privacy, and `git diff --check`. Reviewed source, tests and docs; final changes28 files relative to20a9103, inherited dirty baseline remains uncommitted and excluded.
+
+Plan017 DONE — APPROVED. Independent cold reviewer and parent verified fixes for tied leader ceiling raises and draft preservation. Browser fixture set$100 private ceiling on$45 opening, observed public payable$45 and private owner response, then preserved typed$150+consent across a rival accepted bid; no browser JS errors. Claim browser fixture submitted a private US recipient through storefront. Domain/HTTP tests cover exact-cent cost conservation, claim ownership/history/expiry, direct/proxy resolver ties/retries/deadlines/blocked users, creator/public/SSE ceiling privacy and final payable order prices. Maximum bids are raise-only; proxy-enabled disputed auctions require cancellation rather than per-bid void. Giveaway postage remains manual and on-time claims remain fulfillable after deadline. Live Twitch/provider rehearsal and production load certification remain outside verification. No merge/push; original checkout source unchanged.

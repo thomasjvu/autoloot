@@ -1,3 +1,4 @@
+import {bindingErrors} from './lib/bindings.mjs';
 import {readdirSync,readFileSync,existsSync,statSync} from 'node:fs';
 import {join,resolve,dirname,relative} from 'node:path';
 import {spawnSync} from 'node:child_process';
@@ -11,6 +12,11 @@ for(const file of files){
  const result=spawnSync(process.execPath,['--check',file],{encoding:'utf8'});
  if(result.status!==0){process.stderr.write(result.stderr);failed=true;}
  const source=readFileSync(file,'utf8');graph.set(file,[]);
+ if(result.status===0){
+  for(const issue of bindingErrors(source,{browser:file.startsWith(join(root,'public')+'/')})){
+   console.error(`${relative(root,file)}:${issue.line}: ${issue.message}`);failed=true;
+  }
+ }
  const imports=[...source.matchAll(/\b(?:import|export)\s+(?:[^;'"]+?\s+from\s*)?['"]([^'"]+)['"]/g),...source.matchAll(/\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g)];
  for(const [,specifier] of imports){
   if(!specifier.startsWith('.')&&!specifier.startsWith('/'))continue;
@@ -39,4 +45,4 @@ for(const entry of ['storefront.js','overlay-widgets.js'])buyerBoundary(join(roo
 const entry=readFileSync(join(root,'public/styles/app.css'),'utf8');
 for(const [,path]of entry.matchAll(/@import\s+url\(['"]([^'"]+)['"]\)/g))if(!existsSync(resolve(root,'public/styles',path))){console.error('Missing stylesheet:',path);failed=true;}
 for(const name of readdirSync(join(root,'public')).filter(name=>name.endsWith('.html'))){const html=readFileSync(join(root,'public',name),'utf8');if(/href=["']\/(?:style|drop|street|drop-shop)\.css/.test(html)){console.error('Historical stylesheet entry in',name);failed=true;}}
-if(failed)process.exitCode=1;else console.log(`Checked ${files.length} runtime modules, local imports and stylesheet entry points.`);
+if(failed)process.exitCode=1;else console.log(`Checked ${files.length} runtime modules: syntax, lexical bindings, local imports and stylesheet entry points.`);

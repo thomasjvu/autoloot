@@ -1,4 +1,4 @@
 {
-  "sha256": "0fda4890e4f6c2dedd72782619879366686702cb28de2cbc03cb8013444f10d2",
-  "note": "Plan010 baseline ordered stylesheet stream, after removing only shadowed unconditional :root custom properties. No rendered visual baseline."
+  "sha256": "784d9d7eac2c954f935a838cd1de8aa3a6b450fba795e3ba5ab0e7e72aae1fa7",
+  "note": "Ordered cascade after intentional admin entry design update: greeting bubble, bottom-aligned portrait and password meter. Other surface rules preserved. Source-order guard, not rendered visual certification."
 }

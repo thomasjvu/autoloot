@@ -19,8 +19,12 @@
         <form class="stack-form">
           <label id="username-label" for="admin-username">Username<input id="admin-username" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" minlength="3" maxlength="32" required aria-describedby="username-hint"></label>
           <small id="username-hint" hidden>3–32 letters, numbers, underscores or hyphens.</small>
-          <label for="admin-password">Password<span class="auth-password-field"><input id="admin-password" name="password" type="password" required maxlength="256" autocomplete="current-password" aria-describedby="password-hint"><button id="show-password" type="button" aria-label="Show password" aria-pressed="false">Show</button></span></label>
-          <small id="password-hint" hidden>12+ characters with uppercase, lowercase, a number and a symbol.</small>
+          <label for="admin-password">Password<span class="auth-password-field"><input id="admin-password" name="password" type="password" required maxlength="256" autocomplete="current-password" aria-describedby="password-hint password-strength-label"><button id="show-password" type="button" aria-label="Show password" aria-pressed="false">Show</button></span></label>
+          <div id="password-strength" class="auth-strength" hidden>
+            <div class="auth-strength-heading"><span>Password check</span><span id="password-strength-label" aria-live="polite">Add a password</span></div>
+            <div id="password-meter" class="auth-strength-track" role="meter" aria-label="Password requirements met" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0" aria-valuetext="No password entered"><span></span><span></span><span></span><span></span><span></span></div>
+            <small id="password-hint">12+ characters with uppercase, lowercase, a number and a symbol.</small>
+          </div>
           <p id="legacy-login-note" hidden>Password-only sign in for your existing workspace.</p>
           <label id="confirm-label" for="admin-confirm" hidden>One more time<input id="admin-confirm" name="confirm" type="password" maxlength="256" autocomplete="new-password"></label>
           <button class="btn primary auth-submit" type="submit" id="auth-submit" disabled>Continue <span aria-hidden="true">↗</span></button>

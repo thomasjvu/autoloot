@@ -6,9 +6,16 @@ export function normalizeUsername(value) {
     throw Error('Use 3–32 letters, numbers, underscores or hyphens for your username.');
   return value.trim().toLowerCase();
 }
+export function passwordChecks(value) {
+  const password=typeof value==='string'?value:'';
+  return [
+    {label:'12+ characters',met:password.length>=12&&password.length<=256},
+    {label:'uppercase',met:/[A-Z]/.test(password)},
+    {label:'lowercase',met:/[a-z]/.test(password)},
+    {label:'a number',met:/[0-9]/.test(password)},
+    {label:'a symbol',met:/[^A-Za-z0-9\s]/.test(password)},
+  ];
+}
 export function passwordError(value) {
-  if (typeof value !== 'string' || value.length < 12 || value.length > 256 ||
-      !/[A-Z]/.test(value) || !/[a-z]/.test(value) || !/[0-9]/.test(value) || !/[^A-Za-z0-9\s]/.test(value))
-    return PASSWORD_HINT;
-  return '';
+  return passwordChecks(value).every(check=>check.met)?'':PASSWORD_HINT;
 }
