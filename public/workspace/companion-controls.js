@@ -44,6 +44,11 @@ async function connectCodex(){
   try{
    const result=await api('/api/companion/connection/start',{});if(!active())return;
    if(result.connected){connected(result);return;}
+   if(result.bridge){
+    status.textContent='Start the companion on your computer, then enter this one-time pairing code.';
+    actions.innerHTML=`<p>Run from your Autoloot checkout:</p><pre>${esc(result.command)}</pre><p>Pairing code (expires in ten minutes):</p><code>${esc(result.pairCode)}</code>`;
+    timer=setTimeout(check,2000);return;
+   }
    const url=new URL(result.authUrl);if(url.origin!=='https://auth.openai.com')throw Error('Invalid sign-in address.');
    status.textContent='Sign in with OpenAI, then return here. We’ll finish connecting automatically.';
    actions.innerHTML=`<a class="btn primary full" href="${esc(url.href)}" target="_blank" rel="noopener noreferrer">Continue to OpenAI ↗</a><button class="text-btn" id="cancel-codex-login">Cancel sign-in</button>`;
@@ -54,6 +59,7 @@ async function connectCodex(){
  try{
   const result=await api('/api/companion/connection/status',{});if(!active())return;
   if(result.connected)connected(result);
+  else if(result.bridge){status.textContent='Connect your local Codex companion to this hosted workspace.';actions.innerHTML='<button class="btn primary full" id="start-companion-pairing">Pair this computer</button>';$('#start-companion-pairing').onclick=start;}
   else{status.textContent='Sign in to Codex using your ChatGPT account. OpenAI handles your credentials.';actions.innerHTML='<button class="btn primary full" id="start-codex-login">Sign in with ChatGPT</button>';$('#start-codex-login').onclick=start;
    actions.insertAdjacentHTML('beforeend','<details class="form-details"><summary>Use an API key instead</summary><form id="codex-api-form" class="stack-form"><label>OpenAI API key<input name="apiKey" type="password" required maxlength="512" autocomplete="off" spellcheck="false"></label><p class="field-help">API usage is billed to your OpenAI API account. The key is stored by Codex on this computer.</p><button class="btn full">Connect API key</button></form></details>');
    $('#codex-api-form').onsubmit=async event=>{event.preventDefault();const form=event.currentTarget,button=form.querySelector('button'),key=form.elements.apiKey.value;button.disabled=true;form.reset();try{const result=await api('/api/companion/connection/key',{apiKey:key});if(active()){if(!result.connected)throw Error('Codex could not confirm this API key.');await useAccount();}}catch(error){if(active()){status.textContent=error.message;button.disabled=false;}}};

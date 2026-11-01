@@ -103,13 +103,13 @@ body{background:var(--paper);color:var(--ink)}
 
 .mochi-quick{position:fixed;display:flex;flex-direction:column;align-items:flex-end;gap:14px}
 
-.mochi-quick-toggle{position:relative;width:76px;height:76px;padding:0;border:3px solid var(--ink);border-radius:50%;background:var(--acid);box-shadow:0 4px 0 var(--ink);cursor:pointer;transition:transform 120ms ease,box-shadow 120ms ease}
+.mochi-quick-toggle{position:relative;width:64px;height:64px;padding:0;border:3px solid var(--ink);border-radius:50%;background:var(--acid);box-shadow:0 4px 0 var(--ink);cursor:pointer;transition:transform 120ms ease,box-shadow 120ms ease}
 
 .mochi-quick-toggle:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
 
 .mochi-quick-face{display:block;position:absolute;inset:0;overflow:hidden;border-radius:50%}
 
-.mochi-quick-face img{position:absolute;width:112px;max-width:none;height:auto;left:50%;top:-2px;transform:translateX(-50%)}
+.mochi-quick-face img{position:absolute;width:96px;max-width:none;height:auto;left:50%;top:-2px;transform:translateX(-50%)}
 
 .mochi-quick-dot{position:absolute;width:14px;height:14px;right:0;bottom:0;background:var(--acid);border:3px solid var(--ink);border-radius:50%}
 

@@ -1,0 +1,208 @@
+{
+  "version": 1,
+  "upstreamRepository": "https://github.com/tcgdex/cards-database",
+  "upstreamCommit": "cbddf7e54033b1b58e44af1049c88832e55b94d0",
+  "license": "MIT",
+  "licenseSha256": "12e7dd2d018848b9997d0226c4632f01da86ec4bf6ebe0c8b19953d5e5eeb6ff",
+  "metadataSourcePath": "packages/api/data/tcg/cards-extra-042.json.gz",
+  "metadataSourceSha256": "268b79245d3b27fd8b6befa58ac4778121fd446bc55c72db4ab3df93af5e0b22",
+  "catalogLockSha256": "1da4b2fca382d627ea7a38a4c8b950d1cc3f7d304a658753535834777c0c6d10",
+  "catalogSha256": "008bf8d80a7c15641781c459c8d8f51a5587fc3b94e1e696e74d24383eaeceed",
+  "cards": 34,
+  "sets": 1,
+  "fields": [
+    "gameId",
+    "id",
+    "language",
+    "name",
+    "number",
+    "setId",
+    "setName",
+    "sources"
+  ],
+  "excluded": [
+    "artwork",
+    "image URLs",
+    "prices",
+    "descriptions",
+    "rules",
+    "rarity enrichment",
+    "official-site enrichment"
+  ],
+  "sources": [
+    {
+      "path": "data-asia/XY/CP1.ts",
+      "sha256": "365eef01c2c5bfbd01972b7084f19ee0e9e4dc02e441c18c54b779abce97441f"
+    },
+    {
+      "path": "data-asia/XY/CP1/001.ts",
+      "sha256": "d51650a0713fcbd4ad5613f8599fb70d81f51fde00ea0def05d5ab02565d0e43",
+      "metadataId": "pokemon-tcgdex-ja-CP1-001"
+    },
+    {
+      "path": "data-asia/XY/CP1/002.ts",
+      "sha256": "3493a37b67bf50d17deda306fa456b6aafafc3fb9fa602874337f0fc135a6966",
+      "metadataId": "pokemon-tcgdex-ja-CP1-002"
+    },
+    {
+      "path": "data-asia/XY/CP1/003.ts",
+      "sha256": "24a249dd4c29bfcf7bfd7b181cc997e9233ba3690a5aed82794b64328dd5681c",
+      "metadataId": "pokemon-tcgdex-ja-CP1-003"
+    },
+    {
+      "path": "data-asia/XY/CP1/004.ts",
+      "sha256": "71e8522db2e560c4266467d7400d370c7cdd5e9d14f6a073785b869162e4ac0d",
+      "metadataId": "pokemon-tcgdex-ja-CP1-004"
+    },
+    {
+      "path": "data-asia/XY/CP1/005.ts",
+      "sha256": "229a3af45e417e6c1b8a196c9fd2b8000d5f87db61b1d8ad64185896e645e6ae",
+      "metadataId": "pokemon-tcgdex-ja-CP1-005"
+    },
+    {
+      "path": "data-asia/XY/CP1/006.ts",
+      "sha256": "c468e47c91bfa2ef330a6fc7ba02a23c6d4c35c9239fc1ff219cd8f05c2081aa",
+      "metadataId": "pokemon-tcgdex-ja-CP1-006"
+    },
+    {
+      "path": "data-asia/XY/CP1/007.ts",
+      "sha256": "4c4b377a4ce6451525a8cc84d696ed856590a89a97a2d9a42d55850263ab2399",
+      "metadataId": "pokemon-tcgdex-ja-CP1-007"
+    },
+    {
+      "path": "data-asia/XY/CP1/008.ts",
+      "sha256": "255343860ebe45299b22a63b831dceb4da421fe79241d13f8ff8b286f0d7a769",
+      "metadataId": "pokemon-tcgdex-ja-CP1-008"
+    },
+    {
+      "path": "data-asia/XY/CP1/009.ts",
+      "sha256": "6cfe199bb0fe93ded963606afb5a4af489128608e23acf1eb509cbe741284ac8",
+      "metadataId": "pokemon-tcgdex-ja-CP1-009"
+    },
+    {
+      "path": "data-asia/XY/CP1/010.ts",
+      "sha256": "1b9f8f1b3280f4bf752bcc10fa798c1e4025d3c6414bbe1841ea1e0d6c99da97",
+      "metadataId": "pokemon-tcgdex-ja-CP1-010"
+    },
+    {
+      "path": "data-asia/XY/CP1/011.ts",
+      "sha256": "7121a02328fab7fcb2938820221258e9c341d56ed574732f08d0681b5676c5d9",
+      "metadataId": "pokemon-tcgdex-ja-CP1-011"
+    },
+    {
+      "path": "data-asia/XY/CP1/012.ts",
+      "sha256": "678cbf5834d51529c42f5cf3c54e452c90d08dd23517a45f8fd62d7660a09c65",
+      "metadataId": "pokemon-tcgdex-ja-CP1-012"
+    },
+    {
+      "path": "data-asia/XY/CP1/013.ts",
+      "sha256": "78aba1cfa016aaf1c6a2250536815353a057baa4150ad9da3800392954d54c70",
+      "metadataId": "pokemon-tcgdex-ja-CP1-013"
+    },
+    {
+      "path": "data-asia/XY/CP1/014.ts",
+      "sha256": "890132eb04c1827bbb203fc76d3d766194fa594af643d9a130e98c32a24be464",
+      "metadataId": "pokemon-tcgdex-ja-CP1-014"
+    },
+    {
+      "path": "data-asia/XY/CP1/015.ts",
+      "sha256": "8a0a3bdf6b88adb72c4a043a7b0e8ab9ce36bc4ccf60e5c4c1bc4e7c3f318c83",
+      "metadataId": "pokemon-tcgdex-ja-CP1-015"
+    },
+    {
+      "path": "data-asia/XY/CP1/016.ts",
+      "sha256": "cd8061cb10db95aa0873748cf7c109fd3e6f059dadbcdf2ce81e12ca07671024",
+      "metadataId": "pokemon-tcgdex-ja-CP1-016"
+    },
+    {
+      "path": "data-asia/XY/CP1/017.ts",
+      "sha256": "022792c37ddacc85484c79105fd7508b89e16985c235761e1dee7a37f4a86eb9",
+      "metadataId": "pokemon-tcgdex-ja-CP1-017"
+    },
+    {
+      "path": "data-asia/XY/CP1/018.ts",
+      "sha256": "b82552e5908dcd1484e04d30d4cd05aede560d05d672fcf52449dd3db7e8bfae",
+      "metadataId": "pokemon-tcgdex-ja-CP1-018"
+    },
+    {
+      "path": "data-asia/XY/CP1/019.ts",
+      "sha256": "c8908e095ef574a4cffa353db7b62cf65c944ec677ddae3c11f442c8ac63c013",
+      "metadataId": "pokemon-tcgdex-ja-CP1-019"
+    },
+    {
+      "path": "data-asia/XY/CP1/020.ts",
+      "sha256": "6759bd288554b52c78677bafd67637c2c76d985d10c3356dd02da0b59ca5538e",
+      "metadataId": "pokemon-tcgdex-ja-CP1-020"
+    },
+    {
+      "path": "data-asia/XY/CP1/021.ts",
+      "sha256": "0ad195ef3e0709b7180254b1cf841307817e30a3434c49ad7822e29aae5e7c66",
+      "metadataId": "pokemon-tcgdex-ja-CP1-021"
+    },
+    {
+      "path": "data-asia/XY/CP1/022.ts",
+      "sha256": "4d2552c1ef1f188b1d4520a5e9c6cdffd4f53a6d06e623bd4ad554b57d402abd",
+      "metadataId": "pokemon-tcgdex-ja-CP1-022"
+    },
+    {
+      "path": "data-asia/XY/CP1/023.ts",
+      "sha256": "bc5e0a48d89a4455d762b321a622c596e185c0bdd900961f9cf3e7be2e0bc29d",
+      "metadataId": "pokemon-tcgdex-ja-CP1-023"
+    },
+    {
+      "path": "data-asia/XY/CP1/024.ts",
+      "sha256": "f591bbf499c97de5f5e917fc50bad9aa6373a899dfd69a461106200cff4fa863",
+      "metadataId": "pokemon-tcgdex-ja-CP1-024"
+    },
+    {
+      "path": "data-asia/XY/CP1/025.ts",
+      "sha256": "114556a22aca76b81b961b96a2fb58778ab9cd7bde82af2e2202c6d1a89ecba9",
+      "metadataId": "pokemon-tcgdex-ja-CP1-025"
+    },
+    {
+      "path": "data-asia/XY/CP1/026.ts",
+      "sha256": "a018139dfe0e430a7547cc84334299c7209ecfe00d83c8906aac42ec15b12f2f",
+      "metadataId": "pokemon-tcgdex-ja-CP1-026"
+    },
+    {
+      "path": "data-asia/XY/CP1/027.ts",
+      "sha256": "566d8410fabda1f6f9759edce64d145883015e2ebac42f3333e8e12bb62615de",
+      "metadataId": "pokemon-tcgdex-ja-CP1-027"
+    },
+    {
+      "path": "data-asia/XY/CP1/028.ts",
+      "sha256": "df372357a6f375e12f344e53ee6675b7d636c5793f373effe18f8f14d87a91c0",
+      "metadataId": "pokemon-tcgdex-ja-CP1-028"
+    },
+    {
+      "path": "data-asia/XY/CP1/029.ts",
+      "sha256": "666efbf6d1dfd4a7eefe72a4c5ffc18f31948669fc82331020ab7dce09c61735",
+      "metadataId": "pokemon-tcgdex-ja-CP1-029"
+    },
+    {
+      "path": "data-asia/XY/CP1/030.ts",
+      "sha256": "53e2502ffdef6e2d603a57de830cd9569952f293b45fda44dcd98fa1ad9b71c0",
+      "metadataId": "pokemon-tcgdex-ja-CP1-030"
+    },
+    {
+      "path": "data-asia/XY/CP1/031.ts",
+      "sha256": "ef61b4019620e11f92e440894fb07d74122b04dee244eef610e089cb9c1f91c9",
+      "metadataId": "pokemon-tcgdex-ja-CP1-031"
+    },
+    {
+      "path": "data-asia/XY/CP1/032.ts",
+      "sha256": "c2a67a6a95ba2eb9348a45a7d1ee27f7457821155635717899d7200184066c57",
+      "metadataId": "pokemon-tcgdex-ja-CP1-032"
+    },
+    {
+      "path": "data-asia/XY/CP1/033.ts",
+      "sha256": "2e4adee5b3813a2eec1a3da309b5dd64872ec2052d225ffd636481ef4b5b1e69",
+      "metadataId": "pokemon-tcgdex-ja-CP1-033"
+    },
+    {
+      "path": "data-asia/XY/CP1/034.ts",
+      "sha256": "1837d1455a47f275586ccd9f08ba0896b430a61a084243fd5b242451c0b10ae6",
+      "metadataId": "pokemon-tcgdex-ja-CP1-034"
+    }
+  ]
+}

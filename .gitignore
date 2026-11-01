@@ -23,3 +23,10 @@ __pycache__/
 
 # Generated optional wallet bundle
 public/vendor/reown/
+
+# Cloudflare local runtime, builds and private development secrets
+.wrangler/
+.worker-build/
+.dev.vars
+.dev.vars.*
+output/cloudflare-check.json

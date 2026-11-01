@@ -5,7 +5,7 @@ import {spawnSync} from 'node:child_process';
 const root=resolve(import.meta.dirname,'..');
 const skip=new Set(['node_modules','dist','vendor','fonts','characters','icons']);
 function walk(dir){return readdirSync(dir,{withFileTypes:true}).flatMap(entry=>skip.has(entry.name)?[]:entry.isDirectory()?walk(join(dir,entry.name)):/\.(mjs|js)$/.test(entry.name)?[join(dir,entry.name)]:[]);}
-const files=[join(root,'server.mjs'),...['lib','public','scripts','marketing','browser'].flatMap(dir=>walk(join(root,dir)))];
+const files=[join(root,'server.mjs'),...['lib','public','scripts','marketing','browser','cloudflare'].flatMap(dir=>walk(join(root,dir)))];
 let failed=false;
 const graph=new Map();
 for(const file of files){

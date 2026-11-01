@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "autoloot-workspace",
+  "main": "cloudflare/worker.mjs",
+  "compatibility_date": "2026-10-30",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {"directory": "public", "binding": "ASSETS", "run_worker_first": true, "html_handling": "none"},
+  "durable_objects": {"bindings": [{"name": "WORKSPACES", "class_name": "Workspace"}]},
+  "migrations": [{"tag": "v1", "new_sqlite_classes": ["Workspace"]}],
+  "d1_databases": [{"binding": "DB", "database_name": "autoloot", "database_id": "00000000-0000-0000-0000-000000000000", "migrations_dir": "cloudflare/migrations"}],
+  "r2_buckets": [{"binding": "MEDIA", "bucket_name": "autoloot-media"}],
+  "vars": {"PUBLIC_URL": "http://localhost:8787", "AUTOLOOT_WORKSPACE_ID": "default", "AUTOLOOT_OWNER_TWITCH_ID": "", "METADATA_MODE": "demo", "SHIPPING_COUNTRIES": "US"},
+  "observability": {"enabled": true}
+}

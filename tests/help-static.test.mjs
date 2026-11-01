@@ -4,7 +4,9 @@ import {createServer,request} from 'node:http';
 import {mkdtempSync,mkdirSync,copyFileSync,writeFileSync,rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join,dirname} from 'node:path';
-import {serveStatic} from '../lib/http/static.mjs';
+import {createStaticRoutes} from '../lib/http/static.mjs';
+import {createNodeAssets} from '../lib/http/node-assets.mjs';
+import {createAdaptorServer} from '@hono/node-server';
 
 async function fixture(run){
  const root=mkdtempSync(join(tmpdir(),'autoloot-help-'));
@@ -12,7 +14,8 @@ async function fixture(run){
  for(const file of ['help.html','404.html','index.html','privacy.html','terms.html','styles/app.css']){
   const target=join(root,'public',file);mkdirSync(dirname(target),{recursive:true});copyFileSync(new URL('../public/'+file,import.meta.url),target);
  }
- const server=createServer((req,res)=>serveStatic({req,res,path:req.url.split('?')[0],root}));
+ const app=createStaticRoutes(createNodeAssets({root}));
+ const server=createAdaptorServer({fetch:app.fetch,overrideGlobalObjects:false});
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
  const base=`http://127.0.0.1:${server.address().port}`;
  try{await run({root,base});}finally{await new Promise(resolve=>server.close(resolve));rmSync(root,{recursive:true,force:true});}

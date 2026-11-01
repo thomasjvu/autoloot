@@ -8,7 +8,7 @@ test('Metadata requests use server credentials, encode query and cache results',
  await api.search({name:'Pikachu & ',kind:'card'});assert.equal(calls,1);
 });
 test('Metadata access failures remain errors rather than made-up prices',async()=>{
- const api=new Metadata({fetcher:async()=>({ok:false,status:402})});
+ const api=new Metadata({mode:'api',fetcher:async()=>({ok:false,status:402})});
  await assert.rejects(api.search({name:'Pikachu'}),/METADATA_SERVICE_KEY/);
 });
 test('raw quotes retain decimal USD and provenance, exclude graded and missing prices',()=>{

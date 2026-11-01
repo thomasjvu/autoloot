@@ -1,6 +1,6 @@
 # Autoloot
 
-A local-first Twitch selling workspace with auctions, fixed-price lots, private buyer orders and **Munny**, an optional AI cohost. Current stage: pre-beta; real-account rehearsals and production configuration are still required before live sales.
+A Twitch selling workspace with auctions, fixed-price lots, private buyer orders and **Munny**, an optional AI cohost. Current stage: pre-beta; real-account rehearsals and production configuration are still required before live sales.
 
 ## Run locally
 
@@ -14,6 +14,8 @@ npm start
 Open **http://localhost:4173**. Fresh workspaces start empty in live mode. For a credential-free practice show, use **Settings → Practice show → Load sample lots**. Sample lots use text and built-in placeholders; no third-party card scans or seller photographs are bundled.
 
 Copy `.env.example` to `.env` when configuring integrations. The example enables production mode. Keep credentials and `.data/` private. One server owns one local SQLite data directory.
+
+Metadata API access is optional: without a key, the app uses a bounded identity-only demo. See [Metadata modes and credentials](docs/metadata.md) for full access and production setup.
 
 ## Workspace
 
@@ -77,3 +79,5 @@ See [architecture](docs/architecture.md) for module ownership and trust boundari
 Settings groups Twitch, Stripe, Reown and Codex in connection cards. Companion run, Show and Stream cards open their controls in drawers. Sign out is available beside Take a tour in the Settings header and in the sidebar account row.
 
 Sales & numbers includes a daily collections chart (7 or 30 UTC days) using the selected real/practice activity. All-time totals retain a trailing 30-day chart. Orders includes an all-time real-order status overview; practice and Stripe test payments are excluded. Chart bars expose daily totals on keyboard focus or hover. Add product offers Metadata catalog search alongside manual listing. The self-hosted Powered by Metadata attribution uses Metadata's current spiral (`brand/kit/logos/portal-ink.svg`) with plain text and no surrounding frame. The upstream v1 badge exports still carry the previous framed treatment.
+
+The local Node app and Cloudflare hosted runtime share native Hono routes. See [Cloudflare setup](docs/hosted-migration.md) for Durable Objects, D1, R2, owner sign-in and the local Codex companion. Run `npm run worker:check` to verify the hosted runtime locally.

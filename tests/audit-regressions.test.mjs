@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {routeApp,post} from './helpers/hono.mjs';
 import assert from 'node:assert/strict';
 import {Readable} from 'node:stream';
 import {body,rawBody} from '../lib/http/response.mjs';
@@ -16,19 +17,19 @@ test('JSON decoding preserves accented names and emoji at every byte boundary',a
 test('rejected companion settings leave all state untouched and never commit or broadcast',async()=>{
  for(const provider of ['demo','invalid']){
   let saves=0,broadcasts=0;const engine={state:{mode:'live',companion:{provider:'offline',enabled:false,voice:false,lastSuccessAt:123,lastError:'prior'}},commit(){saves++;}};
-  const before=structuredClone(engine.state),action=createCompanionActions({engine,broadcast:()=>broadcasts++});
-  await assert.rejects(action({path:'/api/companion/settings',b:{provider,enabled:true,voice:true}}));
+  const before=structuredClone(engine.state),action=routeApp(createCompanionActions({engine,broadcast:()=>broadcasts++,stateFor:()=>engine.state}));
+  assert.equal((await post(action,'/api/companion/settings',{provider,enabled:true,voice:true})).status,400);
   assert.deepEqual(engine.state,before);assert.equal(saves,0);assert.equal(broadcasts,0);
  }
 });
 test('valid live and practice companion settings commit together and reset provider health only on change',async()=>{
  for(const [mode,provider]of [['live','codex'],['demo','demo']]){
   const saved=[];const engine={state:{mode,companion:{provider:'offline',enabled:false,lastSuccessAt:123,lastError:'prior'}},commit(){saved.push(structuredClone(this.state));}};
-  const action=createCompanionActions({engine});
-  await action({path:'/api/companion/settings',b:{provider,enabled:true,untrusted:'ignored'}});
+  const action=routeApp(createCompanionActions({engine,stateFor:()=>engine.state}));
+  assert.equal((await post(action,'/api/companion/settings',{provider,enabled:true,untrusted:'ignored'})).status,200);
   assert.equal(saved.length,1);assert.equal(saved[0].companion.enabled,true);assert.equal(saved[0].companion.provider,provider);assert.equal(saved[0].companion.lastSuccessAt,null);assert.equal(saved[0].companion.lastError,null);assert.equal(saved[0].companion.untrusted,undefined);
   engine.state.companion.lastSuccessAt=456;
-  await action({path:'/api/companion/settings',b:{provider,voice:true}});assert.equal(engine.state.companion.lastSuccessAt,456);
+  await post(action,'/api/companion/settings',{provider,voice:true});assert.equal(engine.state.companion.lastSuccessAt,456);
  }
 });
 test('binding checks catch unresolved variables and direct initializer shadowing',()=>{

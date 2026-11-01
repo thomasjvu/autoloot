@@ -1,0 +1,455 @@
+{
+  "cards": [
+    {
+      "id": "pokemon-tcgdex-ja-CP1-001",
+      "gameId": "pokemon",
+      "name": "マグマ団のドンメル",
+      "number": "001",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-001",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/001.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-002",
+      "gameId": "pokemon",
+      "name": "マグマ団のバクーダ",
+      "number": "002",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-002",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/002.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-003",
+      "gameId": "pokemon",
+      "name": "アクア団のタマザラシ",
+      "number": "003",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-003",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/003.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-004",
+      "gameId": "pokemon",
+      "name": "アクア団のトドグラー",
+      "number": "004",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-004",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/004.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-005",
+      "gameId": "pokemon",
+      "name": "アクア団のトドゼルガ",
+      "number": "005",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-005",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/005.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-006",
+      "gameId": "pokemon",
+      "name": "アクア団のカイオーガEX",
+      "number": "006",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-006",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/006.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-007",
+      "gameId": "pokemon",
+      "name": "アクア団のベトベター",
+      "number": "007",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-007",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/007.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-008",
+      "gameId": "pokemon",
+      "name": "アクア団のベトベトン",
+      "number": "008",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-008",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/008.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-009",
+      "gameId": "pokemon",
+      "name": "アクア団のハブネーク",
+      "number": "009",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-009",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/009.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-010",
+      "gameId": "pokemon",
+      "name": "マグマ団のヤジロン",
+      "number": "010",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-010",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/010.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-011",
+      "gameId": "pokemon",
+      "name": "マグマ団のネンドール",
+      "number": "011",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-011",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/011.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-012",
+      "gameId": "pokemon",
+      "name": "マグマ団のココドラ",
+      "number": "012",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-012",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/012.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-013",
+      "gameId": "pokemon",
+      "name": "マグマ団のコドラ",
+      "number": "013",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-013",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/013.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-014",
+      "gameId": "pokemon",
+      "name": "マグマ団のボスゴドラ",
+      "number": "014",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-014",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/014.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-015",
+      "gameId": "pokemon",
+      "name": "マグマ団のグラードンEX",
+      "number": "015",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-015",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/015.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-016",
+      "gameId": "pokemon",
+      "name": "アクア団のポチエナ",
+      "number": "016",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-016",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/016.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-017",
+      "gameId": "pokemon",
+      "name": "マグマ団のポチエナ",
+      "number": "017",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-017",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/017.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-018",
+      "gameId": "pokemon",
+      "name": "アクア団のグラエナ",
+      "number": "018",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-018",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/018.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-019",
+      "gameId": "pokemon",
+      "name": "マグマ団のグラエナ",
+      "number": "019",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-019",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/019.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-020",
+      "gameId": "pokemon",
+      "name": "アクア団のキバニア",
+      "number": "020",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-020",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/020.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-021",
+      "gameId": "pokemon",
+      "name": "アクア団のサメハダー",
+      "number": "021",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-021",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/021.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-022",
+      "gameId": "pokemon",
+      "name": "マグマ団のザングース",
+      "number": "022",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-022",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/022.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-023",
+      "gameId": "pokemon",
+      "name": "アクア団のスーパーボール",
+      "number": "023",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-023",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/023.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-024",
+      "gameId": "pokemon",
+      "name": "マグマ団のスーパーボール",
+      "number": "024",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-024",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/024.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-025",
+      "gameId": "pokemon",
+      "name": "アクアディフューザー",
+      "number": "025",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-025",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/025.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-026",
+      "gameId": "pokemon",
+      "name": "マグマポインター",
+      "number": "026",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-026",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/026.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-027",
+      "gameId": "pokemon",
+      "name": "アクア団の幹部",
+      "number": "027",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-027",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/027.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-028",
+      "gameId": "pokemon",
+      "name": "アクア団のしたっぱ",
+      "number": "028",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-028",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/028.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-029",
+      "gameId": "pokemon",
+      "name": "マグマ団の幹部",
+      "number": "029",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-029",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/029.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-030",
+      "gameId": "pokemon",
+      "name": "マグマ団のしたっぱ",
+      "number": "030",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-030",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/030.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-031",
+      "gameId": "pokemon",
+      "name": "アクア団の秘密基地",
+      "number": "031",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-031",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/031.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-032",
+      "gameId": "pokemon",
+      "name": "マグマ団の秘密基地",
+      "number": "032",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-032",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/032.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-033",
+      "gameId": "pokemon",
+      "name": "ダブルアクアエネルギー",
+      "number": "033",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-033",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/033.ts"
+      }
+    },
+    {
+      "id": "pokemon-tcgdex-ja-CP1-034",
+      "gameId": "pokemon",
+      "name": "ダブルマグマエネルギー",
+      "number": "034",
+      "setId": "pokemon-set-ja-cp1",
+      "setName": "マグマ団VSアクア団 ダブルクライシス",
+      "language": "ja",
+      "sources": {
+        "tcgdex": "https://api.tcgdex.net/v2/ja/cards/CP1-034",
+        "licensedSource": "https://github.com/tcgdex/cards-database/blob/cbddf7e54033b1b58e44af1049c88832e55b94d0/data-asia/XY/CP1/034.ts"
+      }
+    }
+  ],
+  "sets": [
+    {
+      "id": "pokemon-set-ja-cp1",
+      "gameId": "pokemon",
+      "name": "マグマ団VSアクア団 ダブルクライシス",
+      "code": "CP1",
+      "language": "ja"
+    }
+  ]
+}

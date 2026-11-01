@@ -1,5 +1,18 @@
 # Autoloot state and trust boundaries
 
+## HTTP runtime and hosted direction
+
+Both local Node and hosted Cloudflare editions use the same native Hono route
+modules in `lib/http/`. Node-specific socket and asset handling lives in
+`node-platform.mjs` and `node-assets.mjs`. SSE uses Fetch ReadableStreams.
+The local listener retains connection/time limits and graceful shutdown.
+
+The hosted entry `cloudflare/worker.mjs` uses owner-verified Twitch OAuth,
+Durable Object SQLite as the authoritative workspace writer, D1 for queryable
+revisioned projections/account ownership, R2 for uploads and an outbound local
+Codex/vision bridge. Marketing remains a separate Pages/Workers static build.
+See [hosted runtime](hosted-migration.md) for configuration and verification.
+
 ## Auctions
 
 `ready → live ⇄ paused → sold | unsold | cancelled`

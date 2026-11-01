@@ -45,7 +45,9 @@ Add each preset at its documented dimensions. Confirm transparency against a con
 
 On a phone, check Twitch registration, readable price/deadline, bid-command copy, private orders and the complete hosted checkout return. Check portrait and landscape layouts and keyboard behavior.
 
-## Metadata and recognition — provider access required
+## Metadata and recognition
+
+Use the [bundled demo](metadata.md) for credential-free identity search. Full catalog and market guides require hosted API access; verify that mode separately.
 
 Verify the configured API with real catalog searches. Test a small labeled set of real cards under different lighting/crops. Record latency and incorrect matches. Confirm the streamer can reject/correct candidates and that no unreviewed identity or price is announced. Keep recognition labeled as a prototype until this passes.
 

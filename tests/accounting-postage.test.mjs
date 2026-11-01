@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {routeApp,post} from './helpers/hono.mjs';
 import assert from 'node:assert/strict';
 import {accountingRows,postageCosts,recordCosts} from '../lib/accounting.mjs';
 import {Engine,seed} from '../lib/engine.mjs';
@@ -33,7 +34,6 @@ test('unverified labels and inconsistent package membership stay unknown',()=>{
 });
 test('single purchased labels survive dispatch, voiding removes automatic cost and export includes provenance only',async()=>{
  const s=fixture(false);s.orders[0].status='shipped';assert.equal(postageCosts(s).get('b'),425);s.orders[0].shipment.status='voided';assert.equal(accountingRows(s)[0].deliveryCost,null);
- s.orders[0].shipment.status='purchased';const engine=new Engine(s),action=createCommerceActions({engine});let body;
- const res={writeHead:()=>{},end:value=>{body=JSON.parse(value);}};
- await action({path:'/api/accounting/export',b:{},res});assert.match(body.csv,/Delivery cost source/);assert.match(body.csv,/shippo/);assert.doesNotMatch(body.csv,/transaction|attempt|1 Main St/);
+ s.orders[0].shipment.status='purchased';const engine=new Engine(s),action=routeApp(createCommerceActions({engine,stateFor:()=>engine.state}));
+ const body=await (await post(action,'/api/accounting/export',{})).json();assert.match(body.csv,/Delivery cost source/);assert.match(body.csv,/shippo/);assert.doesNotMatch(body.csv,/transaction|attempt|1 Main St/);
 });

@@ -16,6 +16,7 @@ const server = spawn(process.execPath, ["server.mjs"], {
     ...process.env,
     PORT: String(port),
     DATA_DIR: dir,
+    METADATA_MODE: 'demo',
         AUTOLOOT_DEMO: '1',
     PUBLIC_URL: `http://localhost:${port}`,
   },
@@ -49,6 +50,29 @@ try {
     if (!response.ok) throw Error(result.error);
     return result;
   };
+  const status=await call('/api/metadata/status');
+  assert.equal(status.mode,'demo');assert.equal(typeof status.keyConfigured,'boolean');
+  assert.equal(Object.hasOwn(status,'key'),false);
+  const anonymousStatus=await fetch(base+'/api/metadata/status');
+  assert.equal(anonymousStatus.status,403);
+  const unauthorizedSearch=await fetch(base+'/api/catalog/search',{method:'POST',body:'{}'});
+  assert.equal(unauthorizedSearch.status,403);
+  const malformedSearch=await fetch(base+'/api/catalog/search',{method:'POST',headers:{'Content-Type':'application/json','X-Autoloot-Admin':bootstrap.admin},body:'{'});
+  assert.equal(malformedSearch.status,400);
+  assert.equal(malformedSearch.headers.get('cache-control'),'no-store');
+  assert.equal((await malformedSearch.json()).error,'Invalid JSON request.');
+  const crossOriginSearch=await fetch(base+'/api/catalog/search',{method:'POST',headers:{Origin:'https://untrusted.example','X-Autoloot-Admin':bootstrap.admin},body:'{}'});
+  assert.equal(crossOriginSearch.status,403);
+  const catalogSearch=await call('/api/catalog/search',{game:'pokemon'});
+  assert.equal(catalogSearch.state.catalog.total,34);
+  assert.match(catalogSearch.state.catalog.source,/Bundled Metadata demo/);
+  const card=catalogSearch.state.catalog.items[0];
+  const catalogSelection=await call('/api/catalog/select',{id:card.id});
+  assert.equal(catalogSelection.state.catalog.selected.id,card.id);
+  const catalogAdd=await call('/api/catalog/add',{id:card.id,price:'5.00',quantity:1,condition:'Raw · demo'});
+  const demoLot=catalogAdd.state.products.find(p=>p.metadata?.id===card.id);
+  assert.ok(demoLot);assert.equal(demoLot.listed,false);assert.equal(demoLot.price,500);
+  console.log('PASS: bundled Metadata search → review → seller-priced unlisted inventory, without API access.');
   await call("/api/vote/open", {
     productIds: ["p1", "p2", "p3"],
     duration: 30,

@@ -1,5 +1,9 @@
 # Production deployment
 
+This page covers the local Node/server edition. For the shared Hono application
+on Cloudflare Workers with Durable Objects, D1 and R2, use
+[Cloudflare hosted setup](hosted-migration.md).
+
 The supported scope is one streamer, one Node process and one local SQLite data directory. Admin access remains direct localhost only. Public viewers reach the same process through an HTTPS reverse proxy. Do not run replicas or place SQLite on a network volume.
 
 ## Service setup
@@ -18,6 +22,8 @@ npm run start:production
 The build requires esbuild. After pruning, use `start:production`; `npm start` runs the build again.
 
 Keep credentials out of source control; environment files must be mode 0600. Set `NODE_ENV=production`, `DATA_DIR`, `PUBLIC_URL` (the HTTPS viewer origin), Twitch credentials, live Stripe credentials and webhook secret. NFT runs additionally need trusted RPC endpoints and the constrained signer described in [NFT delivery](nft-delivery.md).
+
+For the full Metadata catalog, install a separate TCG-scoped production service key and set `METADATA_MODE=api` in `/etc/autoloot.env`. Credential-free demos can use `METADATA_MODE=demo`; see [Metadata setup](metadata.md).
 
 `npm run start:production` enables production configuration checks. Demo seeding, remote HTTP origins, malformed origins, weak configured NFT credentials and invalid backup limits fail startup. The application binds 127.0.0.1 only. View the streamer dashboard directly at localhost; its capability rotates each restart. Buyer sessions survive restarts; streamer Twitch tokens do not, and interrupted runs remain paused until reviewed/reconnected.
 

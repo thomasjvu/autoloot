@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "cards": 34,
+  "sets": 1,
+  "catalogSha256": "008bf8d80a7c15641781c459c8d8f51a5587fc3b94e1e696e74d24383eaeceed",
+  "checks": [
+    "34 unique canonical identities",
+    "one linked set",
+    "all 34 names match pinned MIT upstream",
+    "set name matches pinned MIT upstream",
+    "identity field allowlist only",
+    "no images or prices",
+    "license digest verified"
+  ],
+  "command": "python3 data/metadata-demo/build-snapshot.py --metadata-root /Users/area/@metadata"
+}

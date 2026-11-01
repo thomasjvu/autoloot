@@ -10,6 +10,8 @@
 | Guide | Purpose |
 | --- | --- |
 | [Production](production.md) | Single-host deployment, launch checks and monitoring |
+| [Hosted migration](hosted-migration.md) | Hono, D1 and the Cloudflare hosted target |
+| [Metadata](metadata.md) | Credential-free demo catalog and scoped API credentials |
 | [Twitch and OBS](twitch-widgets.md) | Channel login, chat commands and stream widgets |
 | [Codex connection](codex-connection.md) | Local companion sign-in, credentials and disconnect |
 | [Payments](payment-onboarding.md) | Seller-owned Stripe account and onboarding scope |

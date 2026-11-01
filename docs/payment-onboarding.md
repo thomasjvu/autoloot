@@ -14,6 +14,14 @@ Optional [USDC checkout](crypto-checkout.md) is a separate physical-order paymen
 
 ## Possible multi-user hosted edition
 
+Update November 1, 2026: Cloudflare/D1 is now the accepted hosted direction;
+see [hosted migration](hosted-migration.md). The payment decisions below still
+need their own implementation and account-level validation.
+
 If pursued after the hackathon: Cloudflare D1 for application data and Stripe Connect for seller onboarding. Start with Stripe-hosted Connect onboarding, subject to selecting the platform's responsibilities and charge pattern. Each authenticated streamer must map to an isolated connected account; payment/refund requests and webhook processing must validate that mapping. Track actual payment/payout capability status rather than redirect completion. Maintain separate sandbox/live identities and replay-safe events.
 
-A hosted design needs tenant isolation, transactional auction/reservation handling, authenticated account access, migrations/backups, shared event delivery, and a solution for the local Codex companion runtime. D1 and Connect are future architectural choices, not implemented or deployed features.
+The hosted backend now includes shared Hono routes, owner-verified Twitch sign-in,
+Durable Object transactions, D1 projection/account migrations, R2 and a paired
+local Codex bridge. It remains one configured owner per deployment. Stripe
+Connect and public multi-seller onboarding are not implemented. See the
+[hosted setup](hosted-migration.md) for tested behavior and deployment gates.

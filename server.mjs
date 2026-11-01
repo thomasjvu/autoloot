@@ -1,20 +1,8 @@
 import {SolanaCheckout} from './lib/solana-checkout.mjs';
 import {CodexConnection} from './lib/codex-connection.mjs';
 import {createRequestPolicy} from './lib/http/policy.mjs';
-import {serveStatic} from './lib/http/static.mjs';
-import {createExports} from './lib/http/exports.mjs';
-import {createMedia} from './lib/http/media.mjs';
-import {createViewer} from './lib/http/viewer.mjs';
-import {createOauth} from './lib/http/oauth.mjs';
-import {createSettingsActions} from './lib/http/settings-actions.mjs';
-import {createCompanionActions} from './lib/http/companion-actions.mjs';
-import {createShowActions} from './lib/http/show-actions.mjs';
-import {createCommerceActions} from './lib/http/commerce-actions.mjs';
-import {createInventoryActions} from './lib/http/inventory-actions.mjs';
 import {createEventHub} from './lib/http/events.mjs';
 import {createProjections} from './lib/http/projections.mjs';
-import {json,body} from './lib/http/response.mjs';
-import {adminRoutes} from './lib/admin-routes.mjs';
 import {AdminAuth} from './lib/admin-auth.mjs';
 
 import {RipSession} from './lib/rip-session.mjs';
@@ -23,8 +11,12 @@ const vision=new Vision();
 import {Shipping} from './lib/shipping.mjs';
 import { runtimeConfig, localAdminRequest } from './lib/runtime.mjs';
 const runtime = runtimeConfig();
-import http from "node:http";
-import { NftDelivery, walletBridge, isNft } from "./lib/nft.mjs";
+import {createAdaptorServer} from '@hono/node-server';
+import {createHttpApp} from './lib/http/app.mjs';
+import {nodeRequestContext} from './lib/http/node-platform.mjs';
+import {createNodeAssets} from './lib/http/node-assets.mjs';
+import {codexReply} from './lib/companion.mjs';
+import { NftDelivery, walletBridge } from "./lib/nft.mjs";
 import { Storage } from "./lib/storage.mjs";
 process.umask(0o077);
 import {emptyWorkspace} from "./lib/workspace.mjs";
@@ -43,7 +35,6 @@ import { fileURLToPath } from "node:url";
 import { randomBytes } from "node:crypto";
 import { Engine, seed } from "./lib/engine.mjs";
 import { Twitch } from "./lib/twitch.mjs";
-import { LEGAL_VERSION, operatorProfile, operatorConfigured } from "./lib/legal.mjs";
 import { Runs } from "./lib/runs.mjs";
 import { Payments } from "./lib/payments.mjs";
 const root = fileURLToPath(new URL(".", import.meta.url));
@@ -67,7 +58,6 @@ const companion={proposal:null,busy:false};
 function broadcast(){events.broadcast();}
 let stateFor;
 const events=createEventHub({stateFor:role=>stateFor(role),adminValid:req=>adminAuth.valid(req)});
-const clients=events.clients;
 engine = new Engine(initial, {
   save: (s) => storage.save(s),
   onChange: broadcast,
@@ -159,101 +149,14 @@ const {backupMinutes, backupKeep} = runtime;
 const backupTimer=setInterval(()=>{storage.automaticBackup(backupKeep).catch(()=>console.error('Automatic backup failed.'));},backupMinutes*60000);
 backupTimer.unref();
 storage.automaticBackup(backupKeep).catch(()=>console.error('Initial database backup failed.'));
-const oauthRoutes=createOauth({base,twitch,storage,oauthHandoffs});
 const solanaCheckout=new SolanaCheckout(engine);
 payments.status.wallet=solanaCheckout.status;
-const viewerRoutes=createViewer({engine,twitch,payments,nft,base,solanaCheckout});
-const mediaRoutes=createMedia({imageDir,rip});
-const exportsRoutes=createExports({engine});
-const inventoryActions=createInventoryActions({engine});
-const commerceActions=createCommerceActions({engine,payments,nft,shipping,shippingConfigFile,localHost,broadcast});
-const showActions=createShowActions({engine,runs,shipping,nft,twitch,announce,base,companion,rip,broadcast});
 const codexConnection=new CodexConnection();
-const companionActions=createCompanionActions({engine,catalog,rip,nft,twitch,imageDir,companion,broadcast,announce,codexConnection});
-const settingsActions=createSettingsActions({engine,twitch,twitchConfigFile,localHost,broadcast});
-const policy=createRequestPolicy({runtime,auth:adminAuth,adminToken:admin,agentToken:()=>process.env.NFT_AGENT_TOKEN,localHost,storage,engine,twitch,broadcast});
-let closing = false;
-const server = http.createServer(async (req, res) => {
-  const context=policy.begin(req,res,closing);
-  if(!context)return;
-  try {
-    const prepared=policy.prepare(context);
-    if(!prepared)return;
-    const {url,path,adminAccess,nftAgent,auditContext,settle,session}=prepared;
-    if(await adminRoutes({req,res,path,auth:adminAuth,clients,localHost,json,body}))return;
-    if(path==='/' && localHost(req) && !adminAuth.valid(req)){res.writeHead(302,{Location:'/admin-login.html'});return res.end();}
-    if (path === "/api/bootstrap") {
-      if (!localHost(req))
-        return json(
-          res,
-          { error: "Open the streamer dashboard at localhost." },
-          403,
-        );
-      if(!adminAuth.valid(req))return json(res,{error:'Admin sign-in required.'},401);
-      return json(res, {
-        admin,
-        overlayUrl: `http://localhost:${port}/overlay`,
-        viewerUrl: base + "/shop",
-        state: stateFor("admin"),
-      });
-    }
-    if(path==='/api/nft/jobs' && req.method==='GET') {
-      if(!adminAccess && !nftAgent)return json(res,{error:'NFT agent or streamer access required.'},403);
-      return json(res,{jobs:engine.state.orders.filter(o=>isNft(o)&&o.delivery&&['paid','paid-external'].includes(o.status)&&(adminAccess||o.delivery.allowTransfer)).map(o=>({...nft.manifest(o),status:o.delivery.status,transactionId:o.delivery.transactionId || null,error:o.delivery.error || null}))});
-    }
-    if(path==='/api/nft/submit' && req.method==='POST') {
-      if(!adminAccess && !nftAgent)return json(res,{error:'NFT agent or streamer access required.'},403);
-      const b=await body(req),o=engine.order(b.id);
-      if(!adminAccess&&!o.delivery?.allowTransfer)return json(res,{error:'NFT transfer was not authorized for agent execution.'},403);
-      nft.submit(o.id,b.transactionId);return json(res,{ok:true});
-    }
-    if (path === "/api/legal" && req.method === "GET")
-      return json(res, { version:LEGAL_VERSION, operator:operatorProfile(engine.state.operator), configured:operatorConfigured(engine.state.operator) });
-    if (path === "/api/state")
-      return json(res, stateFor(adminAccess ? "admin" : "viewer"));
-    if (path === "/api/events") {
-      if (url.searchParams.has("admin") && !adminAccess)
-        return json(res, { error: "Admin session expired." }, 403);
-      if(clients.size >= 200) return json(res,{error:"Viewer connection limit reached."},429);
-      events.connect(req,res,adminAccess?'admin':'viewer',settle);
-      return;
-    }
-    if(await oauthRoutes({req,res,path,url,adminAccess,session}))return;
-    if(await viewerRoutes({req,res,path,url,adminAccess,session}))return;
-    if(await mediaRoutes({req,res,path,adminAccess}))return;
-    if (req.method === "POST" && path.startsWith("/api/")) {
-      const origin = req.headers.origin;
-      if (
-        origin &&
-        origin !== `http://${req.headers.host}` &&
-        origin !== `https://${req.headers.host}`
-      )
-        return json(res, { error: "Cross-origin request rejected." }, 403);
-      if (!adminAccess)
-        return json(res, { error: "Streamer access required." }, 403);
-      const b = await body(req, path.startsWith("/api/import/") ? 1500000 : 32768);
-      if(auditContext.action){
-        const operation=['ship','cancel','refund','test-pay','confirm-paid'].includes(b.action)?b.action:null;
-        const target=engine.state.orders.find(order=>order.id===b.id)?.number || engine.state.products.find(product=>product.id===b.id)?.id;
-        if(operation)auditContext.action+=' · '+operation;
-        if(target)auditContext.action+=' ['+target+']';
-      }
-
-      const handled=await inventoryActions({path,b,req,res}) || await commerceActions({path,b,req,res}) || await showActions({path,b,req,res}) || await companionActions({path,b,req,res}) || await settingsActions({path,b,req,res});
-      if(!handled)return json(res,{error:'Unknown action.'},404);
-      if(res.writableEnded)return;
-      return json(res, { ok: true, state: stateFor("admin") });
-    }
-    if(await exportsRoutes({req,res,path,adminAccess}))return;
-    serveStatic({req,res,path,root});
-  } catch (e) {
-    json(
-      res,
-      { error: e instanceof SyntaxError ? "Invalid JSON request." : e.message },
-      400,
-    );
-  }
-});
+let closing=false;
+const policy=createRequestPolicy({runtime,auth:adminAuth,adminToken:admin,agentToken:()=>process.env.NFT_AGENT_TOKEN,localHost,storage,engine,twitch,broadcast,isClosing:()=>closing});
+const platform=createNodeAssets({root,imageDir,twitchConfigFile,shippingConfigFile});
+const app=createHttpApp({policy,requestContext:nodeRequestContext,...platform,auth:adminAuth,events,admin,port,base,engine,twitch,payments,nft,shipping,runs,catalog,rip,metadata,stateFor,localHost,broadcast,announce,companion,codexConnection,oauthHandoffs,storage,solanaCheckout,companionRuntime:{reply:codexReply}});
+const server=createAdaptorServer({fetch:app.fetch,overrideGlobalObjects:false,autoCleanupIncoming:false});
 server.requestTimeout=30000;
 server.headersTimeout=10000;
 server.keepAliveTimeout=5000;
@@ -261,7 +164,7 @@ server.maxRequestsPerSocket=1000;
 server.maxConnections=512;
 server.listen(port, "127.0.0.1", () =>
   console.log(
-    `Autoloot is ready at http://localhost:${port}\nViewer page: ${base}/shop\nLocal streamer access only. Data: ${data} (SQLite)`,
+    `Autoloot is ready at http://localhost:${port}\nViewer page: ${base}/shop\nLocal streamer access only. Metadata: ${metadata.mode}. Data: ${data} (SQLite)`,
   ),
 );
 async function shutdown() {
