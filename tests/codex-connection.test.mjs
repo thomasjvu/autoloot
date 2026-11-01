@@ -43,3 +43,12 @@ test('cancel uses the current login ID and API keys never enter returned state',
 test('raw provider errors are replaced with safe messages',async()=>{
  const f=fixture({error:true});try{await assert.rejects(f.service.status(),error=>!error.message.includes('sensitive'));}finally{f.service.close();}
 });
+
+test('auth lifecycle rejects late login results after cancellation',async()=>{
+ const service=new CodexConnection();let release;const calls=[];
+ service.status=async()=>({connected:false});service.child={kill(){}};
+ service.rpc=async(method,params)=>{calls.push({method,params});if(method==='account/login/start')return new Promise(resolve=>{release=resolve;});return {};};
+ const starting=service.start();await new Promise(resolve=>setImmediate(resolve));assert.equal(service.state.auth,'starting');
+ await service.cancel();release({loginId:'late',authUrl:'https://auth.openai.com/oauth'});await assert.rejects(starting,/cancelled/);
+ assert.equal(service.state.auth,'idle');assert.equal(service.login,null);assert.equal(service.timer,null);assert.ok(calls.some(x=>x.method==='account/login/cancel'&&x.params.loginId==='late'));service.close();
+});

@@ -1,6 +1,10 @@
+import {transition, connectionGraph} from '../shared/state-machine.js';
 // Public display updates never wait for private order reads. One coalesced worker
 // refreshes buyer state when the opaque commerce revision changes or after reconnect.
 export function createLiveConnection({surface,api,getAdminToken,getViewer,applyBootstrap,applySnapshot,setConnected,render,captureDraft,restoreDraft,notify,createSource=url=>new EventSource(url),now=()=>Date.now(),viewerRefreshMs=30000}) {
+ const lifecycle={state:'idle'};
+ const move=state=>transition(lifecycle,'state',state,connectionGraph,'connection');
+ const connected=value=>{move(value?'connected':'interrupted');setConnected(value);};
  let source=null,closed=false,generation=0,cachedViewer=null,viewerRevision,lastViewerRead=0,renderedSignature,renderedViewer;
  const displaySignature=state=>{const {serverTime,viewerRevision:revision,...display}=state;return JSON.stringify(display);};
  function connect(){
@@ -12,7 +16,7 @@ export function createLiveConnection({surface,api,getAdminToken,getViewer,applyB
   const display=()=>{
    if(!current()||events.readyState!==1||!latestState)return;
    const signature=surface==='shop'?displaySignature(latestState):null;
-   applySnapshot(latestState,surface==='shop'?cachedViewer:null);setConnected(true);
+   applySnapshot(latestState,surface==='shop'?cachedViewer:null);connected(true);
    if(surface==='shop'&&signature===renderedSignature&&cachedViewer===renderedViewer)return;
    const draft=captureDraft();render();restoreDraft(draft);renderedSignature=signature;renderedViewer=cachedViewer;
   };
@@ -27,23 +31,23 @@ export function createLiveConnection({surface,api,getAdminToken,getViewer,applyB
       if(attempt!==epoch)continue;
       if(getViewer&&getViewer()!==viewerBefore){cachedViewer=getViewer();forceViewer=true;continue;}
       cachedViewer=viewer;viewerRevision=revision;lastViewerRead=now();display();
-     }catch{if(current()&&attempt===epoch){forceViewer=true;setConnected(false);}return;}
+     }catch{if(current()&&attempt===epoch){forceViewer=true;connected(false);}return;}
     }
    })().finally(()=>{refreshPromise=null;});
    return refreshPromise;
   };
   events.onmessage=async event=>{
    if(!current()||events.readyState!==1)return;
-   try{latestState=JSON.parse(event.data);}catch{setConnected(false);return;}
+   try{latestState=JSON.parse(event.data);}catch{connected(false);return;}
    if(surface==='shop'&&getViewer)cachedViewer=getViewer();
    display();
    if(surface==='shop')await refreshViewer();
   };
   events.onerror=async()=>{
    if(!current())return;
-   epoch++;forceViewer=true;setConnected(false);
+   epoch++;forceViewer=true;connected(false);
    if(recovering)return;
-   recovering=true;
+   recovering=true;move('recovering');
    try{
     if(getAdminToken()){
      const fresh=await api('/api/bootstrap');
@@ -54,13 +58,15 @@ export function createLiveConnection({surface,api,getAdminToken,getViewer,applyB
     }
    }catch{}
    if(current())notify('Connection interrupted. Reconnecting…');
-   recovering=false;
+   recovering=false;if(current()&&lifecycle.state==='recovering')move('interrupted');
   };
  }
  async function start(){
+  move('bootstrapping');
   source?.close();source=null;closed=false;
   const attempt=++generation;
   const current=()=>!closed&&generation===attempt;
+  try{
   if(surface==='workspace'){
    const bootstrap=await api('/api/bootstrap');if(!current())return;applyBootstrap(bootstrap);
   }else{
@@ -68,6 +74,7 @@ export function createLiveConnection({surface,api,getAdminToken,getViewer,applyB
    if(!current())return;cachedViewer=viewer;viewerRevision=state.viewerRevision;lastViewerRead=now();renderedSignature=displaySignature(state);renderedViewer=viewer;applySnapshot(state,viewer);
   }
   if(!current())return;render();connect();
+  }catch(error){if(current())connected(false);throw error;}
  }
- return {start,close(){closed=true;generation++;source?.close();source=null;}};
+ return {start,get state(){return lifecycle.state;},close(){move('closed');closed=true;generation++;source?.close();source=null;}};
 }

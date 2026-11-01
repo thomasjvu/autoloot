@@ -51,3 +51,14 @@ test('chat-only snapshots differing only in server time do not rebuild the shop'
  let reads=0;const f=fixture(async path=>path==='/api/state'?{viewerRevision:'a',serverTime:1,auction:{price:10}}:{read:++reads});
  await f.controller.start();const count=f.renders;await f.sources[0].onmessage({data:JSON.stringify({viewerRevision:'a',serverTime:2,auction:{price:10}})});assert.equal(f.renders,count);assert.equal(reads,1);f.controller.close();
 });
+
+test('connection lifecycle exposes bootstrap failure, recovery, close and restart',async()=>{
+ let fail=true;const f=fixture(async()=>{if(fail)throw Error('offline');return {};},'overlay');
+ assert.equal(f.controller.state,'idle');await assert.rejects(f.controller.start(),/offline/);assert.equal(f.controller.state,'interrupted');
+ fail=false;await f.controller.start();assert.equal(f.controller.state,'bootstrapping');
+ await f.sources[0].onmessage({data:'{}'});assert.equal(f.controller.state,'connected');
+ await f.sources[0].onerror();assert.equal(f.controller.state,'interrupted');
+ await f.sources[0].onmessage({data:'{}'});assert.equal(f.controller.state,'connected');
+ f.controller.close();assert.equal(f.controller.state,'closed');await f.sources[0].onerror();assert.equal(f.controller.state,'closed');
+ await f.controller.start();assert.equal(f.controller.state,'bootstrapping');f.controller.close();
+});

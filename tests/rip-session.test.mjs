@@ -52,3 +52,12 @@ test('announcement formatting is completed before any pull or companion mutation
  session.state.selected.variants[0].currency='EUR';session.confirm({selectionId:selection.selectionId,variant:'raw'});assert.equal(saved.pulls.length,1);assert.match(saved.companion.message,/€1\.00/);
  assert.throws(()=>session.confirm({selectionId:selection.selectionId,variant:'raw'}),/changed/);
 });
+
+test('reveal lifecycle records failures and ignores superseded failures',async()=>{
+ let reject;const session=new RipSession(new Engine(emptyWorkspace()),{...metadata,search:()=>new Promise((resolve,fail)=>{reject=fail;})},vision);
+ assert.equal(session.snapshot().phase,'idle');const searching=session.search({query:'x'});assert.equal(session.snapshot().phase,'searching');
+ session.clear();reject(Error('late failure'));await assert.rejects(searching,/late failure/);assert.equal(session.snapshot().phase,'idle');assert.equal(session.snapshot().error,'');
+ const next=session.search({query:'x'});reject(Error('catalog offline'));await assert.rejects(next,/catalog offline/);assert.equal(session.snapshot().phase,'error');
+ session.metadata=metadata;await session.search({query:'x'});assert.equal(session.snapshot().phase,'candidates');await session.select('card');assert.equal(session.snapshot().phase,'selected');
+ session.confirm({selectionId:session.snapshot().selected.selectionId});assert.equal(session.snapshot().phase,'idle');
+});

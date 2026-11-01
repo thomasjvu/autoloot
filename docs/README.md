@@ -27,6 +27,7 @@
 
 ## Development and release
 
+- [Lifecycle contracts](lifecycles.md): explicit states, recovery and transition rules.
 - [Architecture](architecture.md): state ownership, privacy and UI/deployment boundaries.
 - [Design](../design.md): current visual and interaction rules.
 - [Release](release.md): repository/CI conventions and release gates.
