@@ -1,4 +1,4 @@
 {
-  "sha256": "784d9d7eac2c954f935a838cd1de8aa3a6b450fba795e3ba5ab0e7e72aae1fa7",
-  "note": "Ordered cascade after intentional admin entry design update: greeting bubble, bottom-aligned portrait and password meter. Other surface rules preserved. Source-order guard, not rendered visual certification."
+  "sha256": "17e5d0b8334a5b25f95da2e9f0a7cd981359b2e92745c337202489bf4bfa0363",
+  "note": "Intentional lower login bubble tail and larger login branding; other ordered surface rules preserved."
 }

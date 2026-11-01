@@ -56,3 +56,17 @@ test('invalid static paths never become FAQ fallbacks or expose deployment files
   }
  });
 });
+
+
+test('directories and object prototype names return clean 404s; legal pages support HEAD',async()=>{
+ await fixture(async({base})=>{
+  for(const path of ['/styles','/styles/','/constructor','/toString','/__proto__']){
+   const response=await fetch(base+path);assert.equal(response.status,404,path);
+   assert.match(response.headers.get('content-type'),/^text\/html/);
+  }
+  for(const path of ['/privacy','/terms','/404']){
+   const response=await fetch(base+path,{method:'HEAD'});
+   assert.equal(response.status,path==='/404'?404:200,path);assert.equal(await response.text(),'');
+  }
+ });
+});

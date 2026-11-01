@@ -10,29 +10,26 @@
 </head>
 <body class="admin-auth-page">
   <main class="admin-login">
-    <a class="auth-brand" href="/shop" aria-label="Autoloot storefront"><img src="/icon-192.png" alt="" width="56" height="56"><span class="wordmark">autoloot</span></a>
+    <a class="auth-brand" href="/" aria-label="Autoloot administrator"><img src="/icon-192.png" alt="" width="64" height="64"><span class="wordmark">autoloot</span></a>
     <section class="auth-card" aria-labelledby="auth-title">
-      <div class="auth-art" aria-hidden="true"><span class="auth-spark auth-spark-one">✦</span><span class="auth-spark auth-spark-two">✧</span><div class="auth-character-window"><img src="/characters/mochi-hero-welcome.png" alt="" width="1024" height="1536"></div><span class="auth-wave">Hey, streamer.</span></div>
+      <div class="auth-art" aria-hidden="true"><span class="auth-spark auth-spark-one">✦</span><div class="auth-character-window"><img src="/characters/mochi-hero-welcome.png" alt="" width="1024" height="1536"></div><span class="auth-wave">Hey, streamer.</span></div>
       <div class="auth-form-content">
         <h1 id="auth-title">Welcome in.</h1>
-        <p id="auth-description">Getting your workspace ready…</p>
         <form class="stack-form">
           <label id="username-label" for="admin-username">Username<input id="admin-username" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" minlength="3" maxlength="32" required aria-describedby="username-hint"></label>
           <small id="username-hint" hidden>3–32 letters, numbers, underscores or hyphens.</small>
-          <label for="admin-password">Password<span class="auth-password-field"><input id="admin-password" name="password" type="password" required maxlength="256" autocomplete="current-password" aria-describedby="password-hint password-strength-label"><button id="show-password" type="button" aria-label="Show password" aria-pressed="false">Show</button></span></label>
+          <label for="admin-password">Password<span class="auth-password-field"><input id="admin-password" name="password" type="password" required maxlength="256" autocomplete="current-password" aria-describedby="password-hint password-strength-label"><button id="show-password" type="button" aria-label="Show password" aria-pressed="false"><svg class="ui-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></span></label>
           <div id="password-strength" class="auth-strength" hidden>
             <div class="auth-strength-heading"><span>Password check</span><span id="password-strength-label" aria-live="polite">Add a password</span></div>
             <div id="password-meter" class="auth-strength-track" role="meter" aria-label="Password requirements met" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0" aria-valuetext="No password entered"><span></span><span></span><span></span><span></span><span></span></div>
             <small id="password-hint">12+ characters with uppercase, lowercase, a number and a symbol.</small>
           </div>
           <p id="legacy-login-note" hidden>Password-only sign in for your existing workspace.</p>
-          <label id="confirm-label" for="admin-confirm" hidden>One more time<input id="admin-confirm" name="confirm" type="password" maxlength="256" autocomplete="new-password"></label>
           <button class="btn primary auth-submit" type="submit" id="auth-submit" disabled>Continue <span aria-hidden="true">↗</span></button>
           <p role="status" aria-live="polite" id="auth-status"></p>
         </form>
       </div>
     </section>
-    <a class="auth-shop-link" href="/shop">Just browsing? Open the shop <span aria-hidden="true">→</span></a>
   </main>
 </body>
 </html>

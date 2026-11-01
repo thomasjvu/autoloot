@@ -4,4 +4,6 @@ paths.seller='<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy
 paths.shipping='<path d="M3 6h11v12H3zM14 10h4l3 4v4h-7M14 14h7"/><circle cx="7" cy="18" r="2" fill="var(--paper)"/><circle cx="18" cy="18" r="2" fill="var(--paper)"/>';
 paths.companion='<path d="M4 10V3l6 4a12 12 0 0 1 4 0l6-4v7c3 8-1 11-8 11S1 18 4 10Z"/><path d="M8 13v2M16 13v2M10 17l2 1 2-1"/>';
 paths.stats='<path d="M4 4v16h16M8 15v-4M13 15V7M18 15v-6"/>';
+paths.eye='<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>';
+paths['eye-off']='<path d="m3 3 18 18M10.6 5.1A12 12 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3 3.8M6.2 6.2A19 19 0 0 0 2 12s3.5 7 10 7a12 12 0 0 0 5.8-1.8M10 10a3 3 0 0 0 4 4"/>';
 export function icon(name,size=20){return '<svg class="ui-icon" width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(paths[name] || paths.spark)+'</svg>';}

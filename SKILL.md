@@ -20,16 +20,16 @@ The default creator dashboard is `http://localhost:4173`, the buyer storefront i
 
 Before starting another process, check `GET /api/health` on the intended port. A healthy response is `{ "ok": true, "storage": "sqlite" }`. Reuse an existing server when appropriate: one process owns one data directory. Do not restart an active show casually; restart pauses auctions/runs and requires Twitch reconnection.
 
-For browser operation, open the creator dashboard using localhost. It bootstraps admin access automatically. A public/tunneled URL is for viewers and cannot bootstrap creator access.
+For browser operation, open the creator dashboard using localhost. Create an administrator username and strong password on first use, or sign in to the existing account. The dashboard then obtains its capability using the authenticated session. A public/tunneled URL is for viewers and cannot bootstrap creator access.
 
 For direct API operation on the server machine:
 
-1. Fetch `GET http://localhost:4173/api/bootstrap` in memory. The response contains `admin`, `state`, `viewerUrl` and `overlayUrl`.
-2. Send that capability as `X-Autoloot-Admin` on creator requests. Use `Content-Type: application/json` for JSON POST bodies.
+1. Authenticate locally through `POST /api/admin/setup` on first use, or `/api/admin/login` thereafter, with `username` and `password`. Retain the HttpOnly session cookie in memory and send it on subsequent requests. Then fetch `GET http://localhost:4173/api/bootstrap` in memory. The response contains `admin`, `state`, `viewerUrl` and `overlayUrl`.
+2. Send that capability as `X-Autoloot-Admin` together with the authenticated session cookie on creator requests. Use `Content-Type: application/json` for JSON POST bodies.
 3. Read authenticated `GET /api/state` to inspect current creator state. Without the capability, this endpoint returns a sanitized public snapshot.
 4. After a mutation, inspect the returned state or fetch state again. Consult the matching route in `server.mjs` for its current body schema and the engine guards in `lib/engine.mjs` before constructing a new command.
 
-Keep the capability out of output, shared links and committed files. It changes on server restart. Bootstrap requires a loopback connection, a localhost/loopback Host header, and no forwarding headers. Do not spoof headers to bypass remote access restrictions. For browser-origin requests, Origin must match the request host; a 403 is an access/configuration failure to resolve, not a reason to disable checks.
+Keep the capability out of output, shared links and committed files. It changes on server restart, which also clears administrator sessions. A capability alone grants no access. Bootstrap requires a loopback connection, a localhost/loopback Host header, and no forwarding headers. Do not spoof headers to bypass remote access restrictions. For browser-origin requests, Origin must match the request host; a 403 is an access/configuration failure to resolve, not a reason to disable checks.
 
 Public updates stream from `GET /api/events` using SSE. Prefer ordinary state reads for short tasks; the browser already manages live subscriptions.
 

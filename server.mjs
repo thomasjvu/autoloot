@@ -93,7 +93,7 @@ try {
  }
  nft=new NftDelivery(engine,{rpc:nftRpc,adapter:walletBridge(process.env.NFT_WALLET_URL,process.env.NFT_WALLET_TOKEN)});
 } catch { storage.close(); throw Error('Invalid NFT RPC or wallet-bridge configuration. Use HTTPS or loopback URLs and a dedicated bridge credential.'); }
-stateFor=createProjections({engine,nft,shipping,storage,payments,twitch,rip,catalog,metadata,companion});
+stateFor=createProjections({engine,nft,shipping,storage,payments,twitch,rip,catalog,metadata,companion,adminAuth});
 // An interrupted live show resumes paused; never silently close an auction while offline.
 if (engine.state.auction?.status === "live") {
   const a = engine.state.auction;

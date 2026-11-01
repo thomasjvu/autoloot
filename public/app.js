@@ -219,7 +219,7 @@ function render() {
   if (isShop) return renderShop();
   const activityExpanded = $("#show-activity")?.open || false;
   $("#app").innerHTML =
-    `${workspaceNavigation({tab,mobileMenuOpen,twitch:state.twitch,companion:state.companion,companionError:state.companionError,brand:brand()})}<div class="workspace-main">${header()}<main>${{ studio, inventory, orders, audience, giveaways:()=>giveawaysPage(state), companion: companionPage, connections, rip: () => ripPage(state), catalog: () => inventory(), accounting:()=>accountingPage(state) }[tab]()}</main></div><footer class="app-footer"><span>© ${new Date().getFullYear()} Autoloot. All rights reserved.</span><nav aria-label="Legal"><button class="text-btn" data-action="admin-logout">Sign out</button><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/docs/getting-started/faq">Docs</a></nav></footer>${mochiQuick()}`;
+    `${workspaceNavigation({tab,mobileMenuOpen,adminAccount:state.adminAccount,twitch:state.twitch,companion:state.companion,companionError:state.companionError,brand:brand()})}<div class="workspace-main">${header()}<main>${{ studio, inventory, orders, audience, giveaways:()=>giveawaysPage(state), companion: companionPage, connections, rip: () => ripPage(state), catalog: () => inventory(), accounting:()=>accountingPage(state) }[tab]()}</main></div><footer class="app-footer"><span>© ${new Date().getFullYear()} Autoloot. All rights reserved.</span><nav aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/docs/getting-started/faq">Docs</a></nav></footer>${mochiQuick()}`;
 
   $("#app").dataset.draftSurface=JSON.stringify([tab,state.mode]);
   if ($("#show-activity")) $("#show-activity").open = activityExpanded;

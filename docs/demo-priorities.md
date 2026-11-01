@@ -1,6 +1,6 @@
 # Autoloot: the hackathon cut
 
-The differentiator is a Twitch-native AI producer that makes selling a shared live experience. The demo should show creator utility and audience entertainment together.
+The differentiator is a Twitch-native AI producer that makes selling a shared live experience. The demo should show creator utility and audience entertainment together. Use [Demo finalization](demo-ready.md) for the current working checklist, timed script and evidence record; this document explains the feature selection.
 
 ## Rehearsal priorities
 
@@ -14,7 +14,7 @@ The differentiator is a Twitch-native AI producer that makes selling a shared li
 
 Creator uploads a product photo and specifies price/condition. Autoloot drafts a listing. Chat chooses it as the next lot. Creator approves. Munny introduces it; two real viewers bid; the timer extends; one wins. The winner opens their private order and completes sandbox checkout. Creator sees payment verification and the shipping handoff.
 
-Keep this sequence under three minutes, including brief evidence of building with Codex. Keep the lightweight Sales & numbers view secondary to the demo. Avoid additional marketplace integrations, a social feed or multi-seller platform is required for this narrative.
+Keep this sequence under three minutes, including brief evidence of building with Codex. Keep the lightweight Sales & numbers view secondary to the demo. Additional marketplace integrations, a social feed and a multi-seller platform are outside this demo narrative.
 
 ## Verification gates
 

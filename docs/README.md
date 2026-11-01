@@ -29,7 +29,8 @@
 - [Release](release.md): repository/CI conventions and release gates.
 - [Live rehearsal](live-rehearsal.md): real-account verification still needed before launch.
 - [Roadmap](roadmap.md): planned work, separate from shipped features.
-- [Hackathon demo](hackathon.md) and [demo priorities](demo-priorities.md): demo-specific scope.
+- [Demo finalization](demo-ready.md): remaining gates, timed script and rehearsal record.
+- [Hackathon submission](hackathon.md), [submission copy](submission-draft.md) and [demo priorities](demo-priorities.md): requirements, draft description and feature selection.
 - [Production audit](production-audit.md): dated findings and verification boundaries, not a current certification.
 - [Artwork prompts](hero-art.md): generated character asset provenance.
 - [Marketing deployment](../marketing/README.md): independent Cloudflare Pages target.
