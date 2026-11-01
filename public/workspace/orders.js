@@ -1,3 +1,4 @@
+import {ordersChart} from '../shared/analytics.js';
 import {esc,usd,heading,statusBadge} from '../shared/presenters.js';
 import {attentionReasons,packingGroups,packingBlockers,physicalFundsVerified} from './order-operations.js';
 import {icon} from '../icons.js';
@@ -37,7 +38,7 @@ export function ordersPage(state,{filter='all'}={}, {nftOrderDetails,reservation
           : filter === "paid" && ["paid", "paid-external", "test-paid"].includes(o.status)),
   );
   if(filter==='packing')list.splice(0,list.length,...groups.flatMap(g=>g.orders));
-  return `${heading("Your orders", "", `<div class="heading-actions shipping-order-tools"><button class="btn" data-action="export-fulfillment">Export shipping CSV</button><button class="btn" data-action="export-pirateship">Pirate Ship CSV</button><button class="btn" data-action="import-tracking">Import tracking</button><button class="btn" data-action="export">Export all orders</button></div>`)}<div class="filter-tabs">${[
+  return `${heading("Your orders", "", `<details class="order-file-menu"><summary class="btn">${icon('download',16)} Import / export <span aria-hidden="true">⌄</span></summary><div class="order-file-options" aria-label="Order files"><button data-action="export">Export orders CSV</button><button data-action="export-fulfillment">Export shipping CSV</button><button data-action="export-pirateship">Export Pirate Ship CSV</button><button data-action="import-tracking">Import tracking CSV</button></div></details>`)}${ordersChart(state.orders)}<div class="filter-tabs">${[
     ["all", "All"],
     ["attention", `Needs attention (${state.orders.filter(o=>attentionReasons(o).length).length})`],
     ["packing", "Packing by buyer"],

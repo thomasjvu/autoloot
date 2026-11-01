@@ -1,3 +1,4 @@
+import {policyPresets,applyPolicyPreset} from '/policy-presets.js';
 import {createStudioViews} from '/workspace/studio.js';
 import {createProductDialogs} from '/workspace/product-dialogs.js';
 import {createLiveConnection} from '/lifecycle/connection.js';
@@ -6,7 +7,7 @@ import {companionPortrait,companionCard as companionCardMarkup,companionPage as 
 import {createCompanionControls} from '/workspace/companion-controls.js';
 import {inventoryPage} from '/workspace/inventory.js';
 import {ordersPage} from '/workspace/orders.js';
-import {settingsPage} from '/workspace/settings.js';
+import {settingsPage,settingsPanel} from '/workspace/settings.js';
 import {wireInventory,wireOrders} from '/workspace/commerce-controls.js';
 import {esc,usd,productArt,assetDescription,visual,statusBadge,brand,heading,time} from '/shared/presenters.js';
 import {createStorefront} from '/storefront.js';
@@ -74,7 +75,7 @@ function setLiveConnection(connected) {
   if (!connected) {
     if(isShop){storefront.disconnect();updateDropClock(state,Date.now()-serverOffset,false);}
     cohostPlayer.arm(false);
-    document.querySelectorAll('[data-copy-bid], [data-buy], [data-checkout], [data-buyer-pay]').forEach(button => button.disabled = true);
+    document.querySelectorAll('[data-copy-bid], [data-buy], [data-checkout], [data-buyer-pay], [data-wallet-checkout]').forEach(button => button.disabled = true);
     document.querySelectorAll('[data-clock], [data-vote-clock], [data-reservation-clock]').forEach(clock => clock.textContent = "—");
   }
 }
@@ -152,7 +153,7 @@ function runDialog() {
  modal(`<h2>Arm an agent-led run</h2><p>Select up to 20 single-unit products. They run in inventory order. Prices, condition, shipping and auction terms are frozen until you stop the run.</p><form id="run-form" class="stack-form"><div class="run-products">${products.map(p => `<div class="run-product"><label><input type="checkbox" name="productId" value="${esc(p.id)}"> ${esc(p.title)}<small>Auction from ${usd(p.price)}${p.buyNowPrice ? ' · Fixed price '+usd(p.buyNowPrice) : ''}</small></label><label>Format<select data-run-format="${esc(p.id)}"><option value="auction">Auction</option>${p.buyNowPrice ? '<option value="buy-now">Buy now</option>' : ''}</select></label></div>`).join('')}</div><label class="consent"><input type="checkbox" name="reviewEachLot" ${state.automation?.mode==='review'?'checked':''}> Ask me before opening each lot</label><label>Run for (minutes)<input type="number" name="minutes" min="1" max="240" value="30" required></label><p>${esc(state.mode)} mode · ${state.show.bidDuration}s auctions · ${usd(state.show.increment)} bid increments · ${usd(state.show.shippingPrice)} shipping per order.</p><details><summary>NFT transfer authorization</summary><label class="consent"><input type="checkbox" name="allowNftTransfers"> Authorize transfers of the queued NFTs to buyer-confirmed wallets after payment.</label><label>Maximum total network fee per transfer (native atomic units)<input name="maxNftFeeAtomic" value="0" pattern="[0-9]+" required></label><p>Each chain uses its own native units (for example lamports or wei). The wallet service must enforce the cap before signing. Unknown outcomes are reconciled, not blindly resubmitted.</p></details><label class="consent"><input type="checkbox" required> I authorize this queue to sell under these terms, with no inventory purchasing and only the separately authorized NFT transfers. I am responsible for the listings and fulfillment and have reviewed the <a href="/terms" target="_blank" rel="noopener">automation and AI disclosures</a>.</label><button class="btn primary">Arm run</button></form>`);
  const requestId = crypto.randomUUID();
  $('#run-form').onsubmit = async event => {
-   event.preventDefault(); const form = event.currentTarget, button = form.querySelector('button'); button.disabled = true;
+   event.preventDefault(); const form = event.currentTarget, button = form.querySelector('button[type="submit"]'); button.disabled = true;
    try {
      const data = new FormData(form);
      await api('/api/run/arm', { requestId, reviewEachLot:data.has('reviewEachLot'), minutes:Number(data.get('minutes')), allowNftTransfers:data.has('allowNftTransfers'),maxNftFeeAtomic:data.get('maxNftFeeAtomic'), steps:data.getAll('productId').map(id => ({productId:id,format:form.querySelector(`[data-run-format="${CSS.escape(id)}"]`).value})) });
@@ -177,11 +178,26 @@ async function auditHistoryDialog(before){
 const companionControls=createCompanionControls({getState:()=>state,getToken:()=>adminToken,refresh:async()=>{state=await api('/api/state');render();},api,modal,toast,document,fetch});
 const ask=prompt=>companionControls.ask(prompt);
 function connections(){return settingsPage(state,{selectedWidget});}
+function openSettingsPanel(kind){
+ modal(settingsPanel(state,kind,{selectedWidget}));
+ const dialog=$('#modal');
+ dialog.querySelectorAll('[data-action]').forEach(button=>button.onclick=()=>action(button.dataset.action));
+ dialog.querySelector('[data-tab="studio"]')?.addEventListener('click',()=>{dialog.close();tab='studio';render();});
+ dialog.querySelectorAll('[data-settings-automation]').forEach(button=>button.onclick=async()=>{try{await api('/api/automation',{mode:button.dataset.settingsAutomation});state=await api('/api/state');render();openSettingsPanel(kind);toast('Run style saved.');}catch(error){toast(error.message);}});
+ dialog.querySelector('#settings-widget-preset')?.addEventListener('change',event=>{selectedWidget=event.target.value;try{localStorage.setItem('autoloot-widget',selectedWidget);}catch{}openSettingsPanel(kind);});
+ dialog.querySelector('#settings-mode')?.addEventListener('change',async event=>{try{await api('/api/mode',{mode:event.target.value});state=await api('/api/state');render();openSettingsPanel(kind);}catch(error){toast(error.message);event.target.value=state.mode;}});
+ for(const [id,enabled]of [['settings-load-demo',true],['settings-remove-demo',false]])dialog.querySelector('#'+id)?.addEventListener('click',async event=>{const button=event.currentTarget;button.disabled=true;try{await api('/api/workspace/demo',{enabled});state=await api('/api/state');render();openSettingsPanel(kind);toast(enabled?'Practice content loaded.':'Practice content cleared.');}catch(error){toast(error.message);button.disabled=false;}});
+}
 function operatorDialog() {
  const o = state.operator || {};
- modal(`<h2>Publish seller policies</h2><p>All fields below are public. Use your business/operator identity and a public contact, not private credentials. These notices must reflect your actual practices.</p><form id="operator-form" class="stack-form"><label>Seller / operator name<input name="name" maxlength="160" value="${esc(o.name || '')}" required></label><label>Public support and privacy email<input type="email" name="email" maxlength="254" value="${esc(o.email || '')}" required></label><label>Shipping and fulfillment policy<textarea name="shipping" maxlength="3000" rows="3" required>${esc(o.shipping || '')}</textarea></label><label>Returns, refunds and dispute policy<textarea name="returns" maxlength="3000" rows="3" required>${esc(o.returns || '')}</textarea></label><label>Data retention notice<textarea name="retention" maxlength="1500" rows="3" required>${esc(o.retention || '')}</textarea></label><p class="field-help">There is no automatic personal-data deletion schedule. You must carry out the retention/deletion practices you publish, including backups and exports. Mandatory buyer and privacy rights still apply.</p><label class="consent"><input type="checkbox" name="acknowledged" required> I operate this installation and am responsible for the policies, listings, permissions and automation I authorize. I have reviewed the <a href="/terms" target="_blank" rel="noopener">Terms</a> and <a href="/privacy" target="_blank" rel="noopener">Privacy notice</a>, including AI limitations.</label><button class="btn primary">Publish policies</button></form>`);
+ modal(`<h2>Publish seller policies</h2><p>All fields below are public. Use your business/operator identity and a public contact, not private credentials. These notices must reflect your actual practices.</p><form id="operator-form" class="stack-form"><details class="form-details"><summary>Start from a policy preset</summary><label>Preset<select id="policy-preset">${Object.entries(policyPresets).map(([id,p])=>`<option value="${id}">${esc(p.label)}</option>`).join('')}</select></label><label class="consent"><input type="checkbox" id="replace-policy-draft"> Replace existing policy text</label><button type="button" class="btn" id="apply-policy-preset">Fill draft</button><p class="field-help">Edit the draft and replace bracketed details before publishing. Your seller name and email stay yours.</p></details><label>Seller / operator name<input name="name" maxlength="160" value="${esc(o.name || '')}" required></label><label>Public support and privacy email<input type="email" name="email" maxlength="254" value="${esc(o.email || '')}" required></label><label>Shipping and fulfillment policy<textarea name="shipping" maxlength="3000" rows="3" required>${esc(o.shipping || '')}</textarea></label><label>Returns, refunds and dispute policy<textarea name="returns" maxlength="3000" rows="3" required>${esc(o.returns || '')}</textarea></label><label>Data retention notice<textarea name="retention" maxlength="1500" rows="3" required>${esc(o.retention || '')}</textarea></label><p class="field-help">There is no automatic personal-data deletion schedule. You must carry out the retention/deletion practices you publish, including backups and exports. Mandatory buyer and privacy rights still apply.</p><label class="consent"><input type="checkbox" name="acknowledged" required> I operate this installation and am responsible for the policies, listings, permissions and automation I authorize. I have reviewed the <a href="/terms" target="_blank" rel="noopener">Terms</a> and <a href="/privacy" target="_blank" rel="noopener">Privacy notice</a>, including AI limitations.</label><button type="submit" class="btn primary">Publish policies</button></form>`);
+ $('#apply-policy-preset').onclick=()=>{
+  const form=$('#operator-form'),current=Object.fromEntries(new FormData(form)),draft=applyPolicyPreset(current,$('#policy-preset').value,{replace:$('#replace-policy-draft').checked});
+  for(const field of ['shipping','returns','retention'])form.elements[field].value=draft[field];
+  form.elements.acknowledged.checked=false;toast('Draft filled. Review and edit before publishing.');
+ };
  $('#operator-form').onsubmit = async event => {
-   event.preventDefault(); const form = event.currentTarget, button = form.querySelector('button'); button.disabled = true;
+   event.preventDefault(); const form = event.currentTarget, button = form.querySelector('button[type="submit"]'); button.disabled = true;
    try {
      await api('/api/operator', {...Object.fromEntries(new FormData(form)), acknowledged:new FormData(form).has('acknowledged')});
      $('#modal').close(); state = await api('/api/state'); render(); toast('Seller policies published.');
@@ -280,7 +296,7 @@ function modal(content) {
   drawer.onclick=e=>{if(e.target!==drawer)return;const r=drawer.getBoundingClientRect();if(e.clientX<r.left || e.clientX>r.right || e.clientY<r.top || e.clientY>r.bottom)closeDrawer(drawer);};
 }
 
-const {addProduct,startDialog}=createProductDialogs({getState:()=>state,getToken:()=>adminToken,$,modal,api,toast,fetch});
+const {addProduct,startDialog}=createProductDialogs({getState:()=>state,getToken:()=>adminToken,$,modal,api,toast,fetch,openCatalog:()=>{inventoryView="catalog";tab="inventory";render();document.querySelector("#catalog-query")?.focus();}});
 function confirmAction(title, description, callback) {
   modal(
     `<h2>${esc(title)}</h2><p>${esc(description)}</p><div class="dialog-actions"><button class="btn" id="never-mind">Back</button><button class="btn primary" id="confirm-action">Confirm ${icon("check", 15)}</button></div>`,
@@ -438,6 +454,7 @@ async function action(name) {
 }
 function wire() {
   companionControls.wire();
+ document.querySelectorAll('[data-settings-panel]').forEach(button=>button.onclick=()=>openSettingsPanel(button.dataset.settingsPanel));
   wireInventory({document,$,startDialog,addProduct,confirmAction,api,setFilter:value=>filter=value,setSearch:value=>search=value,render});
   wireOrders({document,$,modal,api,toast,confirmAction});
   wireGiveaways({api,toast,refresh:async()=>{state=await api("/api/state");render();}});

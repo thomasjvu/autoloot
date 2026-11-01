@@ -5,7 +5,7 @@ import {spawnSync} from 'node:child_process';
 const root=resolve(import.meta.dirname,'..');
 const skip=new Set(['node_modules','dist','vendor','fonts','characters','icons']);
 function walk(dir){return readdirSync(dir,{withFileTypes:true}).flatMap(entry=>skip.has(entry.name)?[]:entry.isDirectory()?walk(join(dir,entry.name)):/\.(mjs|js)$/.test(entry.name)?[join(dir,entry.name)]:[]);}
-const files=[join(root,'server.mjs'),...['lib','public','scripts','marketing'].flatMap(dir=>walk(join(root,dir)))];
+const files=[join(root,'server.mjs'),...['lib','public','scripts','marketing','browser'].flatMap(dir=>walk(join(root,dir)))];
 let failed=false;
 const graph=new Map();
 for(const file of files){
@@ -13,7 +13,7 @@ for(const file of files){
  if(result.status!==0){process.stderr.write(result.stderr);failed=true;}
  const source=readFileSync(file,'utf8');graph.set(file,[]);
  if(result.status===0){
-  for(const issue of bindingErrors(source,{browser:file.startsWith(join(root,'public')+'/')})){
+  for(const issue of bindingErrors(source,{browser:file.startsWith(join(root,'public')+'/')||file.startsWith(join(root,'browser')+'/')})){
    console.error(`${relative(root,file)}:${issue.line}: ${issue.message}`);failed=true;
   }
  }

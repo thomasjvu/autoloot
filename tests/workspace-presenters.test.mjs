@@ -30,10 +30,10 @@ test('authenticated sidebar shows escaped username and signout instead of Twitch
  const {workspaceNavigation}=await import('../public/workspace-navigation.js');
  for(const connected of [false,true]){
   const html=workspaceNavigation({tab:'studio',mobileMenuOpen:false,adminAccount:{username:'streamer<1>'},twitch:{connected,channel:'channel'},brand:''});
-  assert.match(html,/Open admin settings/);assert.match(html,/streamer&lt;1&gt;/);assert.match(html,/data-action="admin-logout"/);assert.doesNotMatch(html,/Signed in locally|>Administrator<|> Admin settings/);
+  assert.match(html,/Open admin settings/);assert.match(html,/streamer&lt;1&gt;/);assert.match(html,/class="sidebar-account-row"/);assert.match(html,/data-action="admin-logout" aria-label="Sign out"/);assert.doesNotMatch(html,/>Sign out<|class="account-actions"/);assert.doesNotMatch(html,/Signed in locally|>Administrator<|> Admin settings/);
   assert.doesNotMatch(html,/data-action="connect-twitch"|Switch account|Sign in with Twitch/);
  }
- const html=settingsPage(state());assert.match(html,/Admin account/);assert.match(html,/data-action="admin-logout"/);assert.match(html,/Connect Twitch/);
+ const html=settingsPage(state());assert.doesNotMatch(html,/Admin account|Signed in to this local workspace/);assert.match(html,/data-action="admin-logout"/);assert.match(html,/Connect Twitch/);assert.match(html,/service-card-reown/);assert.match(html,/service-card-codex/);
 });
 
 test('admin account username appears only in the private state projection',async()=>{
@@ -43,4 +43,23 @@ test('admin account username appears only in the private state projection',async
  assert.deepEqual(project('admin').adminAccount,{username:'streamer'});
  assert.equal(project('viewer').adminAccount,undefined);
  assert.doesNotMatch(JSON.stringify(project('viewer')),/streamer/);
+});
+
+test('companion offers guided Codex setup and distinguishes selection from sign-in',()=>{
+ const s=state();s.mode='live';s.companion.provider='offline';
+ const disconnected=companionPage(s);assert.match(disconnected,/data-codex-connect>Connect Codex/);assert.doesNotMatch(disconnected,/id="provider"/);
+ s.companion.provider='codex';const selected=companionPage(s);assert.match(selected,/Manage Codex/);assert.match(selected,/data-codex-disconnect/);assert.match(selected,/Codex selected/);
+});
+
+test('settings groups branded connections and moves detailed controls into dedicated panels',async()=>{
+ const {settingsPanel}=await import('../public/workspace/settings.js'),s=state(),html=settingsPage(s);
+ assert.doesNotMatch(html,/admin-account-settings|id="admin-account-title"|Signed in to this local workspace/);
+ assert.match(html,/data-start-tutorial>Take a tour<\/button><button class="btn" data-action="admin-logout"/);
+ for(const brand of ['twitch','stripe','reown','codex'])assert.match(html,new RegExp('service-card-'+brand));
+ for(const panel of ['run','show','stream'])assert.match(html,new RegExp('data-settings-panel="'+panel+'"'));
+ assert.doesNotMatch(html,/class="automation-options"|id="settings-widget-preset"|id="settings-mode"/);
+ assert.match(settingsPanel(s,'run'),/data-settings-automation="manual"/);
+ assert.match(settingsPanel(s,'show'),/id="settings-mode"/);assert.match(settingsPanel(s,'show'),/id="settings-load-demo"/);
+ assert.match(settingsPanel(s,'stream'),/id="settings-widget-preset"/);assert.match(settingsPanel(s,'stream'),/data-action="copy-widget"/);
+ assert.throws(()=>settingsPanel(s,'unknown'),/Unknown/);
 });

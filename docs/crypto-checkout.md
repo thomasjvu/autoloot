@@ -1,0 +1,15 @@
+# Reown / WalletConnect USDC checkout
+
+Optional wallet payments accept native USDC on **Solana mainnet**, for physical live orders. Stripe remains available. No seller wallet private key or seed is collected.
+
+Configure `REOWN_PROJECT_ID`, `SOLANA_USDC_RECIPIENT` and `SOLANA_PAYMENT_RPC_URL` in the server environment. The RPC must use HTTPS and report the Solana mainnet genesis hash. Register the public storefront origin in the Reown dashboard. Build with `npm run build:wallet`; `npm start`, `npm run dev` and `npm run check` build the optional browser bundle automatically. The source is `browser/reown.js`, generated assets in ignored `public/vendor/reown/`. The wallet connector is lazy-loaded only for this checkout.
+
+Buyers sign in with Twitch, reserve a product, save a shipping address and choose **Pay USDC · Solana**. A WalletConnect QR connects a compatible wallet. Autoloot prepares an unsigned checked SPL-token transfer and unique order memo. Conversion is exactly one USDC per USD of the server-calculated order total, including shipping. Buyers pay Solana fees in SOL; there is no price-feed or slippage conversion.
+
+The server verifies a finalized mainnet receipt with the exact USDC mint, payer signature, source/destination token accounts, amount/decimals, unique memo and recipient net balance increase. Transaction signatures are deduplicated. Wallet UI success cannot mark an order paid. Verified orders use `paid-external` with persisted `cryptoPayment` evidence and `paymentSource: reown`. This permits the existing paid-physical fulfillment workflow without treating wallet transfers as Stripe payments. Refunds are seller-managed, not automatic crypto transfers or Stripe refunds. NFT checkout remains Stripe-only.
+
+A persisted crypto quote holds inventory across restart and blocks Stripe checkout, ordinary cancellation and reservation expiry. Recover by verifying the saved transaction signature. For an abandoned payment, cancel only after the prepared transaction block lifetime expires and the finalized destination history proves no matching successful memo since quote creation. Incomplete or saturated history fails closed for seller reconciliation. No auto-release is attempted when a payment might exist. RPC availability is part of the trust boundary; use a trusted mainnet provider.
+
+No live wallet/provider transfer is performed by automated tests. Fixtures cover wrong chain/amount/mint/recipient/memo, replay, net-zero transfers, ownership and payment-route locks. A real Reown project, buyer wallet and merchant/RPC configuration plus an end-to-end rehearsal are required before use. Do not claim deployment certification from these tests.
+
+References: [Reown payments](https://docs.reown.com/appkit/payments/overview), [WalletConnect Universal Provider](https://github.com/WalletConnect/walletconnect-monorepo/tree/v2.0/providers/universal-provider), [Solana Kit](https://www.solanakit.com/docs), [Circle USDC contracts](https://developers.circle.com/stablecoins/usdc-contract-addresses).

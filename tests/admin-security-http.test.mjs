@@ -3,7 +3,12 @@ test('admin setup protects bootstrap, rejects token-only reuse, cross-origin req
  const socket=createServer();await new Promise(r=>socket.listen(0,'127.0.0.1',r));const port=socket.address().port;await new Promise(r=>socket.close(r));const dir=mkdtempSync(join(tmpdir(),'admin-http-'));const base=`http://localhost:${port}`;const child=spawn(process.execPath,['server.mjs'],{env:{...process.env,PORT:String(port),PUBLIC_URL:base,DATA_DIR:dir},stdio:'ignore'});
  try{
  for(let i=0;i<80;i++){try{if((await fetch(base+'/health')).status<500)break;}catch{}await new Promise(r=>setTimeout(r,50));}
- assert.equal((await fetch(base+'/api/bootstrap')).status,401);assert.equal((await fetch(base+'/shop')).status,200);
+ assert.equal((await fetch(base+'/api/bootstrap')).status,401);
+ for(const path of ['status','start','cancel','key']){
+  const denied=await fetch(base+'/api/companion/connection/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({apiKey:'must-not-be-used'})});
+  assert.equal(denied.status,403,path);
+ }
+assert.equal((await fetch(base+'/shop')).status,200);
  const post=(path,body,headers={})=>fetch(base+path,{method:'POST',headers:{'Content-Type':'application/json',...headers},body:JSON.stringify(body)});
  assert.equal((await post('/api/admin/setup',{username:'streamer',password:'Correct-test-password-123!'},{Origin:'https://evil.example'})).status,403);
  assert.equal((await post('/api/admin/setup',{password:'Correct-test-password-123!'})).status,400);

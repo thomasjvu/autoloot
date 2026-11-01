@@ -75,3 +75,6 @@
  .admin-auth-page h1{font-size:32px}
  .auth-brand .wordmark{font-size:46px}
 }
+
+.auth-form-content .auth-remember{display:flex;flex-direction:row;align-items:center;gap:9px;font-size:11px;white-space:nowrap}
+.auth-form-content .auth-remember input{flex:0 0 16px;width:16px;height:16px;min-height:0;padding:0;accent-color:var(--ink)}

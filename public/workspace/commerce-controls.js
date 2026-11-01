@@ -32,6 +32,12 @@ export function wireInventory({document,$,startDialog,addProduct,confirmAction,a
   });
 }
 export function wireOrders({document,$,modal,api,toast,confirmAction}) {
+ const files=document.querySelector('.order-file-menu');
+ if(files){
+  files.addEventListener('click',event=>{if(event.target.closest('button'))files.open=false;});
+  files.addEventListener('keydown',event=>{if(event.key==='Escape'){files.open=false;files.querySelector('summary').focus();}});
+  files.addEventListener('focusout',event=>{if(!files.contains(event.relatedTarget))files.open=false;});
+ }
   document.querySelectorAll("[data-order]").forEach(
     (el) =>
       (el.onclick = () => {

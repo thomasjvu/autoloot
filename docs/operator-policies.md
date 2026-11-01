@@ -26,3 +26,7 @@ No claim of universal controller/processor status, lawful basis, zero provider r
 This release makes disclosures available and records operator policy settings. It does not certify legal compliance or make all responsibility transferable to end users.
 
 Reference guidance: [FTC privacy/security](https://www.ftc.gov/business-guidance/privacy-security) emphasizes honoring privacy promises; [FTC advertising disclosures](https://www.ftc.gov/business-guidance/resources/advertising-faqs-guide-small-business) explains that buried or easily missed qualifications may be ineffective. These references inform placement/accuracy, not a jurisdiction-specific legal opinion.
+
+## Editable presets
+
+Seller settings offer TCG singles/slabs, sealed TCG and general merchandise starting points. Fill draft preserves nonempty policy fields unless Replace existing policy text is checked, never changes identity/contact, and clears acknowledgment. All text remains editable. Replace bracketed durations/destinations/retention details before publishing; the server rejects unresolved placeholders. No preset auto-publishes, certifies compliance or performs deletion/refunds.

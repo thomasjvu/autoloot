@@ -4,9 +4,9 @@
 
 `ready → live ⇄ paused → sold | unsold | cancelled`
 
-One active/paused auction per workspace. Money is integer USD cents. The initial bid meets the opening price; later bids meet highest + increment. The current leader cannot outbid themselves. Late accepted bids reset the clock to ten seconds when anti-sniping is on. Receipt at/after the deadline is rejected and closes the auction. Pausing stores remaining time and resuming sets a new deadline. A sale reserves one unit and creates one immutable pending order snapshot.
+One active/paused auction per workspace. Money is integer USD cents. The initial bid meets the opening price; later bids meet highest + increment. The current leader cannot place another direct bid, but may raise a [private maximum](bidding.md) without raising the payable price. Late accepted bids reset the clock to ten seconds when anti-sniping is on. Receipt at/after the deadline is rejected and closes the auction. Pausing stores remaining time and resuming sets a new deadline. A sale reserves one unit and creates one immutable pending order snapshot.
 
-Live bids require verified, registered, unblocked Twitch identity. Shared-chat events from other channels cannot buy inventory. Bid voiding requires pause and marks the record voided, then selects the previous valid bid. Blocking the current leader requires cancelling the auction first. Restart and chat disconnect pause bidding; missing chat is not replayed.
+Live bids require verified, registered, unblocked Twitch identity. Shared-chat events from other channels cannot buy inventory. Bid voiding requires pause and marks the record voided, then selects the previous valid bid. Auctions with private maximums require cancellation instead of bid voiding. Blocking the current leader requires cancelling the auction first. Restart and chat disconnect pause bidding; missing chat is not replayed.
 
 ## Purchases and orders
 
@@ -32,13 +32,15 @@ Signed raw-body Stripe events must match session/order ID, USD total and environ
 
 Tests use real SDK signature verification with fixture events and mocked Stripe network methods. Real credentials/provider checkout have not been exercised here.
 
+Optional physical-order [USDC checkout](crypto-checkout.md) verifies finalized Solana mainnet receipts and retains inventory holds until payment or safe cancellation is verified. Refunds are seller-managed.
+
 ## Companion
 
 Codex receives catalog, sanitized auction and order-status snapshots. It can propose start-next, pause, resume or a structured listing draft. The full proposed draft is shown before Apply. The server revalidates actual stock/state/fields at execution. Models cannot set winners or payment status. Shell execution tools are disabled and provider secrets are excluded from the subprocess environment. Authentication remains with the official local CLI.
 
 ## Runtime
 
-Administrator setup/login uses a username and salted scrypt password hash (legacy password-only accounts remain supported). Twelve-hour HttpOnly SameSite=Strict sessions are stored hashed in memory and revoked at logout or restart. Creator requests require both a valid session and the random capability regenerated at restart. Bootstrap also requires a valid session and a loopback connection, a permitted localhost Host, no forwarding headers and valid origin context; a public tunnel must preserve its external hostname. Viewer cookies are HttpOnly and SameSite, and Secure with an HTTPS public URL. Origin checks and session-scoped mutation rate limits protect local/viewer endpoints. Every text field is escaped in UI rendering; photos are restricted to PNG/JPEG/WebP signatures and size-limited.
+Administrator setup/login uses a username and salted scrypt password hash (legacy password-only accounts remain supported). HttpOnly SameSite=Strict sessions lasting 12 hours, or 30 days with Remember me, are stored hashed in memory and revoked at logout or restart. Creator requests require both a valid session and the random capability regenerated at restart. Bootstrap also requires a valid session and a loopback connection, a permitted localhost Host, no forwarding headers and valid origin context; a public tunnel must preserve its external hostname. Viewer cookies are HttpOnly and SameSite, and Secure with an HTTPS public URL. Origin checks and session-scoped mutation rate limits protect local/viewer endpoints. Every text field is escaped in UI rendering; photos are restricted to PNG/JPEG/WebP signatures and size-limited.
 
 State uses transactional SQLite (WAL/full synchronization) with a single-writer guard, revisions and relational constraints. See [storage](storage.md). It is not a distributed transaction log. Data includes private order/address information and must not be published. Pending auction and buy-now orders receive a persisted 15-minute reservationExpiresAt deadline. The engine expires overdue untouched orders and restores stock exactly once. A checkout ID or persisted checkoutCreated marker prevents local expiry, including across restart or uncertain network responses. Reservation deadlines are persisted when orders are created and enforced across restart. Checkout entry and manual payment changes check expiry synchronously, so the periodic timer is not the enforcement boundary. A production service still needs preauthorization/anti-abuse, seller policies and operations beyond this hackathon implementation.
 

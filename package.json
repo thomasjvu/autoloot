@@ -17,16 +17,25 @@
     "storage:restore": "node --env-file-if-exists=.env scripts/storage.mjs restore",
     "start:production": "NODE_ENV=production node --env-file-if-exists=.env server.mjs",
     "production:check": "NODE_ENV=production node --env-file-if-exists=.env scripts/production-check.mjs",
-    "marketing:build": "node marketing/build.mjs"
+    "marketing:build": "node marketing/build.mjs",
+    "build:wallet": "node scripts/build-wallet.mjs",
+    "prestart": "npm run build:wallet",
+    "predev": "npm run build:wallet",
+    "precheck": "npm run build:wallet"
   },
   "engines": {
     "node": ">=22.16"
   },
   "dependencies": {
+    "@solana-program/token": "^0.18.0",
+    "@solana/kit": "^8.6.0",
+    "@walletconnect/universal-provider": "^2.26.0",
+    "qrcode": "^1.5.4",
     "stripe": "^23.0.1"
   },
   "devDependencies": {
     "acorn": "^8.19.0",
+    "esbuild": "^0.28.2",
     "eslint-scope": "^9.1.2"
   }
 }

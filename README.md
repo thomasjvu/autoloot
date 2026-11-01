@@ -18,7 +18,7 @@ Copy `.env.example` to `.env` when configuring integrations. The example enables
 ## Workspace
 
 - **Studio:** current sale, lineup, setup checklist and bounded agent-led runs.
-- **Companion:** Choose a custom name, tone, preferences and avatar or restore Munny; configure provider and voice settings. Live companions start offline until configured. Her floating panel contains chat, notifications and activity.
+- **Companion:** customize name, tone, avatar and voice; [connect Codex](docs/codex-connection.md) or select a provider. Live companions start offline until configured. Her floating panel contains chat, notifications and activity.
 - **Inventory / Rip studio:** add owned stock, browse provider data in Inventory’s catalog tab, or review a captured card reveal. AI drafts and matches need review; catalog prices are not automatically adopted.
 - **Orders:** private payment and fulfillment records, shipping labels and CSV workflows.
 - **Sales & numbers:** collected funds, refunds, outstanding payments and seller-recorded costs. Practice/test orders are separate; contribution is an estimate, not reconciled profit.
@@ -30,21 +30,15 @@ Desktop uses a sidebar; mobile uses a navigation drawer. Buyers use `/shop`; OBS
 
 Standard auctions extend late bids to ten seconds; sudden-death auctions keep a fixed deadline. Buy-now orders reserve one unit. Untouched reservations expire after 15 minutes; attempted provider checkouts hold stock until reconciled.
 
-Stripe Checkout uses server prices and signed payment events. Shippo provides quotes, labels, tracking and explicit dispatch; Pirate Ship uses CSV. NFT orders complete at verified digital transfer, with provider redemption separate. Agent-led runs sell a preapproved queue and can ask for review before each lot; they do not purchase inventory or implement new break-allocation formats.
+Stripe Checkout uses server prices and signed payment events. Optional [USDC checkout](docs/crypto-checkout.md) supports physical orders on Solana mainnet. Shippo provides quotes, labels, tracking and explicit dispatch; Pirate Ship uses CSV. NFT orders complete at verified digital transfer, with provider redemption separate. Agent-led runs sell a preapproved queue and can ask for review before each lot; they do not purchase inventory or implement new break-allocation formats.
 
 All live integrations require the operator's accounts/configuration. A success URL, AI response or submitted transaction ID is not proof of payment or fulfillment.
 
 ## Documentation
 
-Start with the [documentation index](docs/README.md). Key guides:
+Start with the [documentation index](docs/README.md) for setup, selling, payments, shipping and development guides.
 
-- [Production deployment](docs/production.md) and [release rehearsal](docs/live-rehearsal.md)
-- [Twitch and OBS](docs/twitch-widgets.md), [shipping](docs/shipping.md), [CSV workflows](docs/csv-and-shipping.md)
-- [Agent-led runs](docs/agent-led-runs.md), [NFT delivery](docs/nft-delivery.md), [sales accounting](docs/accounting.md)
-- [Storage and recovery](docs/storage.md), [architecture](docs/architecture.md), [seller policies](docs/operator-policies.md)
-- [Design](design.md), [roadmap](docs/roadmap.md), [hackathon demo](docs/hackathon.md)
-
-`documentation/` is an ignored, separate Papers checkout. Its content/build is not included in this repository's commits. When present, use Node 24+ and `npm run docs:dev` to preview it at http://localhost:3333. The tracked guides in `docs/` are the portable source of operational guidance. Help and FAQ links serve a bundled quick guide when the optional documentation build is absent; a built FAQ in `documentation/dist` takes precedence.
+`docs/` contains the tracked operational guides. `documentation/` is an ignored, separate Papers checkout; its content and builds are not included in this repository's commits. When available, use Node 24+ and `npm run docs:dev` to preview it at http://localhost:3333. Help and FAQ use its built pages when present, otherwise a bundled quick guide.
 
 ## Separate marketing site
 
@@ -68,26 +62,18 @@ Automated tests use disposable data and provider fixtures. The production check 
 
 Maple Mono is bundled under SIL OFL; retain [font licensing](public/fonts/OFL.txt). Service marks and reference imagery retain their own ownership. The application has no open-source license grant; the separate icon package is MIT.
 
-Rip Studio supports Prime Inference and local Photon inference. See [livestream vision setup](docs/vision.md).
+## Administrator access
 
-OBS presets include confirmed-pull spotlight and a recent-pulls ribbon. They use saved, streamer-confirmed identities and do not expose buyer details or market prices.
+Create an administrator username and password on first use at localhost. Usernames use 3–32 letters, numbers, underscores or hyphens. Passwords require at least 12 characters with uppercase, lowercase, a number and a symbol. Existing password-only accounts retain their sign-in.
 
-## Giveaways and Channel Points
-
-Giveaways → open a prize with eligibility/claim rules → viewers type `!enter` → close entries (or wait for the timer) → draw. One equal entry per verified Twitch user; no buyer registration, purchase, subscription or points required. Blocked users cannot enter. Draws use Node cryptographic randomness and persist winner, count, selected index and roster SHA-256 alongside the private entry roster. Drawing does not create inventory, reserve stock, charge payment or ship a prize. Winners claim privately in the shop using the same verified account and a US recipient address before the configured deadline. Opening the next giveaway archives the prior roster, draw and claim; the seller records actual prize dispatch separately from sales orders. Practice claims and dispatch are simulated. See [giveaway claims and history](docs/giveaways.md).
-
-For on-stream hype interactions, create a custom reward in Twitch Creator Dashboard, link its reward ID on Giveaways, then reauthorize Twitch. The app requests `channel:read:redemptions` and listens to the configured reward through EventSub. This triggers a cohost message only: it does not buy entries or change giveaway odds. Redemption fulfillment/refunds are managed in Twitch. Twitch eligibility and live reward delivery require verification with your broadcaster account. See https://legal.twitch.com/en/legal/channel-points-acceptable-use-policy/ and https://dev.twitch.tv/docs/eventsub/eventsub-subscription-types/ .
-
-## Administrator password
-
-Open the local dashboard to create an administrator username and password on first use. Enter the password once; use Show to check it and the meter to review requirements. The sidebar shows your admin username and a Sign out button; the account control opens Settings. Twitch connection controls stay in Settings and do not sign you into the administrator account. Usernames use 3–32 letters, numbers, underscores or hyphens. The server requires passwords of at least 12 characters including uppercase, lowercase, a number and a symbol. Existing password-only accounts keep their password-only sign-in. Sign-in uses a 12-hour HttpOnly SameSite session; passwords are stored as salted scrypt hashes in the private `.data/admin-auth.json` file. Restarting the server ends admin sessions. The existing local-only boundary remains in place; buyer sign-in and the public shop are separate. Sign out from the dashboard footer to revoke the current administrator session. If you lose the password, stop the server and move `.data/admin-auth.json` to a private backup, restart and create a new administrator account locally. Keep access to the data folder restricted. Existing automation/test clients must authenticate through `/api/admin/setup` or `/api/admin/login`, retain the session cookie, then request `/api/bootstrap`; an admin token alone is no longer sufficient.
+Sessions last up to 12 hours, or 30 days with **Remember me**, and end on sign-out or server restart. Passwords are salted scrypt hashes in private `.data/admin-auth.json`; session cookies are HttpOnly and SameSite Strict. Twitch and buyer sign-in are separate. See [administrator recovery](docs/production.md#administrator-access) for lost passwords and automation access.
 
 ## Maintaining the app
 
-`server.mjs` wires providers, timers and shutdown. `lib/http/policy.mjs` owns ordered ingress/auth/audit/rate policy; the other `lib/http/` modules own route groups, role projections, HTTP bodies and SSE transport. Domain modules such as Engine, Payments and Shipping retain authoritative sale transitions. Route modules run behind the common policy.
+See [architecture](docs/architecture.md) for module ownership and trust boundaries, [stylesheet ownership](public/styles/README.md) for CSS changes, and [release checks](docs/release.md) before shipping.
 
-`public/app.js` coordinates workspace navigation and remaining show dialogs. `public/workspace/` owns page views and product, order and companion controls; `public/shared/presenters.js` owns escaping/formatting and common visuals. `public/lifecycle/` owns connection recovery and draft focus. `public/storefront.js` owns buyer actions. State reaches extracted controllers through explicit accessors. See [stylesheet ownership](public/styles/README.md) and [architecture](docs/architecture.md).
+`npm run check` builds the wallet bundle, checks runtime JavaScript syntax and lexical bindings, and validates local imports and stylesheet entry points. Automated checks use disposable data and provider fixtures; browser, OBS and real-provider rehearsals remain separate release gates.
 
-`npm run check` recursively discovers runtime JavaScript, checks syntax and lexical bindings, and validates local imports and stylesheet entry points. Tests cover extracted policy, SSE backpressure/session revocation, connection races, presenter escaping/payment visibility and the preserved CSS cascade. Browser and real-provider rehearsal remain separate release checks.
+Settings groups Twitch, Stripe, Reown and Codex in connection cards. Companion run, Show and Stream cards open their controls in drawers. Sign out is available beside Take a tour in the Settings header and in the sidebar account row.
 
-The binding gate uses development-only Acorn and eslint-scope dependencies. It checks unresolved names with separate browser/Node globals and direct self-initialization of `let`/`const` bindings. This is a focused lint check, not a type checker or a substitute for runtime tests. Forgejo runs it through `npm run check`.
+Sales & numbers includes a daily collections chart (7 or 30 UTC days) using the selected real/practice activity. All-time totals retain a trailing 30-day chart. Orders includes an all-time real-order status overview; practice and Stripe test payments are excluded. Chart bars expose daily totals on keyboard focus or hover. Add product offers Metadata catalog search alongside manual listing. The self-hosted Powered by Metadata attribution uses Metadata's current spiral (`brand/kit/logos/portal-ink.svg`) with plain text and no surrounding frame. The upstream v1 badge exports still carry the previous framed treatment.

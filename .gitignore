@@ -20,3 +20,6 @@ marketing/dist/
 
 .venv-vision/
 __pycache__/
+
+# Generated optional wallet bundle
+public/vendor/reown/

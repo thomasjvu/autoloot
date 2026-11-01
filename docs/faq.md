@@ -12,6 +12,8 @@ Use Settings → Twitch. Add your Twitch application's client ID and secret, reg
 
 The single-user edition uses your own Stripe account. Complete business verification and bank setup in [Stripe Dashboard](https://dashboard.stripe.com). Configure `STRIPE_API_KEY` and `STRIPE_WEBHOOK_SECRET` in the server environment and restart Autoloot. Use a restricted key with Checkout Session create/retrieve/expire, Payment Intent access and Refund operations. Register signed payment events at `/api/stripe/webhook` and set the public HTTPS storefront URL and shipping countries. Rehearse checkout and refunds in sandbox before using live credentials.
 
+Optional [USDC checkout](crypto-checkout.md) accepts Solana mainnet payments for physical orders after seller configuration.
+
 Opening Stripe does not automatically connect Autoloot. A future hosted multi-user edition would use Stripe Connect; this edition has no platform account or platform fee.
 
 ## What if a payment or refund is uncertain?
@@ -20,7 +22,7 @@ Use Orders → Reconcile with Stripe to verify the existing Checkout session or 
 
 ## How do viewers bid?
 
-Viewers review seller policies, sign in with Twitch and register through the storefront. They then type `!bid 25.00` in the connected chat. The server decides bid acceptance and deadlines; stream video can be delayed. Private orders show checkout and shipping updates.
+Viewers review seller policies, sign in with Twitch and register through the storefront. They then type `!bid 25.00` in the connected chat. The server decides bid acceptance and deadlines; stream video can be delayed. The shop also supports [private maximum bids](bidding.md). Private orders show checkout and shipping updates.
 
 ## How do I put Autoloot in OBS?
 

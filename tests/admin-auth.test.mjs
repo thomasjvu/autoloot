@@ -56,3 +56,16 @@ test('existing password-only records retain login without new password rules or 
   assert.equal(readFileSync(file,'utf8'),before);
  }finally{rmSync(dir,{recursive:true,force:true});}
 });
+
+test('remembered sessions extend server expiry and remain revocable',async()=>{
+ const dir=mkdtempSync(join(tmpdir(),'admin-remember-'));
+ try{
+  const auth=new AdminAuth(join(dir,'auth.json'));
+  const normal=await auth.login('Strong-password-123!',true,'streamer');
+  const remembered=await auth.login('Strong-password-123!',false,'streamer',true);
+  const req=token=>({headers:{cookie:'autoloot_admin='+token}});
+  const normalExpiry=auth.sessions.get(auth.sessionKey(req(normal))),rememberedExpiry=auth.sessions.get(auth.sessionKey(req(remembered)));
+  assert.ok(normalExpiry-Date.now()<=12*3600000);assert.ok(rememberedExpiry-normalExpiry>29*86400000);
+  auth.logout(req(remembered));assert.equal(auth.valid(req(remembered)),false);assert.equal(auth.valid(req(normal)),true);
+ }finally{rmSync(dir,{recursive:true,force:true});}
+});

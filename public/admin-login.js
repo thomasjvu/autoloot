@@ -52,7 +52,7 @@ form.onsubmit=async event=>{
   try {
     const response=await fetch('/api/admin/'+(setup?'setup':'login'),{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({username:username.disabled?undefined:username.value,password:password.value}),
+      body:JSON.stringify({username:username.disabled?undefined:username.value,password:password.value,remember:form.elements.remember.checked}),
     });
     const result=await response.json();if(!response.ok)throw Error(result.error);
     form.reset();location.replace('/');

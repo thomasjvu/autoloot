@@ -6,4 +6,6 @@ paths.companion='<path d="M4 10V3l6 4a12 12 0 0 1 4 0l6-4v7c3 8-1 11-8 11S1 18 4
 paths.stats='<path d="M4 4v16h16M8 15v-4M13 15V7M18 15v-6"/>';
 paths.eye='<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>';
 paths['eye-off']='<path d="m3 3 18 18M10.6 5.1A12 12 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3 3.8M6.2 6.2A19 19 0 0 0 2 12s3.5 7 10 7a12 12 0 0 0 5.8-1.8M10 10a3 3 0 0 0 4 4"/>';
+paths.at='<circle cx="12" cy="12" r="4"/><path d="M16 8v6a2 2 0 0 0 4 0v-2a8 8 0 1 0-3 6.2"/>';
+paths.logout='<path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4M16 8l4 4-4 4M10 12h10"/>';
 export function icon(name,size=20){return '<svg class="ui-icon" width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(paths[name] || paths.spark)+'</svg>';}

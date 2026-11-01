@@ -462,7 +462,7 @@ body{background:var(--paper);color:var(--ink)}
 
 .heading-actions.shipping-order-tools { flex-wrap:wrap; gap:8px; }
 
-/* Persistent desktop navigation and a compact mobile drawer. */body:not(.overlay-body) #app{display:block}
+/* Persistent desktop navigation and a compact mobile drawer. */body:not(.overlay-body) #app{display:flex;flex-direction:column;min-height:100dvh}
 
 .sidebar{position:fixed;inset:0 auto 0 0;width:232px;height:100dvh;display:flex;flex-direction:column;align-items:stretch;padding:30px 20px 24px;gap:32px;border-right:1px solid var(--line);border-bottom:0;background:var(--paper);z-index:80;overflow-y:auto}
 
@@ -474,15 +474,15 @@ body{background:var(--paper);color:var(--ink)}
 
 .sidebar .nav-item{display:flex;flex-direction:row;justify-content:flex-start;gap:13px;width:100%;min-height:46px;padding:12px 15px;font-size:12px}
 
-.sidebar-bottom{display:grid;gap:16px;margin:0;padding:20px 8px 0;border-top:1px solid var(--line)}
+.sidebar-bottom{display:grid;gap:16px;margin:0;padding:20px 8px 0;border-top:0}
 
 .sidebar-bottom a{color:var(--muted);text-decoration:none;display:flex;align-items:center;justify-content:space-between;font-size:11px}
 
-.workspace-main{margin-left:232px;min-height:calc(100dvh - 90px)}
+.workspace-main{margin-left:232px;min-height:0;flex:1}
 
 .workspace-main main{padding:20px 36px 40px;max-width:1500px;margin:auto}
 
-.app-footer{margin-left:232px;width:calc(100% - 232px);padding:22px 36px 32px}
+.app-footer{margin-left:232px;width:calc(100% - 232px);max-width:none;min-height:82px;align-items:center;padding:24px 110px 24px 36px}
 
 .mobile-header,.nav-backdrop{display:none}
 
@@ -504,7 +504,7 @@ body{background:var(--paper);color:var(--ink)}
 
 @media(max-width:1100px) and (min-width:761px){.sidebar{width:204px;padding:26px 14px}.workspace-main{margin-left:204px}.app-footer{margin-left:204px;width:calc(100% - 204px)}.sidebar .wordmark{font-size:23px}.welcome-copy{width:61%}.welcome-mochi{width:39%}}
 
-@media(max-width:760px){.mobile-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;min-height:72px;border-bottom:1px solid var(--line);background:var(--paper)}.mobile-header .wordmark{font-size:26px}.sidebar{display:none}.sidebar.mobile-open{display:flex;inset:72px auto 0 0;width:min(300px,85vw);height:calc(100dvh - 72px);padding:20px;z-index:90}.sidebar.mobile-open>.brand{display:none}.sidebar nav{order:initial;flex-basis:auto;padding:0;background:transparent}.nav-backdrop{display:block;position:fixed;inset:72px 0 0;border:0;background:#25282366;z-index:85}.workspace-main{margin-left:0;min-height:calc(100dvh - 160px)}.workspace-main main{padding:20px 20px 32px}.app-footer{margin-left:0;width:100%;padding:22px 20px 100px;flex-wrap:wrap}.practice-strip{padding:9px 20px}.welcome-panel h1{font-size:32px}.page-heading{gap:18px;flex-wrap:wrap}.page-heading h1{font-size:34px}.heading-actions{flex-wrap:wrap}.preference-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.mobile-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;min-height:72px;border-bottom:1px solid var(--line);background:var(--paper)}.mobile-header .wordmark{font-size:26px}.sidebar{display:none}.sidebar.mobile-open{display:flex;inset:72px auto 0 0;width:min(300px,85vw);height:calc(100dvh - 72px);padding:20px;z-index:90}.sidebar.mobile-open>.brand{display:none}.sidebar nav{order:initial;flex-basis:auto;padding:0;background:transparent}.nav-backdrop{display:block;position:fixed;inset:72px 0 0;border:0;background:#25282366;z-index:85}.workspace-main{margin-left:0;min-height:calc(100dvh - 160px)}.workspace-main main{padding:20px 20px 32px}.app-footer{margin-left:0;width:100%;padding:22px 100px calc(12px + env(safe-area-inset-bottom)) 20px;flex-wrap:wrap}.practice-strip{padding:9px 20px}.welcome-panel h1{font-size:32px}.page-heading{gap:18px;flex-wrap:wrap}.page-heading h1{font-size:34px}.heading-actions{flex-wrap:wrap}.preference-grid{grid-template-columns:1fr 1fr}}
 
 /* Munny is the single entry point for chat, attention and show activity. */.workspace-main main{padding-top:32px}
 
@@ -575,6 +575,9 @@ body{background:var(--paper);color:var(--ink)}
 /* Brand integrations retain official colors and a clean white logo tile. */.service-card-twitch{--service-color:#9146ff}
 
 .service-card-stripe{--service-color:#635bff}
+.service-card-reown{--service-color:#d63d4f}
+.service-card-codex{--service-color:#0b8063}
+.service-card-reown .service-icon,.service-card-codex .service-icon{color:var(--service-color)}
 
 .preference-card.service-card{background:var(--service-color);border-color:transparent;color:#fff}
 
@@ -692,6 +695,11 @@ body{background:var(--paper);color:var(--ink)}
 
 .munny-activity p{margin:5px 0 0;font-size:11px;line-height:1.6}
 
+.sidebar-account-row{display:flex;align-items:center;gap:10px}
+.sidebar-account-row .workspace-account{flex:1}
+.account-signout{flex-shrink:0;width:30px;height:30px;min-width:30px;min-height:30px;padding:6px;border:0;border-radius:9px;background:transparent;color:var(--muted)}
+.account-signout .ui-icon{width:16px;height:16px;stroke-width:1.7}
+
 .workspace-account{display:flex;gap:10px;align-items:center;min-width:0;width:100%;text-align:left;color:var(--ink)}
 
 .account-avatar{width:34px;height:34px;border-radius:12px;background:#e6e8d8;display:grid;place-items:center;flex-shrink:0}
@@ -758,7 +766,7 @@ body{background:var(--paper);color:var(--ink)}
 
 .setup-checklist-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:16px}
 
-.setup-checklist-heading h2{font-size:20px;letter-spacing:-.5px;margin:0 0 7px}
+.setup-checklist-heading h2{font-size:20px;letter-spacing:-.5px;margin:0}
 
 .setup-checklist-heading span{font-size:11px;color:var(--muted)}
 
@@ -934,7 +942,7 @@ dialog.guided-tour::backdrop{background:transparent;backdrop-filter:none;filter:
 
 /* Clear, compact companion composer. */.ask-form{display:block;border:0;padding:0;background:transparent;margin-top:16px}
 
-.composer-label{display:block;font-size:11px;font-weight:700;margin:0 0 7px}
+.composer-label{display:block;font-size:11px;font-weight:700;margin:0}
 
 .composer-field{display:flex;align-items:center;gap:8px;background:#fffdf5;border:1.5px solid #858b70;border-radius:16px;padding:7px 8px 7px 13px;transition:border-color 120ms,box-shadow 120ms}
 
@@ -1239,3 +1247,29 @@ body:has(#modal[open]){overflow:hidden}
 .admin-login p{font-size:12px;line-height:1.7}
 
 .admin-login [hidden]{display:none!important}
+
+.order-file-menu{position:relative}
+.order-file-menu>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:9px}
+.order-file-menu>summary::-webkit-details-marker{display:none}
+.order-file-options{position:absolute;right:0;top:calc(100% + 8px);z-index:8;min-width:210px;display:grid;padding:7px;background:var(--surface,#fff);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px #0000000d}
+.order-file-options button{text-align:left;padding:11px 12px;border-radius:10px;font-size:11px}
+.order-file-options button:hover{background:var(--paper)}
+.order-file-options button:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+
+/* Recorded activity charts: neutral surfaces, one brand accent. */
+.activity-chart{padding:24px;margin:20px 0;min-width:0}
+.chart-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.chart-heading h2{margin:0;font-size:18px}.chart-heading>span,.chart-axis{font-size:12px;color:var(--muted,#777)}
+.sales-bars{display:flex;align-items:stretch;gap:5px;height:160px;border-bottom:1px solid #dedbd4}
+.sales-bar-slot{flex:1;min-width:0;position:relative;display:flex;align-items:flex-end;outline-offset:3px}
+.sales-bar{width:100%;background:#44463c;border-radius:5px 5px 0 0;transition:background .15s}
+.sales-bar[data-empty="true"]{background:#e7e5df}.sales-bar-slot:hover .sales-bar,.sales-bar-slot:focus .sales-bar{background:#80896b}
+.chart-tooltip{display:none;position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#252620;color:#fff;padding:10px;border-radius:10px;white-space:nowrap;font-size:11px;z-index:2;pointer-events:none}
+.sales-bar-slot:hover .chart-tooltip,.sales-bar-slot:focus .chart-tooltip{display:block}
+.sales-bar-slot:first-child .chart-tooltip{left:0;transform:none}.sales-bar-slot:last-child .chart-tooltip{left:auto;right:0;transform:none}
+.chart-axis{display:flex;justify-content:space-between;gap:12px;margin-top:12px}.chart-empty{display:grid;place-items:center;min-height:140px;color:#79786f;font-size:14px;text-align:center}
+.status-bars{display:grid;gap:14px}.status-bar-row{display:grid;grid-template-columns:145px minmax(0,1fr) 35px;gap:16px;align-items:center;font-size:13px}.status-bar-row strong{text-align:right}
+.status-bar-track{height:12px;border-radius:20px;background:#eae8e1;overflow:hidden}.status-bar-track i{display:block;height:100%;background:#575d49;border-radius:20px}
+.catalog-entry{padding:18px;background:#f0efe8;border-radius:18px;margin-bottom:24px}.catalog-entry p{font-size:12px;margin:12px 0 0}
+.metadata-badge img{width:240px;height:auto;max-width:100%}
+@media(max-width:600px){.activity-chart{padding:18px}.sales-bars{gap:3px}.status-bar-row{grid-template-columns:112px minmax(0,1fr) 24px;gap:10px;font-size:12px}.chart-axis{font-size:10px}}

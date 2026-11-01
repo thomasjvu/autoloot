@@ -1,3 +1,5 @@
+import {SolanaCheckout} from './lib/solana-checkout.mjs';
+import {CodexConnection} from './lib/codex-connection.mjs';
 import {createRequestPolicy} from './lib/http/policy.mjs';
 import {serveStatic} from './lib/http/static.mjs';
 import {createExports} from './lib/http/exports.mjs';
@@ -158,13 +160,16 @@ const backupTimer=setInterval(()=>{storage.automaticBackup(backupKeep).catch(()=
 backupTimer.unref();
 storage.automaticBackup(backupKeep).catch(()=>console.error('Initial database backup failed.'));
 const oauthRoutes=createOauth({base,twitch,storage,oauthHandoffs});
-const viewerRoutes=createViewer({engine,twitch,payments,nft,base});
+const solanaCheckout=new SolanaCheckout(engine);
+payments.status.wallet=solanaCheckout.status;
+const viewerRoutes=createViewer({engine,twitch,payments,nft,base,solanaCheckout});
 const mediaRoutes=createMedia({imageDir,rip});
 const exportsRoutes=createExports({engine});
 const inventoryActions=createInventoryActions({engine});
 const commerceActions=createCommerceActions({engine,payments,nft,shipping,shippingConfigFile,localHost,broadcast});
 const showActions=createShowActions({engine,runs,shipping,nft,twitch,announce,base,companion,rip,broadcast});
-const companionActions=createCompanionActions({engine,catalog,rip,nft,twitch,imageDir,companion,broadcast,announce});
+const codexConnection=new CodexConnection();
+const companionActions=createCompanionActions({engine,catalog,rip,nft,twitch,imageDir,companion,broadcast,announce,codexConnection});
 const settingsActions=createSettingsActions({engine,twitch,twitchConfigFile,localHost,broadcast});
 const policy=createRequestPolicy({runtime,auth:adminAuth,adminToken:admin,agentToken:()=>process.env.NFT_AGENT_TOKEN,localHost,storage,engine,twitch,broadcast});
 let closing = false;
@@ -263,7 +268,7 @@ async function shutdown() {
   if(closing)return;
   closing=true;
   clearInterval(timer);clearInterval(nftTimer);clearInterval(validationTimer);clearInterval(backupTimer);
-  twitch.close();
+  twitch.close();codexConnection.close();
   events.close();
   server.close();
   server.closeIdleConnections();
