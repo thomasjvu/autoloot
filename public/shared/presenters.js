@@ -1,4 +1,4 @@
-import {practiceImage} from './practice-images.js';
+import {productImage} from './practice-images.js';
 import {icon} from '../icons.js';
 export const esc = (v) =>
   String(v ?? "").replace(
@@ -28,12 +28,10 @@ export function assetDescription(p) {
  return `<details class="asset-description"><summary>NFT entitlement · ${esc(a.chain)}</summary><p class="policy-copy">Provider: ${esc(a.provider)}<br>Asset: ${esc(a.mint || a.contract+' / '+a.tokenId)}<br>Source wallet: ${esc(a.sender)}</p><p>Delivery ends at confirmed NFT transfer. Optional physical redemption and its fees are handled by the provider. A provider label is the seller’s claim, not independent authentication.</p></details>`;
 }
 export function productDescription(p) {
-  const text=String(p.description || '');
-  if (!practiceImage(p)) return text;
-  return text.replaceAll('Text-only practice listing', 'Reference card scan for practice').replace('Text-only practice slab listing. No photo or certification is supplied or verified.', 'Practice slab listing with a reference card scan. No slab photo or certification is supplied or verified.');
+  return String(p.description || '');
 }
 export function visual(p, large = false) {
-  const image = p.image || practiceImage(p);
+  const image = productImage(p);
   return image
     ? `<img class="product-photo" src="${esc(image)}" alt="${esc(p.title)}" loading="lazy" decoding="async">`
     : productArt(p.art, large);

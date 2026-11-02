@@ -1,4 +1,4 @@
 {
-  "sha256": "16cc3a1df54874217be9d173c8f61d779133afb7178362a1b9ee494bd236fc9a",
-  "note": "Reviewed custom Munny chalk auction layout and WOFF font export; Reown Settings icon uses a square 48px image."
+  "sha256": "d52fd7d805c3efe18a78c7a05dc29362fb2f545546547dc4f4906cdfdb74265f",
+  "note": "Reviewed original integration icons: service tiles and Codex widget keep icon contrast; no third-party logo images."
 }

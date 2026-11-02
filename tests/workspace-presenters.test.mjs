@@ -73,11 +73,13 @@ test('Your show has a distinct active navigation destination',async()=>{
  const html=workspaceNavigation({tab:'show',twitch:{},brand:''});
  assert.match(html,/data-tab="show" aria-current="page"/);assert.match(html,/>Your show<\/span>/);
 });
-test('practice reference scans appear for exact sample identities without replacing seller images',async()=>{
+test('practice lots use original placeholders while preserving seller and API images',async()=>{
  const {visual,productDescription}=await import('../public/shared/presenters.js');
  const sample={id:'p1',title:'Charizard ex · 151 #199/165',practiceOnly:true,art:'card',description:'Text-only practice listing; no physical item offered.'};
- assert.match(visual(sample),/src="\/demo\/cards\/sv3pt5-199.png"/);
- assert.match(productDescription(sample),/Reference card scan/);
+ assert.doesNotMatch(visual(sample),/<img/);
+ assert.doesNotMatch(visual({...sample,image:"/demo/cards/sv3pt5-199.png"}),/<img/);
+ assert.match(visual({...sample,image:"https://catalog.example/card.webp"}),/catalog.example\/card.webp/);
+ assert.match(productDescription(sample),/Text-only practice listing/);
  assert.match(visual({...sample,image:'/uploads/owned.jpg'}),/owned.jpg/);
  assert.doesNotMatch(visual({...sample,practiceOnly:false}),/demo\/cards/);
  assert.doesNotMatch(visual({...sample,title:'My own card'}),/demo\/cards/);

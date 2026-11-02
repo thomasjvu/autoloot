@@ -127,7 +127,7 @@ Local marketing preview: `npm run marketing:dev` serves the built static site at
 
 `createStudioViews()` exposes `studio()` for the persistent hero, workspace overview and setup checklist, and `showPage()` for the hosting controls. The `show` workspace destination is labeled **Your show** in desktop and mobile navigation. Adding inventory or loading practice lots does not replace Studio. Settings and the guided tour link to the hosting destination explicitly.
 
-Practice listings use locally bundled reference scans under `public/demo/cards/`; attribution is retained in `SOURCES.md`. The shared practice-image lookup supplies scans for legacy sample snapshots only when both the practice flag and exact built-in identity match, and preserves explicit seller images. The sample PSA listing uses a card scan, not a slab photo or verified certificate.
+Practice listings use original vector placeholders. Third-party card scans are not bundled. Saved `/demo/cards/` image references fall back to placeholders; seller images remain intact. The live Metadata catalog supplies validated HTTPS image URLs, which browsers load directly from the provider host. The identity-only demo snapshot contains no artwork. API access does not establish publication rights for catalog artwork. Integration names use original functional icons rather than official logos.
 
 ### Chalkboard stream presets
 

@@ -30,6 +30,6 @@ Auto scan reads the next reveal and pauses for review. CLI image analysis can ta
 
 ## Provider requirements
 
-Set `METADATA_SERVICE_KEY` on the server and restart. Metadata matching and prices require a healthy authorized API. Provider failures are shown without invented sample matches. Catalog reference images load from their original HTTPS hosts.
+Set `METADATA_SERVICE_KEY` on the server and restart. Metadata matching and prices require a healthy authorized API. Provider failures are shown without invented sample matches. Catalog reference images load directly from HTTPS URLs returned by the live API; no card scans are bundled. Practice lots use original placeholders. Use only images you are authorized to display or record; API access does not grant artwork publication rights.
 
 Rip Studio is a coming-soon preview, disabled by default. Enable `AUTOLOOT_RIP_STUDIO=1` and restart to use the scanning workflow above. Catalog browsing remains available without this flag.

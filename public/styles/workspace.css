@@ -564,12 +564,12 @@ body{background:var(--paper);color:var(--ink)}
 
 @media(max-width:760px){.workspace-main main{padding-top:24px}.mochi-quick{right:18px;bottom:calc(20px + env(safe-area-inset-bottom))}.munny-drawer-header{padding:20px}.munny-tabs{padding:12px}.munny-tabs button{font-size:10px;gap:5px}.munny-panel-content{padding-left:12px;padding-right:12px}}
 
-/* Brand integrations retain official colors and a clean white logo tile. */.service-card-twitch{--service-color:#9146ff}
+/* Integration labels use original functional icons on white tiles. */.service-card-twitch{--service-color:#9146ff}
 
 .service-card-stripe{--service-color:#635bff}
 .service-card-reown{--service-color:#d63d4f}
 .service-card-codex{--service-color:#0b8063}
-.service-card-reown .service-icon,.service-card-codex .service-icon{color:var(--service-color)}
+.service-card .service-icon{color:var(--service-color)}
 
 .preference-card.service-card{background:var(--service-color);border-color:transparent;color:#fff}
 
@@ -1098,7 +1098,7 @@ body:has(#modal[open]){overflow:hidden}
 
 .studio-widget-orders{background:#171914;border-color:#171914;color:#fff}.studio-widget-orders h2,.studio-widget-orders .studio-widget-value,.studio-widget-orders .studio-widget-value small,.studio-widget-orders>.text-btn{color:#fff}.studio-widget-orders .studio-widget-icon{background:#fff;color:#171914}
 
-.studio-widget-codex{background:#0b8063;border-color:#0b8063;color:#fff}.studio-widget-codex h2,.studio-widget-codex .text-btn{color:#fff}.studio-widget-codex .studio-widget-icon{background:#fff}.studio-widget-codex .studio-widget-icon img{width:26px;height:26px}.studio-widget-codex .widget-dot{background:#ffffff70}.studio-widget-codex .widget-dot.connected{background:#bfe986}
+.studio-widget-codex{background:#0b8063;border-color:#0b8063;color:#fff}.studio-widget-codex h2,.studio-widget-codex .text-btn{color:#fff}.studio-widget-codex .studio-widget-icon{background:#fff;color:#0b8063}.studio-widget-codex .studio-widget-icon img{width:26px;height:26px}.studio-widget-codex .widget-dot{background:#ffffff70}.studio-widget-codex .widget-dot.connected{background:#bfe986}
 
 .studio-widget-twitch{background:#6441a5;border-color:transparent;color:#fff}
 

@@ -11,7 +11,7 @@ function operatorSettings() {
  return settingsCard('seller','Seller details',ready?'Published':'Finish setup',ready?esc(o.name):'Your public contact, shipping and returns.',`<button class="btn" data-action="operator-settings">${ready?'Edit details':'Add details'}</button>`);
 }
 function settingsCard(symbol,title,status,copy,action,brand=false) {
- return `<section class="panel preference-card ${brand ? 'service-card service-card-'+symbol : ''}"><div class="preference-top"><span class="service-icon">${brand&&['twitch','stripe','reown','codex'].includes(symbol)?`<img src="/brand/services/${symbol}.${symbol==='reown'?'webp':'svg'}" alt="">`:icon(symbol==='reown'?'link':symbol==='codex'?'spark':symbol,26)}</span><span class="preference-status">${status}</span></div><h2>${title}</h2><p>${copy}</p><div class="preference-actions">${action}</div></section>`;
+ return `<section class="panel preference-card ${brand ? 'service-card service-card-'+symbol : ''}"><div class="preference-top"><span class="service-icon">${icon(({twitch:'chat',stripe:'orders',reown:'link',codex:'spark'})[symbol]||symbol,26)}</span><span class="preference-status">${status}</span></div><h2>${title}</h2><p>${copy}</p><div class="preference-actions">${action}</div></section>`;
 }
 function widgetSettings() {
  const preset=widgetPresets[selectedWidget];

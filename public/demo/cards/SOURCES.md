@@ -1,9 +1,7 @@
-# Practice card reference scans
+# Practice artwork and catalog images
 
-Downloaded November 2, 2026 from the Pokémon TCG API image service:
+Practice listings use Autoloot's original vector placeholders. No third-party card scans are bundled. The three former Pokémon TCG API scans were removed; saved references to `/demo/cards/` fall back to original placeholders.
 
-- Charizard ex, 151 #199/165: https://images.pokemontcg.io/sv3pt5/199_hires.png
-- Pikachu, 151 #173/165: https://images.pokemontcg.io/sv3pt5/173_hires.png
-- Mew ex, 151 #205/165: https://images.pokemontcg.io/sv3pt5/205_hires.png
+For actual inventory, the live Metadata API returns card image URLs. The browser loads the validated HTTPS URL directly from the provider host; Autoloot does not download or redistribute catalog image files. Sellers can also supply their own item photographs. The licensed identity-only Metadata demo contains no image URLs or artwork.
 
-Card artwork © Pokémon / Nintendo / Creatures / GAME FREAK. These are reference scans, not seller-owned item photos. The practice PSA listing uses the Pikachu card scan; it does not represent a photographed or authenticated slab. Prices and grades in practice listings are simulations.
+API access and attribution do not grant artwork rights. Use provider data under its terms and obtain any permissions needed for publication, recordings or promotional material. Previously recorded footage and Git history may still contain the removed scans.

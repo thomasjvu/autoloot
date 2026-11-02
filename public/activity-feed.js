@@ -14,7 +14,7 @@ export function notifications(state){
  if(!state.twitch.connected&&state.mode==='live')items.push({category:'connection',service:'twitch',title:'Connect your Twitch channel',detail:'Finish connecting in Settings.',tab:'connections'});
  return items;
 }
-function feedIcon(symbol,service,size){return service==='twitch'?`<img class="feed-brand-icon" src="/brand/services/twitch.svg" alt="" width="${size}" height="${size}">`:icon(symbol,size);}
+function feedIcon(symbol,service,size){return icon(service==='twitch'?'chat':symbol,size);}
 export function notificationFeed(items){return `<div class="munny-notices">${items.length?items.map(item=>{const category=categories[item.category]||categories.show;return `<button class="notification-item feed-${escape(item.category)}" data-tab="${item.tab}"><span class="feed-icon">${feedIcon(category.symbol,item.service,20)}</span><span><strong>${escape(item.title)}</strong><small>${escape(item.detail)}</small></span>${icon('arrow',15)}</button>`;}).join(''):'<div class="munny-empty"><h3>All caught up.</h3><p>Anything that needs you will appear here.</p></div>'}</div>`;}
 function categoryFor(event){
  if(['error','system'].includes(event.type))return 'system';
