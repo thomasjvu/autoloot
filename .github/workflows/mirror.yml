@@ -1,0 +1,38 @@
+name: Mirror to Forgejo
+on:
+  push:
+    branches: ['**']
+    tags: ['**']
+  delete:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: forgejo-mirror
+  cancel-in-progress: false
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push branches and tags
+        env:
+          FORGEJO_MIRROR_TOKEN: ${{ secrets.FORGEJO_MIRROR_TOKEN }}
+        run: |
+          set -eu
+          test -n "$FORGEJO_MIRROR_TOKEN"
+          askpass=$(mktemp)
+          trap 'rm -f "$askpass"' EXIT
+          cat > "$askpass" <<'ASKPASS'
+          #!/bin/sh
+          case "$1" in
+            *Username*) printf '%s\n' 'phantasy' ;;
+            *Password*) printf '%s\n' "$FORGEJO_MIRROR_TOKEN" ;;
+          esac
+          ASKPASS
+          chmod 700 "$askpass"
+          export GIT_ASKPASS="$askpass" GIT_TERMINAL_PROMPT=0
+          git fetch https://github.com/${{ github.repository }}.git '+refs/heads/*:refs/remotes/source/*' '+refs/tags/*:refs/tags/*' --prune
+          git push --prune --force https://forgejo.thomasjvu.com/phantasy/autoloot.git 'refs/remotes/source/*:refs/heads/*' 'refs/tags/*:refs/tags/*'
