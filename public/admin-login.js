@@ -33,6 +33,7 @@ try {
   if(!response.ok)throw Error(account.error);
   if(account.authenticated)location.replace('/');
   setup=!account.configured;
+  $('#twitch-admin-login').hidden=!account.twitchSignIn;
   const legacy=!setup && account.legacyPasswordOnly;
   $('#auth-title').textContent=setup?'Create account':'Welcome back.';
   $('#username-label').hidden=legacy;username.required=!legacy;username.disabled=legacy;

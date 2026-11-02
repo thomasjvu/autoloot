@@ -1,3 +1,5 @@
+import {companionAsset} from '/shared/companion-asset.js';
+import {animateSetupProgress} from '/progress-bar.js';
 import {policyPresets,applyPolicyPreset} from '/policy-presets.js';
 import {createStudioViews} from '/workspace/studio.js';
 import {createProductDialogs} from '/workspace/product-dialogs.js';
@@ -36,7 +38,7 @@ const cohostState = () => !liveConnection || ['auction','vote','pull','ribbon'].
   ? { ...state, companion: { ...state.companion, enabled: false, overlayVoice: false } } : state;
 const $ = (s, r = document) => r.querySelector(s);
 const companionName=()=>state?.companion?.name||'Munny';
-const companionAvatar=()=>state?.companion?.avatar||'/characters/mochi-street-v3.png';
+const companionAvatar=()=>companionAsset(state?.companion?.avatar);
 const mochi=()=>companionPortrait(state);
 const companionCard=(...args)=>companionCardMarkup(state,...args);
 const companionPage=()=>companionPageMarkup(state);
@@ -246,15 +248,14 @@ function render() {
   wire();
   mountTutorial(section=>{tab=section;mobileMenuOpen=false;mochiQuickOpen=false;render();},render);
   enterSection(tab, $(".workspace-main main"));
+  cohostPlayer.arm(Boolean(state.companion.voice));
   if (
     state.companion.voice &&
     state.companion.message !== lastSpoken &&
     "speechSynthesis" in window
   ) {
     lastSpoken = state.companion.message;
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(lastSpoken);
-    speechSynthesis.speak(u);
+    cohostPlayer.speak(lastSpoken);
   }
 }
 let lastVisualEvent = null;
@@ -384,6 +385,8 @@ async function action(name) {
         () => api("/api/auction/cancel", {}),
       );
 
+    else if(name==='link-admin-twitch') location.href='/auth/twitch?role=admin-link&admin='+encodeURIComponent(adminToken);
+    else if(name==='unlink-admin-twitch'){await api('/api/admin/twitch/unlink',{});location.href='/admin-login.html';}
     else if (name === "add-product") addProduct();
     else if (name === "auction-settings")
       startDialog(state.auction?.productId || state.products[0]?.id);
@@ -453,6 +456,7 @@ async function action(name) {
   }
 }
 function wire() {
+  animateSetupProgress();
   companionControls.wire();
  document.querySelectorAll('[data-settings-panel]').forEach(button=>button.onclick=()=>openSettingsPanel(button.dataset.settingsPanel));
   wireInventory({document,$,startDialog,addProduct,confirmAction,api,setFilter:value=>filter=value,setSearch:value=>search=value,render});

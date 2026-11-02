@@ -27,18 +27,9 @@
 | [Livestream vision](vision.md) | Moondream via Prime/local setup and recognition limits |
 | [Storage](storage.md) | SQLite, backups, integrity checks and restore |
 
-## Development and release
+## Developer documentation
 
-- [Lifecycle contracts](lifecycles.md): explicit states, recovery and transition rules.
-- [Architecture](architecture.md): state ownership, privacy and UI/deployment boundaries.
-- [Design](../design.md): current visual and interaction rules.
-- [Release](release.md): repository/CI conventions and release gates.
-- [Live rehearsal](live-rehearsal.md): real-account verification still needed before launch.
-- [Roadmap](roadmap.md): planned work, separate from shipped features.
-- [Demo finalization](demo-ready.md): remaining gates, timed script and rehearsal record.
-- [Hackathon submission](hackathon.md), [submission copy](submission-draft.md) and [demo priorities](demo-priorities.md): requirements, draft description and feature selection.
-- [Production audit](production-audit.md): dated findings and verification boundaries, not a current certification.
-- [Artwork prompts](hero-art.md): generated character asset provenance.
-- [Marketing deployment](../marketing/README.md): independent Cloudflare Pages target.
+Developer reference, architecture, lifecycle contracts, release guides, audits, and the design system live in the separate [Autoloot Dev Docs](../dev-docs/README.md) Papers site. Run `npm run dev-docs:dev` to preview it on port 3334.
+
 
 Documentation describes the single-streamer implementation. Tests and local previews do not establish real payment, provider custody or funded-wallet integration success.

@@ -2,12 +2,14 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { CohostPlayer } from "../public/showtime.js";
 function setup() {
-  const spoken = [], classes = new Map();
+  const spoken = [], utterances=[], classes = new Map();
+  const rig={src:"/characters/munny-idle.svg",getAttribute(){return this.src;},setAttribute(name,value){this.src=value;}};
+  const custom={...rig,src:"/media/custom.png"};
   globalThis.window = {
     speechSynthesis: {
       cancel() {},
       speak: (u) => {
-        spoken.push(u.text);
+        spoken.push(u.text);utterances.push(u);
       },
     },
   };
@@ -16,9 +18,9 @@ function setup() {
       this.text = text;
     }
   };
-  globalThis.document = { body: { dataset: {}, classList: { toggle:(name,value)=>classes.set(name,value) } } };
+  globalThis.document = { querySelectorAll:()=>[rig,custom], body: { dataset: {}, classList: { toggle:(name,value)=>classes.set(name,value) } } };
   const player = new CohostPlayer();
-  return { player, spoken, classes, cleanup: () => clearTimeout(player.voiceTimer) };
+  return { player, spoken, classes, utterances,rig,custom, cleanup: () => clearTimeout(player.voiceTimer) };
 }
 test("cohost ignores initial history and speaks each fresh event once", () => {
   const { player, spoken, cleanup } = setup();
@@ -99,4 +101,9 @@ test("avatar-only mode never speaks and reduced motion is reflected", () => {
   } finally {
     cleanup();
   }
+});
+
+test('mouth follows utterance lifecycle and leaves custom avatars unchanged',()=>{
+ const {player,utterances,rig,custom,cleanup}=setup();
+ try{player.arm(true);player.speak('Hello');assert.equal(rig.src,'/characters/munny-idle.svg');utterances[0].onstart();assert.equal(rig.src,'/characters/munny-idle.svg#talk');assert.equal(custom.src,'/media/custom.png');utterances[0].onend();assert.equal(rig.src,'/characters/munny-idle.svg');player.speak('Again');utterances[1].onstart();player.arm(false);assert.equal(rig.src,'/characters/munny-idle.svg');}finally{cleanup();}
 });

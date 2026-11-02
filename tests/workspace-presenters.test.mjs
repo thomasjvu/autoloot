@@ -40,7 +40,7 @@ test('admin account username appears only in the private state projection',async
  const {createProjections}=await import('../lib/http/projections.mjs');
  const engine={state:emptyWorkspace()};
  const project=createProjections({engine,adminAuth:{username:'streamer'},payments:{status:{}},twitch:{status:{}},storage:{status:()=>({}),auditPage:()=>({events:[]})},rip:{snapshot:()=>({})},catalog:{state:{}},metadata:{},companion:{}});
- assert.deepEqual(project('admin').adminAccount,{username:'streamer'});
+ assert.deepEqual(project('admin').adminAccount,{username:'streamer',twitchLogin:null});
  assert.equal(project('viewer').adminAccount,undefined);
  assert.doesNotMatch(JSON.stringify(project('viewer')),/streamer/);
 });

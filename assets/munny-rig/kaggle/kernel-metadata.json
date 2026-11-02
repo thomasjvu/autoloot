@@ -1,0 +1,1 @@
+{"id": "thomasjvu/autoloot-munny-see-through", "title": "Autoloot Munny See-through", "code_file": "run_gpu.py", "language": "python", "kernel_type": "script", "is_private": true, "enable_gpu": true, "enable_internet": true, "dataset_sources": ["thomasjvu/autoloot-munny-seethrough-source"], "competition_sources": [], "kernel_sources": []}

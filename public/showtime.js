@@ -1,3 +1,4 @@
+import {setCompanionSpeaking} from './shared/companion-asset.js';
 /* Browser speech is optional, local and never authoritative for auction timing. */
 export class CohostPlayer {
   constructor() {
@@ -22,6 +23,7 @@ export class CohostPlayer {
   }
   setSpeaking(value) {
     this.speaking = value;
+    setCompanionSpeaking(value);
     document.body.classList.toggle("cohost-speaking", value);
   }
   speak(text) {

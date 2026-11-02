@@ -1,0 +1,261 @@
+{
+  "canvas": [
+    768,
+    768
+  ],
+  "layers": [
+    {
+      "name": "tail",
+      "file": "01.png",
+      "bbox": [
+        213,
+        349,
+        380,
+        465
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "legwear",
+      "file": "02.png",
+      "bbox": [
+        292,
+        345,
+        491,
+        678
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "shoe left \u00b7 original pixels",
+      "file": "03.png",
+      "bbox": [
+        257,
+        633,
+        380,
+        754
+      ],
+      "source": "original-pixel repair"
+    },
+    {
+      "name": "shoe right \u00b7 original pixels",
+      "file": "04.png",
+      "bbox": [
+        376,
+        643,
+        504,
+        762
+      ],
+      "source": "original-pixel repair"
+    },
+    {
+      "name": "back hair",
+      "file": "05.png",
+      "bbox": [
+        286,
+        28,
+        498,
+        211
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "cat ear left \u00b7 original pixels",
+      "file": "06.png",
+      "bbox": [
+        319,
+        4,
+        391,
+        90
+      ],
+      "source": "original-pixel repair"
+    },
+    {
+      "name": "cat ear right \u00b7 original pixels",
+      "file": "07.png",
+      "bbox": [
+        456,
+        50,
+        513,
+        114
+      ],
+      "source": "original-pixel repair"
+    },
+    {
+      "name": "bottomwear",
+      "file": "08.png",
+      "bbox": [
+        329,
+        293,
+        495,
+        409
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "topwear",
+      "file": "09.png",
+      "bbox": [
+        277,
+        161,
+        523,
+        379
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "neck",
+      "file": "10.png",
+      "bbox": [
+        365,
+        137,
+        401,
+        182
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "ears",
+      "file": "11.png",
+      "bbox": [
+        328,
+        106,
+        352,
+        141
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "face",
+      "file": "12.png",
+      "bbox": [
+        351,
+        55,
+        460,
+        168
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "nose",
+      "file": "13.png",
+      "bbox": [
+        409,
+        140,
+        412,
+        143
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "mouth",
+      "file": "14.png",
+      "bbox": [
+        390,
+        139,
+        413,
+        159
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "eyebrow-l",
+      "file": "15.png",
+      "bbox": [
+        429,
+        111,
+        451,
+        119
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "eyebrow-r",
+      "file": "16.png",
+      "bbox": [
+        380,
+        91,
+        403,
+        105
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "irides-l",
+      "file": "17.png",
+      "bbox": [
+        418,
+        129,
+        434,
+        146
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "irides-r",
+      "file": "18.png",
+      "bbox": [
+        371,
+        110,
+        388,
+        130
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "eyelash-l",
+      "file": "19.png",
+      "bbox": [
+        419,
+        124,
+        449,
+        141
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "eyelash-r",
+      "file": "20.png",
+      "bbox": [
+        364,
+        102,
+        396,
+        125
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "front hair",
+      "file": "21.png",
+      "bbox": [
+        336,
+        13,
+        481,
+        158
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "handwear-l",
+      "file": "22.png",
+      "bbox": [
+        424,
+        140,
+        555,
+        309
+      ],
+      "source": "see-through"
+    },
+    {
+      "name": "handwear-r",
+      "file": "23.png",
+      "bbox": [
+        236,
+        190,
+        405,
+        349
+      ],
+      "source": "see-through"
+    }
+  ]
+}

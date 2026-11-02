@@ -1,7 +1,8 @@
+import {companionAsset} from '../shared/companion-asset.js';
 import {esc,heading} from '../shared/presenters.js';
 import {icon} from '../icons.js';
 const companionName=state=>state?.companion?.name||'Munny';
-const companionAvatar=state=>state?.companion?.avatar||'/characters/mochi-street-v3.png';
+const companionAvatar=state=>companionAsset(state?.companion?.avatar);
 export function companionPortrait(state) {
   return `<img class="mochi mochi-vtuber" src="${esc(companionAvatar(state))}" alt="${esc(companionName(state))}, your cohost" width="320" height="480" decoding="async">`;
 

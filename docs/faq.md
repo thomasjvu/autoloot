@@ -47,3 +47,9 @@ No. Choose a camera or screen source in Rip studio to begin sharing. Stop sharin
 ## Who handles support, returns and privacy requests?
 
 The seller/operator running the installation. Their published seller details and policies appear in the storefront and policy pages. Publish support contact, shipping, returns and retention information in Settings before real transactions. Provider disputes and statutory remedies remain available where applicable.
+
+### Can I sign in as admin with Twitch?
+
+Yes. First create and sign in to your password-protected admin account. Configure the Twitch application, then use Settings → Admin sign-in → Link Twitch for sign-in. Approve the desired Twitch account. Only its immutable Twitch user ID can subsequently sign in as admin; connecting a stream or signing into the shop does not grant admin access. Twitch login requests basic identity only. Password login remains available for recovery. Unlinking Twitch signs out all current admin sessions.
+
+Admin OAuth must start and finish on the configured BASE_URL host, which must also be an allowed administrator host. No public first-user ownership claim or cross-host admin sign-in handoff is supported. Twitch sign-in creates a browser-session cookie with a 12-hour server expiry; the password form's Remember me option applies only to password sign-in.

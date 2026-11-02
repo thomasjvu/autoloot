@@ -1,0 +1,10 @@
+{
+  "canvas": [768,768],
+  "source": "See-through padded src_img.png; coordinates in this fixed canvas",
+  "regions": [
+    {"name":"cat ear left · original pixels","after":"back hair","polygon":[[321,0],[359,0],[390,28],[378,66],[343,89],[319,73]]},
+    {"name":"cat ear right · original pixels","after":"back hair","polygon":[[455,47],[517,46],[518,82],[493,119],[470,102],[463,79]]},
+    {"name":"shoe left · original pixels","after":"legwear","polygon":[[257,643],[308,633],[345,651],[375,703],[381,760],[253,760]]},
+    {"name":"shoe right · original pixels","after":"legwear","polygon":[[390,645],[445,643],[460,681],[504,705],[512,765],[376,765],[376,696]]}
+  ]
+}

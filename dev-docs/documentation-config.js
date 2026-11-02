@@ -203,12 +203,12 @@ export const homepageConfig = {
   footer: {
     links: [
       {
-        text: 'Quick start',
+        text: 'Architecture',
         href: '/docs/developers/architecture',
       },
       {
-        text: 'Troubleshooting',
-        href: '/docs/operations/troubleshooting',
+        text: 'Design system',
+        href: '/docs/design/design',
       },
       {
         text: 'API reference',
@@ -218,13 +218,41 @@ export const homepageConfig = {
   },
 };
 
-/** @type {FileItem[]} */
-const AUDIT_PAGES = ["polish-audit-2026-10-30", "security-review-2026-11-01", "runtime-authenticity-audit", "security-review-2026-10-27", "production-audit"];
+const page = (name, path) => ({ type: 'file', name: `${name}.md`, path });
 
+/** @type {FileItem[]} */
 export const documentationTree = [
-  { type: 'directory', name: 'Developer reference', path: 'developers', expanded: true,
-    children: ['architecture', 'api', 'documentation', 'lifecycles', 'release', 'hosted-migration', 'deployment', 'storage', 'roadmap', 'live-rehearsal', 'hero-art'].map(path => ({type: 'file', name: path + '.md', path: 'developers/' + path})) },
-  { type: 'directory', name: 'Design system', path: 'design', expanded: true,
-    children: [{type: 'file', name: 'Design system.md', path: 'design/design'}, {type: 'file', name: 'Stylesheet ownership.md', path: 'design/styles'}] },
-  { type: 'directory', name: 'Audits', path: 'audits', children: AUDIT_PAGES.map(path => ({type: 'file', name: path + '.md', path: 'audits/' + path})) },
+  {
+    type: 'directory', name: 'Developer reference', path: 'developers', expanded: true,
+    children: [
+      page('Architecture', 'developers/architecture'),
+      page('HTTP API', 'developers/api'),
+      page('Documentation maintenance', 'developers/documentation'),
+      page('Lifecycle contracts', 'developers/lifecycles'),
+      page('Release checks', 'developers/release'),
+      page('Hosted runtime', 'developers/hosted-migration'),
+      page('Deployment targets', 'developers/deployment'),
+      page('Storage and recovery', 'developers/storage'),
+      page('Roadmap', 'developers/roadmap'),
+      page('Live rehearsal', 'developers/live-rehearsal'),
+      page('Artwork prompts', 'developers/hero-art'),
+    ],
+  },
+  {
+    type: 'directory', name: 'Design system', path: 'design', expanded: true,
+    children: [
+      page('Design system', 'design/design'),
+      page('Stylesheet ownership', 'design/styles'),
+    ],
+  },
+  {
+    type: 'directory', name: 'Audits', path: 'audits',
+    children: [
+      page('Polish audit · October 30, 2026', 'audits/polish-audit-2026-10-30'),
+      page('Security review · November 1, 2026', 'audits/security-review-2026-11-01'),
+      page('Runtime authenticity', 'audits/runtime-authenticity-audit'),
+      page('Security review · October 27, 2026', 'audits/security-review-2026-10-27'),
+      page('Production audit', 'audits/production-audit'),
+    ],
+  },
 ];

@@ -69,3 +69,21 @@ test('remembered sessions extend server expiry and remain revocable',async()=>{
   auth.logout(req(remembered));assert.equal(auth.valid(req(remembered)),false);assert.equal(auth.valid(req(normal)),true);
  }finally{rmSync(dir,{recursive:true,force:true});}
 });
+
+test('linked Twitch identity uses immutable ID, preserves password, persists and unlinks sessions',async()=>{
+ const dir=mkdtempSync(join(tmpdir(),'admin-twitch-'));
+ try{
+  const auth=new AdminAuth(join(dir,'auth.json'));
+  assert.throws(()=>auth.loginTwitch({id:'123'}),/not linked/);
+  await auth.login('Correct-password-123!',true,'streamer');
+  auth.linkTwitch({id:'123',login:'original'});
+  assert.throws(()=>auth.loginTwitch({id:'456',login:'original'}),/not linked/);
+  assert.throws(()=>auth.linkTwitch({id:'456',login:'other'}),/Unlink/);
+  const token=auth.loginTwitch({id:'123',login:'renamed'}),req={headers:{cookie:'autoloot_admin='+token}};
+  assert.ok(auth.valid(req));assert.equal(new AdminAuth(auth.file).twitchIdentity.id,'123');
+  await auth.login('Correct-password-123!',false,'streamer');
+  auth.unlinkTwitch();assert.equal(auth.valid(req),false);assert.equal(auth.twitchIdentity,null);
+  assert.throws(()=>auth.loginTwitch({id:'123'}),/not linked/);
+  assert.ok(await auth.login('Correct-password-123!',false,'streamer'));
+ }finally{rmSync(dir,{recursive:true,force:true});}
+});
