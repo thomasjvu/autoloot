@@ -10,7 +10,7 @@ npm run check passed82 runtime modules. npm test247/247 passed. Reviewers ran17 
 
 ### BUG-01: Format/validate a pull before mutating the pull ledger
 
-- Evidence: lib/rip.mjs33 accepts provider currency without validation;37 formats via Intl.NumberFormat. lib/rip-session.mjs33–34 inserts a pull before that formatting.
+- Evidence: lib/integrations/rip.mjs33 accepts provider currency without validation;37 formats via Intl.NumberFormat. lib/commerce/rip-session.mjs33–34 inserts a pull before that formatting.
 - Impact: malformed quote currency makes confirmation fail, leaves a ghost pull in memory, and an unrelated later commit persists it. Selection remains active so retry can duplicate.
 - Effort S; risk LOW; confidence HIGH.
 - Reproduction: Metadata fixture finite raw quote with currency invalid -> confirm throws RangeError, pulls1/saves0; unrelated engine.chat -> pulls1/saves1. No persistence fixture or source file modified.
@@ -30,7 +30,7 @@ Recommend both fixes. BUG-01 is isolated and can land independently. UI-01 needs
 
 ## Direction options
 
-Prefer these correctness fixes before more commerce formats. Future options remain scheduled pre-bids (docs/roadmap.md21–23, L) and an explicit prize-fulfillment entity enabling prize labels (docs/giveaways.md19–21, M–L). These are product options with inventory/ownership/expiry decisions, not defects or current work.
+Prefer these correctness fixes before more commerce formats. Future options remain scheduled pre-bids (docs/dev/content/developers/roadmap.md21–23, L) and an explicit prize-fulfillment entity enabling prize labels (docs/user/content/operations/giveaways.md19–21, M–L). These are product options with inventory/ownership/expiry decisions, not defects or current work.
 
 ## Considered and rejected / limits
 

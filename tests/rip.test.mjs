@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {Metadata,rawQuotes,hostPull} from '../lib/rip.mjs';
+import {Metadata,rawQuotes,hostPull} from '../lib/integrations/rip.mjs';
 test('Metadata requests use server credentials, encode query and cache results',async()=>{
  let calls=0;
  const api=new Metadata({base:'https://metadata.example',key:'private',fetcher:async(url,options)=>{calls++;assert.equal(options.headers['X-Metadata-Service-Key'],'private');assert.equal(options.headers['X-Metadata-Vertical'],'tcg');assert.match(url,/q=Pikachu%20%26%20/);return {ok:true,json:async()=>({items:[{id:'p1',name:'Pikachu',number:'25',setName:'Base'}]})};}});

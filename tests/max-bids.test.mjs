@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {Engine,seed} from '../lib/engine.mjs';
-import {ownMaximum,resolveMaximums} from '../lib/max-bids.mjs';
+import {Engine,seed} from '../lib/commerce/engine.mjs';
+import {ownMaximum,resolveMaximums} from '../lib/commerce/max-bids.mjs';
 import {createProjections} from '../lib/http/projections.mjs';
 function fixture({antiSnipe=true,live=false}={}){
  let now=100000,request=0;const state=seed();state.products[0].price=500;state.products[0].practiceOnly=false;if(live)state.mode='live';

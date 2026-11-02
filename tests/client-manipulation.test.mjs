@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {routeApp,post} from './helpers/hono.mjs';
-import {Engine,seed} from '../lib/engine.mjs';
+import {Engine,seed} from '../lib/commerce/engine.mjs';
 import {createViewer} from '../lib/http/viewer.mjs';
 test('buyer payload cannot set identity, price, payment status or inventory quantity',async()=>{
  const engine=new Engine(seed()),product=engine.state.products.find(p=>p.listed&&p.buyNowPrice&&p.quantity>0),quantity=product.quantity;

@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {Engine,seed} from '../lib/engine.mjs';import {accountingRows,recordCosts} from '../lib/accounting.mjs';
+import {Engine,seed} from '../lib/commerce/engine.mjs';import {accountingRows,recordCosts} from '../lib/commerce/accounting.mjs';
 test('accounting separates practice, outstanding and refunds while seller costs persist independently',()=>{
  const e=new Engine(seed());const order=e.buyNow({productId:'p4',userId:'buyer',username:'buyer',requestId:'accounting'});
  let row=accountingRows(e.state)[0];assert.equal(row.mode,'practice');assert.equal(row.received,0);assert.equal(row.outstanding,1800);assert.equal(row.complete,false);

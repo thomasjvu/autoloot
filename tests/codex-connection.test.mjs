@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {EventEmitter} from 'node:events';
 import {PassThrough} from 'node:stream';
-import {CodexConnection} from '../lib/codex-connection.mjs';
+import {CodexConnection} from '../lib/integrations/codex-connection.mjs';
 function fixture({account=null,url='https://auth.openai.com/oauth/authorize?state=fixture',error=false}={}){
  const calls=[];let child,spawns=0;
  const service=new CodexConnection({env:{CODEX_BIN:'fixture',PATH:'/bin',STRIPE_SECRET_KEY:'must-not-inherit'},spawnProcess:(bin,args,options)=>{

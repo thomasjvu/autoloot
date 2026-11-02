@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Engine, seed } from "../lib/engine.mjs";
-import { publicVote } from "../lib/voting.mjs";
+import { Engine, seed } from "../lib/commerce/engine.mjs";
+import { publicVote } from "../lib/commerce/voting.mjs";
 function setup() {
   let now = 1000;
   const e = new Engine(seed(), { now: () => now });

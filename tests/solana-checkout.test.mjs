@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {SolanaCheckout,USDC} from '../lib/solana-checkout.mjs';
-import {Engine,seed} from '../lib/engine.mjs';
+import {SolanaCheckout,USDC} from '../lib/integrations/solana-checkout.mjs';
+import {Engine,seed} from '../lib/commerce/engine.mjs';
 import {applyPolicyPreset,policyPresets} from '../public/policy-presets.js';
-import {validateOperator} from '../lib/legal.mjs';
+import {validateOperator} from '../lib/commerce/legal.mjs';
 const merchant='So11111111111111111111111111111111111111112',payer='Vote111111111111111111111111111111111111111';
 const signature='2'.repeat(88),genesis='5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp';
 function fixture(){

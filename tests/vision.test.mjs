@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {Vision,parseObservation} from '../lib/vision.mjs';
+import {Vision,parseObservation} from '../lib/integrations/vision.mjs';
 const observation={kind:'card',name:'Pikachu',number:'25',setName:'',language:'English',finish:'',visibleText:'Pikachu 25'};
 const result=()=>Response.json({answer:JSON.stringify(observation)});
 

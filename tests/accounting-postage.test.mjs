@@ -1,8 +1,8 @@
 import test from 'node:test';
 import {routeApp,post} from './helpers/hono.mjs';
 import assert from 'node:assert/strict';
-import {accountingRows,postageCosts,recordCosts} from '../lib/accounting.mjs';
-import {Engine,seed} from '../lib/engine.mjs';
+import {accountingRows,postageCosts,recordCosts} from '../lib/commerce/accounting.mjs';
+import {Engine,seed} from '../lib/commerce/engine.mjs';
 import {createCommerceActions} from '../lib/http/commerce-actions.mjs';
 const address={name:'Buyer',line1:'1 Main St',city:'Boston',state:'MA',postal_code:'02110',country:'US'};
 const destination=JSON.stringify(['name','line1','line2','city','state','postal_code','country'].map(k=>String(address[k]||'').toLowerCase()));

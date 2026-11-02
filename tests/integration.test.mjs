@@ -29,3 +29,12 @@ test('reservation guidance hides local deadlines once provider checkout owns the
   assert.equal(reservationDeadline({...order, checkoutId:'session'}), null);
   assert.equal(reservationDeadline({...order, status:'expired'}), null);
 });
+
+test('chalk presets produce public browser-source URLs with reusable dimensions',async()=>{
+ const {widgetPresets}=await import('../public/integration.js');
+ for(const [id,type,width,height] of [['chalk-auction','auction',960,500],['chalk-vote','vote',1000,550]]){
+  assert.equal(widgetType('?widget='+id),id);assert.equal(widgetPresets[id].type,type);
+  assert.equal(widgetPresets[id].width,width);assert.equal(widgetPresets[id].height,height);
+  assert.equal(widgetUrl('https://show.example/overlay?admin=secret',id),'https://show.example/overlay?widget='+id);
+ }
+});

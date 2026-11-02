@@ -11,8 +11,8 @@ The app has good provider/domain modules but app.js combines three applications 
 public/app.js is 1296 lines/~118KB: imports all feature modules at1-14; globals/API at62-99; workspace/render at417-443; overlay446-465; storefront500-615; feature dialogs660-810; action/wire810-1178; SSE/timers1180-1296. It auto-starts on import. public/rip.js creates video and adds pagehide listener at import.
 server.mjs is1105lines: construction4-50/121-157; projection/SSE53-118; timer/announcement191-237; security/audit/rate242-305; upload558-599; admin switch619-980; shutdown1085-1105.
 server.mjs889-896 mutates boolean companion settings before rejecting demo provider in live mode.
-lib/catalog.mjs27-35 calls engine.addProduct (already commits at engine155-157), decorates metadata/image then commits again.
-lib/engine.mjs6 and public/app.js299 duplicate physicalFundsVerified; activity-feed.js11 counts all paid statuses including holds/test-funded live orders.
+lib/integrations/catalog.mjs27-35 calls engine.addProduct (already commits at engine155-157), decorates metadata/image then commits again.
+lib/commerce/engine.mjs6 and public/app.js299 duplicate physicalFundsVerified; activity-feed.js11 counts all paid statuses including holds/test-funded live orders.
 app.js1199-1230 preserves only one focused INPUT across entire-app SSE rerender; catalog.js6/18 stores search query/game in DOM and loses them on unrelated snapshots.
 style.css1612-1627 makes .consent flex; app.js366/508 puts checkbox/raw text/links as separate children, causing columns.
 CSS: index.html20-22 loads style.css/drop.css/street.css/drop-shop.css for workspace/shop/OBS; legal pages load three. Navigation defined style124/drop49/street58,135-140. design.md documents the old cascade and final palette; preserve winning styles, not obsolete historical direction.
@@ -21,7 +21,7 @@ tests/commerce.test.mjs503-505 slices app.js and new Function executes substring
 Run git diff --stat 09e015c..HEAD and inspect anchors. Initial worktree must have no source drift. Later planned-stage drift is expected; recheck affected contracts between stages.
 
 ## Scope
-May modify server.mjs; lib/**/*.mjs; public/**/*.js and public/**/*.css; public/*.html; tests/**; scripts/check*.mjs and scripts/browser*.mjs (new allowed); package.json/package-lock.json; playwright.config.mjs (new allowed); .gitignore for standard browser outputs; docs/architecture.md, docs/README.md, docs/twitch-widgets.md if entry changes need it, design.md, README.md.
+May modify server.mjs; lib/**/*.mjs; public/**/*.js and public/**/*.css; public/*.html; tests/**; scripts/check*.mjs and scripts/browser*.mjs (new allowed); package.json/package-lock.json; playwright.config.mjs (new allowed); .gitignore for standard browser outputs; docs/dev/content/developers/architecture.md, docs/user/README.md, docs/user/content/operations/twitch-widgets.md if entry changes need it, design.md, README.md.
 May create cohesive lib/http/,lib/routes/,public/shared/,public/workspace/,public/storefront/,public/overlay/,public/styles/ modules and focused tests/browser fixtures.
 Do not modify marketing, assets/fonts/art, deploy/security origin policy, database schema, real .env/data, payment/refund semantics or external provider contracts except the documented correctness fixes/capability projection. Keep icons and product artwork faithful.
 No framework migration, CSS-in-JS, DB migration, generic event bus/plugin registry, eval/new Function/with, service-locator proxy, or generated concatenated god modules. No copying old whole files into runtime.js/workspace.js and calling it modular. Do not split atomic stock/order commands into separate commits.
@@ -95,7 +95,7 @@ APPROVE — all seven stages complete on 2026-10-26. Baseline 09e015c, final imp
 
 Reviewer independently reran npm run check (94 production modules plus lexical/import/CSS guards), npm test (177/177), npm run demo:check (both commerce journeys and privacy), npm run test:browser (4/4 including ten unchanged pre-refactor screenshots), and git diff --check 09e015c..HEAD; all passed. Reviewed scope, route/security/lifecycle seams, domain delegation, capabilities, tests and style ownership. Manual isolated-browser QA passed desktop storefront rich consent; 390px command reference; workspace startup/inventory/product dialog; 390px navigation drawer; and 960x200 OBS standby.
 
-Stage commits: 98c554b atomic behavior/consent; cc3d240 importable presenters/capabilities/browser baseline; c431f2f frontend split; bc2d531 CSS and lifecycle ownership; 96ecf45 backend extraction after explicit repair; 7583c55 Engine/checks/docs/lifecycle; ce5791a whitespace. No source schema migration, framework migration, marketing/art changes, real provider requests, push or merge.
+Stage commits: 98c554b atomic behavior/consent; cc3d240 importable presenters/capabilities/browser baseline; c431f2f frontend split; bc2d531 CSS and lifecycle ownership; 96ecf45 backend extraction after explicit repair; 7583c55 Engine/checks/docs/lifecycle; ce5791a whitespace. No source schema migration, framework migration, apps/marketing/art changes, real provider requests, push or merge.
 
 server.mjs is 9 lines, public/app.js 6, workspace shell 65, Engine 393 with explicit inventory 123 / auction 196 delegates and shared pure order builder. These sizes describe the result; ownership, tests and import boundaries are the maintenance contract. Historical CSS files are removed and no longer loaded.
 

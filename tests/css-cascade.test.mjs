@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {cssRules,withoutComments,removeShadowedRootProperties} from '../scripts/lib/css-structure.mjs';
+import {cssRules,withoutComments,removeShadowedRootProperties} from '../scripts/check/lib/css-structure.mjs';
 const styles=new URL('../public/styles/',import.meta.url);
 test('ordered feature imports preserve the reviewed cascade and own every stylesheet exactly once',()=>{
  const entry=readFileSync(new URL('app.css',styles),'utf8');

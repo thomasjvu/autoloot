@@ -8,14 +8,14 @@ Planned at `2d23cf8` plus the full uncommitted workspace on 2026-10-26.
 Bind Twitch OAuth to the initiating browser. The current boundary permits a commerce or identity outcome inconsistent with the operator/buyer intent described below.
 
 ## Current state and drift check
-Repository: /Users/area/live-shopping-companion. lib/twitch.mjs:32-39 stores pending state with only role/at and consumes it without browser proof. server.mjs:369 redirects via twitch.login(role); lines 375-381 pass only code/state then set a session cookie. Existing tests/twitch.test.mjs exercise expiry/replay with mocked fetch.
-Run `git diff --stat 2d23cf8..HEAD -- lib/twitch.mjs server.mjs tests/twitch.test.mjs tests/server.test.mjs tests/production-http.test.mjs tests/oauth-http.test.mjs` and `git diff -- lib/twitch.mjs server.mjs tests/twitch.test.mjs tests/server.test.mjs tests/production-http.test.mjs tests/oauth-http.test.mjs`. The baseline explicitly includes dirty/untracked work copied into the executor worktree; compare these anchors before editing and stop on mismatch. Preserve all existing changes.
+Repository: /Users/area/live-shopping-companion. lib/integrations/twitch.mjs:32-39 stores pending state with only role/at and consumes it without browser proof. server.mjs:369 redirects via twitch.login(role); lines 375-381 pass only code/state then set a session cookie. Existing tests/twitch.test.mjs exercise expiry/replay with mocked fetch.
+Run `git diff --stat 2d23cf8..HEAD -- lib/integrations/twitch.mjs server.mjs tests/twitch.test.mjs tests/server.test.mjs tests/production-http.test.mjs tests/oauth-http.test.mjs` and `git diff -- lib/integrations/twitch.mjs server.mjs tests/twitch.test.mjs tests/server.test.mjs tests/production-http.test.mjs tests/oauth-http.test.mjs`. The baseline explicitly includes dirty/untracked work copied into the executor worktree; compare these anchors before editing and stop on mismatch. Preserve all existing changes.
 
 ## Conventions
-Plain Node ES modules, single-host SQLite, integer USD cents, synchronous authoritative engine transitions and explicit thrown Error messages. Match node:test and strict assertions in tests/commerce.test.mjs and tests/runtime.test.mjs. Provider transports are fixture-mocked; never use real funds, account messages or credentials. docs/architecture.md states that buyer identity and server-side order ownership are authoritative. Keep local admin access distinct from buyer identity.
+Plain Node ES modules, single-host SQLite, integer USD cents, synchronous authoritative engine transitions and explicit thrown Error messages. Match node:test and strict assertions in tests/commerce.test.mjs and tests/runtime.test.mjs. Provider transports are fixture-mocked; never use real funds, account messages or credentials. docs/dev/content/developers/architecture.md states that buyer identity and server-side order ownership are authoritative. Keep local admin access distinct from buyer identity.
 
 ## Scope
-Only these files may change: lib/twitch.mjs server.mjs tests/twitch.test.mjs tests/server.test.mjs tests/production-http.test.mjs tests/oauth-http.test.mjs.
+Only these files may change: lib/integrations/twitch.mjs server.mjs tests/twitch.test.mjs tests/server.test.mjs tests/production-http.test.mjs tests/oauth-http.test.mjs.
 All other source files, dependencies, storage layout, unrelated UI, marketing and design are out of scope. Report if another file is required.
 
 ## Git workflow

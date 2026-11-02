@@ -1,0 +1,178 @@
+{
+  "canvas": [
+    768,
+    768
+  ],
+  "layers": [
+    {
+      "name": "tail",
+      "file": "00.png",
+      "bbox": [
+        212,
+        349,
+        380,
+        465
+      ]
+    },
+    {
+      "name": "legwear",
+      "file": "01.png",
+      "bbox": [
+        292,
+        338,
+        491,
+        677
+      ]
+    },
+    {
+      "name": "bottomwear",
+      "file": "02.png",
+      "bbox": [
+        329,
+        293,
+        495,
+        409
+      ]
+    },
+    {
+      "name": "topwear",
+      "file": "03.png",
+      "bbox": [
+        277,
+        160,
+        523,
+        380
+      ]
+    },
+    {
+      "name": "back hair",
+      "file": "04.png",
+      "bbox": [
+        287,
+        28,
+        499,
+        211
+      ]
+    },
+    {
+      "name": "neck",
+      "file": "05.png",
+      "bbox": [
+        365,
+        136,
+        401,
+        182
+      ]
+    },
+    {
+      "name": "eyebrow-l",
+      "file": "06.png",
+      "bbox": [
+        429,
+        113,
+        452,
+        127
+      ]
+    },
+    {
+      "name": "ears",
+      "file": "07.png",
+      "bbox": [
+        328,
+        106,
+        353,
+        141
+      ]
+    },
+    {
+      "name": "face",
+      "file": "08.png",
+      "bbox": [
+        352,
+        60,
+        461,
+        168
+      ]
+    },
+    {
+      "name": "nose",
+      "file": "09.png",
+      "bbox": [
+        409,
+        139,
+        412,
+        143
+      ]
+    },
+    {
+      "name": "mouth",
+      "file": "10.png",
+      "bbox": [
+        391,
+        139,
+        413,
+        159
+      ]
+    },
+    {
+      "name": "eyelash-l",
+      "file": "11.png",
+      "bbox": [
+        418,
+        129,
+        444,
+        146
+      ]
+    },
+    {
+      "name": "eyebrow-r",
+      "file": "12.png",
+      "bbox": [
+        369,
+        94,
+        404,
+        108
+      ]
+    },
+    {
+      "name": "eyelash-r",
+      "file": "13.png",
+      "bbox": [
+        363,
+        113,
+        396,
+        130
+      ]
+    },
+    {
+      "name": "front hair",
+      "file": "14.png",
+      "bbox": [
+        337,
+        12,
+        482,
+        159
+      ]
+    },
+    {
+      "name": "handwear-l",
+      "file": "15.png",
+      "bbox": [
+        423,
+        140,
+        555,
+        309
+      ]
+    },
+    {
+      "name": "handwear-r",
+      "file": "16.png",
+      "bbox": [
+        236,
+        190,
+        405,
+        349
+      ]
+    }
+  ]
+}

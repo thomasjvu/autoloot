@@ -9,7 +9,7 @@ import {join} from 'node:path';
 const address={name:'Private Winner',line1:'1 Main St',city:'Boston',state:'MA',postal_code:'02110',country:'US'};
 test('giveaway HTTP claims remain winner-owned and survive archive with private dispatch',async()=>{
  const socket=createServer();await new Promise(r=>socket.listen(0,'127.0.0.1',r));const port=socket.address().port;await new Promise(r=>socket.close(r));const dir=mkdtempSync(join(tmpdir(),'autoloot-prize-')),base=`http://localhost:${port}`;
- const child=spawn(process.execPath,['server.mjs'],{env:{...process.env,NODE_ENV:'test',PORT:String(port),PUBLIC_URL:base,DATA_DIR:dir,AUTOLOOT_DEMO:'1',TWITCH_CLIENT_ID:'',TWITCH_CLIENT_SECRET:'',STRIPE_API_KEY:'',STRIPE_WEBHOOK_SECRET:'',SHIPPO_API_TOKEN:'',NFT_RPC_CONFIG:'{}',NFT_WALLET_URL:'',NFT_AGENT_TOKEN:''},stdio:['ignore','pipe','pipe']});
+ const child=spawn(process.execPath,['server.mjs'],{env:{...process.env,NODE_ENV:'test',PORT:String(port),PUBLIC_URL:base,DATA_DIR:dir,AUTOLOOT_DEMO:'1',AUTOLOOT_GIVEAWAYS:'1',TWITCH_CLIENT_ID:'',TWITCH_CLIENT_SECRET:'',STRIPE_API_KEY:'',STRIPE_WEBHOOK_SECRET:'',SHIPPO_API_TOKEN:'',NFT_RPC_CONFIG:'{}',NFT_WALLET_URL:'',NFT_AGENT_TOKEN:''},stdio:['ignore','pipe','pipe']});
  try{
   await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Startup timed out')),10000);child.stdout.once('data',()=>{clearTimeout(timer);resolve();});child.once('exit',c=>{clearTimeout(timer);reject(Error('Exited '+c));});});
   const token=(await(await fetch(base+'/api/bootstrap')).json()).admin;

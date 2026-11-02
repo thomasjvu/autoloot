@@ -13,7 +13,7 @@ npm start
 
 Open http://localhost:4173, create a local administrator account, and use **Settings → Practice show → Load sample lots** for a credential-free rehearsal. Configure integrations through your own ignored `.env` file when needed. Never commit credentials, `.data/`, databases, customer information, or live-provider captures.
 
-Read the [architecture guide](docs/architecture.md), [stylesheet ownership](public/styles/README.md), and [release checklist](docs/release.md) before changing the relevant area.
+Read the [architecture guide](docs/dev/content/developers/architecture.md), [stylesheet ownership](public/styles/README.md), and [release checklist](docs/dev/content/developers/release.md) before changing the relevant area.
 
 ## Keep the project aligned
 
@@ -29,9 +29,9 @@ Read the [architecture guide](docs/architecture.md), [stylesheet ownership](publ
 
 Update documentation in the same pull request as the behavior it describes.
 
-Developer references belong in `dev-docs/content/`, and the design system in `dev-docs/design.md`. Add navigation entries in `dev-docs/documentation-config.js` for new pages. Do not edit generated content or framework code under `dev-docs/.papers/`.
+Developer references belong in `docs/dev/content/`, and the design system in `docs/dev/design.md`. Add navigation entries in `docs/dev/documentation-config.js` for new pages. Do not edit generated content or framework code under `docs/.papers/dev/`.
 
-User-facing Papers guides live in the separate local `documentation/` checkout. The `docs/` directory retains operational guides and compatibility links. If a separate checkout is unavailable, describe the required guide change in the pull request rather than creating a competing copy.
+User-facing Papers guides live in tracked `docs/user/content/`. Both sites use the shared `docs/theme/` and independent ignored runtimes under `docs/.papers/`. Edit source guides and run the corresponding docs check; never add framework build output.
 
 ## Validate your change
 

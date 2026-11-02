@@ -1,7 +1,10 @@
+import {createObjectUrl} from './vendor/vn-tts/index.js';
 import {setCompanionSpeaking} from './shared/companion-asset.js';
-/* Browser speech is optional, local and never authoritative for auction timing. */
+/* Local VN audio is optional and never authoritative for auction timing. */
 export class CohostPlayer {
   constructor() {
+    this.audio=null;
+    this.audioUrl=null;
     this.lastEvent = null;
     this.lastAuction = null;
     this.counted = new Set();
@@ -10,13 +13,15 @@ export class CohostPlayer {
     this.voiceTimer = null;
     this.sequence = 0;
     this.lastCountdownEnd = null;
+    this.workspaceMessage = null;
+    this.workspaceVisible = false;
   }
   arm(enabled) {
     const changed = this.enabled !== enabled;
     this.enabled = enabled;
     if (!enabled && changed) {
       this.sequence++;
-      window.speechSynthesis?.cancel();
+      this.stopAudio();
       clearTimeout(this.voiceTimer);
       this.setSpeaking(false);
     }
@@ -26,25 +31,37 @@ export class CohostPlayer {
     setCompanionSpeaking(value);
     document.body.classList.toggle("cohost-speaking", value);
   }
+  stopAudio(){
+    if(this.audio){this.audio.onplaying=this.audio.onended=this.audio.onerror=null;this.audio.pause();this.audio.removeAttribute('src');this.audio=null;}
+    if(this.audioUrl){URL.revokeObjectURL(this.audioUrl);this.audioUrl=null;}
+    clearTimeout(this.voiceTimer);this.setSpeaking(false);
+  }
   speak(text) {
-    if (!this.enabled || !("speechSynthesis" in window)) return;
-    const sequence = ++this.sequence;
-    window.speechSynthesis.cancel();
-    this.setSpeaking(false);
-    clearTimeout(this.voiceTimer);
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = 1.06;
-    u.pitch = 1.15;
-    u.onstart = () => {
-      if (sequence === this.sequence) this.setSpeaking(true);
-    };
-    u.onend = u.onerror = () => {
-      if (sequence !== this.sequence) return;
-      clearTimeout(this.voiceTimer);
-      this.setSpeaking(false);
-    };
-    this.voiceTimer = setTimeout(() => this.setSpeaking(false), 20000);
-    window.speechSynthesis.speak(u);
+    if(!this.enabled)return;
+    const sequence=++this.sequence;
+    this.stopAudio();
+    const message=String(text||'').trim().slice(0,350);
+    if(!message)return;
+    try{
+      this.audioUrl=createObjectUrl({text:message,pitch:1.25,speed:1.65,baseFrequency:250,vowelVolume:.24,consonantVolume:.16});
+      const audio=this.audio=new Audio(this.audioUrl);
+      const done=()=>{if(sequence===this.sequence)this.stopAudio();};
+      audio.onplaying=()=>{if(sequence===this.sequence)this.setSpeaking(true);};
+      audio.onended=audio.onerror=done;
+      this.voiceTimer=setTimeout(done,30000);
+      const playing=audio.play();playing?.catch(done);
+    }catch{this.stopAudio();}
+  }
+  updateWorkspace(state, visible, connected = true) {
+    const c = state.companion;
+    const message = String(c.message || '');
+    const active = Boolean(visible && connected && c.enabled && c.voice);
+    const fresh = this.workspaceVisible && this.workspaceMessage !== null && message !== this.workspaceMessage;
+    this.workspaceMessage = message;
+    this.workspaceVisible = active;
+    this.arm(active);
+    // Opening a conversation establishes a baseline; it never replays history.
+    if (active && fresh) this.speak(message);
   }
   update(state, offset = 0) {
     const c = state.companion,

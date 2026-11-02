@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {runtimeConfig,requestAllowed,localAdminRequest,anonymousClientAddress} from '../lib/runtime.mjs';
+import {runtimeConfig,requestAllowed,localAdminRequest,anonymousClientAddress} from '../lib/platform/runtime.mjs';
 const config=runtimeConfig({PORT:'4173',PUBLIC_URL:'https://shop.example.com'});
 const request=(headers={},address='127.0.0.1')=>({headers:{host:'localhost:4173',...headers},socket:{remoteAddress:address}});
 test('admin bootstrap rejects forwarded, remote, rebinding and cross-site requests',()=>{

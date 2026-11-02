@@ -4,13 +4,13 @@ Planned at49c7c59, main. User explicitly authorized execution of both findings i
 
 ## Current state/evidence
 
-lib/rip.mjs rawQuotes accepts currency unvalidated; hostPull constructs Intl currency formatter. lib/rip-session.mjs33 appends pull before hostPull at34. Invalid currency causes RangeError before engine commit, leaving pull in memory and selection active; later unrelated commit persists rejected pull and retry may duplicate.
+lib/integrations/rip.mjs rawQuotes accepts currency unvalidated; hostPull constructs Intl currency formatter. lib/commerce/rip-session.mjs33 appends pull before hostPull at34. Invalid currency causes RangeError before engine commit, leaving pull in memory and selection active; later unrelated commit persists rejected pull and retry may duplicate.
 
 public/lifecycle/focus.js6 saves only focused INPUT;16 restores first global input[name]. app.js221 replaces full app DOM on admin SSE; connection.js17 calls capture/restore. giveaways.js2 recreates blank prize/rules/selects;5 multiple dispatch forms all name tracking. Textarea input lost, tracking from second form moves to first. Maximum bids have separate auction/owner-specific preservation already; do not regress or duplicate it.
 
 ## Scope
 
-lib/rip.mjs, lib/rip-session.mjs; public/lifecycle/focus.js; public/app.js ONLY draft scope/wiring; public/giveaways.js ONLY stable form/entity identifiers if needed; focused tests/rip*.test.mjs + tests/focus*.test.mjs/new inline-drafts.test.mjs + narrowly relevant existing lifecycle tests; docs/vision.md or docs/architecture.md describing changed behavior. No dependencies/CSS/auth/payments/shipping/max-bid resolver changes. If other inline forms need stable IDs, report/request scoped expansion rather than blanket changes.
+lib/integrations/rip.mjs, lib/commerce/rip-session.mjs; public/lifecycle/focus.js; public/app.js ONLY draft scope/wiring; public/giveaways.js ONLY stable form/entity identifiers if needed; focused tests/rip*.test.mjs + tests/focus*.test.mjs/new inline-drafts.test.mjs + narrowly relevant existing lifecycle tests; docs/user/content/operations/vision.md or docs/dev/content/developers/architecture.md describing changed behavior. No dependencies/CSS/auth/payments/shipping/max-bid resolver changes. If other inline forms need stable IDs, report/request scoped expansion rather than blanket changes.
 
 ## Steps and requirements
 

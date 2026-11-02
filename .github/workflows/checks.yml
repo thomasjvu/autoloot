@@ -6,6 +6,15 @@ on:
 permissions:
   contents: read
 jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm run docs:check
+      - run: npm run dev-docs:check
   verify:
     runs-on: ubuntu-latest
     steps:
@@ -23,4 +32,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: sh scripts/container-check.sh
+      - run: sh scripts/check/container.sh

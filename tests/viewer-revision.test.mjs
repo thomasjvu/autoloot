@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createProjections} from '../lib/http/projections.mjs';
-import {seed} from '../lib/engine.mjs';
+import {seed} from '../lib/commerce/engine.mjs';
 function fixture(){
  const engine={state:seed()},payments={status:{configured:false}},twitch={status:{configured:false}},nft={status:()=>({chains:[]})};
  const project=createProjections({engine,payments,twitch,nft});return {engine,payments,twitch,project};

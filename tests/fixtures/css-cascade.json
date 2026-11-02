@@ -1,4 +1,4 @@
 {
-  "sha256": "ecdd1a8b34d6c3d963803721067ad1f67e7b5a87462fb584379110d41e2cfc63",
-  "note": "Intentional green Codex studio widget replacing pace before Orders."
+  "sha256": "8282efa0c45c292d238b025d4efd03e143d9644f6fd8c9eddf26872ef24a7ed8",
+  "note": "Reviewed custom Munny chalk auction layout: inline format, enlarged timer, price and bidder alignment; transparent native OBS widgets."
 }

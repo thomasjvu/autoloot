@@ -6,7 +6,7 @@ Audited283f098 on codex/rip-draft-fixes at /Users/area/.codex/worktrees/rip-draf
 
 Enforce bounded-run expiry synchronously on auction bid entry.
 
-Evidence: lib/runs.mjs110 pauses expired runs only from Runs.tick; server.mjs125–130 calls that after Engine.tick in a200ms loop. lib/engine.mjs277–281 direct bids and lib/max-bids.mjs49–58 private maxima check live auction/deadline, not owning run expiry. Buy-now (engine525–527) and auction resume already check run expiry synchronously. docs/agent-led-runs.md48,81 states bounded authorization/deadlines stop new sales and preserve existing orders.
+Evidence: lib/commerce/runs.mjs110 pauses expired runs only from Runs.tick; server.mjs125–130 calls that after Engine.tick in a200ms loop. lib/commerce/engine.mjs277–281 direct bids and lib/commerce/max-bids.mjs49–58 private maxima check live auction/deadline, not owning run expiry. Buy-now (engine525–527) and auction resume already check run expiry synchronously. docs/user/content/operations/agent-led-runs.md48,81 states bounded authorization/deadlines stop new sales and preserve existing orders.
 
 Impact: a run auction whose own duration exceeds the arming window accepts bids after operator authorization expires until the next runner poll. Slow/event-loop-delayed polling enlarges the gap. Accepted public bid/ceiling state changes before the runner pauses it. This is an input-boundary correctness defect, not an assertion of unauthorized transfer/payment completion.
 
@@ -22,6 +22,6 @@ No additional high-confidence issue in exact NFT asset/source/recipient/finality
 
 ## Direction / next investments
 
-Prioritize deadline guard before new runner formats. Two separate validation investments remain grounded: automated browser regressions (current CI .forgejo/workflows/check.yml13–16 runs syntax/Node/demo only) and real-account/device rehearsal (docs/live-rehearsal.md17–50). Neither is evidence of a new source defect. No architecture rewrite or dependency migration justified.
+Prioritize deadline guard before new runner formats. Two separate validation investments remain grounded: automated browser regressions (current CI .forgejo/workflows/check.yml13–16 runs syntax/Node/demo only) and real-account/device rehearsal (docs/dev/content/developers/live-rehearsal.md17–50). Neither is evidence of a new source defect. No architecture rewrite or dependency migration justified.
 
 Not audited: real RPC/signer/provider behavior, funded-wallet operations, live Twitch/Stripe/Shippo accounts, production load/proxy setup, all marketing assets or full accessibility. Await user selection before implementation plan/source changes; recommended next plan is RUN-01.

@@ -11,4 +11,4 @@ fi
 # Every container writer holds this kernel lock, including after PID/host changes.
 # flock releases automatically on termination; no time-based lease can expire mid-sale.
 export AUTOLOOT_CONTAINER_LOCKED=1
-exec flock --exclusive --nonblock --no-fork "$DATA_DIR/.container.lock" node scripts/container-start.mjs
+exec flock --exclusive --nonblock --no-fork "$DATA_DIR/.container.lock" node scripts/runtime/container-start.mjs

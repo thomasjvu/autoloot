@@ -1,15 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
-import {Engine,seed} from '../lib/engine.mjs';
-import {NftDelivery,walletBridge} from '../lib/nft.mjs';
-import {Runs} from '../lib/runs.mjs';
-import {Payments} from '../lib/payments.mjs';
+import {Engine,seed} from '../lib/commerce/engine.mjs';
+import {NftDelivery,walletBridge} from '../lib/commerce/nft.mjs';
+import {Runs} from '../lib/commerce/runs.mjs';
+import {Payments} from '../lib/integrations/payments.mjs';
 const address=n=>'0x'+String(n).repeat(40),tx='0x'+'4'.repeat(64),hash='0x'+'5'.repeat(64);
 const sender=address(1),recipient=address(2),contract=address(3);
 const topic=value=>'0x'+value.slice(2).padStart(64,'0');
 const asset={type:'nft',chain:'eip155:8453',contract,tokenId:'7',sender,provider:'Fixture provider'};
-function orderFixture(mode='live',fulfillment=asset){const e=new Engine(seed());e.setMode(mode);if(mode==='live')e.register({id:'buyer',login:'buyer'});const product=e.addProduct({title:'Fixture redeemable NFT',quantity:1,price:'5',buyNowPrice:'5',listed:true,condition:'NFT entitlement',fulfillment});const order=e.buyNow({productId:product.id,userId:'buyer',username:'buyer',requestId:'buy'});e.orderUpdate(order.id,mode==='demo'?'test-pay':'confirm-paid');return {e,product,order};}
+function orderFixture(mode='live',fulfillment=asset){const e=new Engine(seed(),{features:{nft:true}});e.setMode(mode);if(mode==='live')e.register({id:'buyer',login:'buyer'});const product=e.addProduct({title:'Fixture redeemable NFT',quantity:1,price:'5',buyNowPrice:'5',listed:true,condition:'NFT entitlement',fulfillment});const order=e.buyNow({productId:product.id,userId:'buyer',username:'buyer',requestId:'buy'});e.orderUpdate(order.id,mode==='demo'?'test-pay':'confirm-paid');return {e,product,order};}
 async function rpcFixture(t){
  const state={chain:'0x2105',final:true,owner:recipient,receipt:true,l1Fee:'0x0',fee:'0x2',token:'0x'+BigInt(7).toString(16).padStart(64,'0'),transfers:0,failFirst:false,requested:false};
  const server=createServer(async(req,res)=>{let text='';for await(const chunk of req)text+=chunk;res.setHeader('Content-Type','application/json');

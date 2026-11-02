@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {Readable} from 'node:stream';
 import {body,rawBody} from '../lib/http/response.mjs';
 import {createCompanionActions} from '../lib/http/companion-actions.mjs';
-import {bindingErrors} from '../scripts/lib/bindings.mjs';
+import {bindingErrors} from '../scripts/check/lib/bindings.mjs';
 
 test('JSON decoding preserves accented names and emoji at every byte boundary',async()=>{
  const expected={title:'Pokémon — フシギダネ 🌿',notes:'Crème brûlée'},bytes=Buffer.from(JSON.stringify(expected));

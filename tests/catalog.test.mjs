@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {Catalog,catalogImage} from '../lib/catalog.mjs';
-import {Engine,seed} from '../lib/engine.mjs';
+import {Catalog,catalogImage} from '../lib/integrations/catalog.mjs';
+import {Engine,seed} from '../lib/commerce/engine.mjs';
 test('catalog searches all games, pages results and selects only canonical identities',async()=>{
  let path;
  const card={id:'card-1',name:'Pikachu',number:'173',setName:'151',gameId:'pokemon',imageUrl:'https://images.example/card.png'};

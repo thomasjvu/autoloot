@@ -40,7 +40,7 @@ test('tracked-only Help follows redirects to a usable public FAQ and internal li
 
 test('optional rich FAQ and assets take precedence over the tracked fallback',async()=>{
  await fixture(async({root,base})=>{
-  const docs=join(root,'documentation','dist');mkdirSync(join(docs,'docs','getting-started'),{recursive:true});mkdirSync(join(docs,'assets'),{recursive:true});
+  const docs=join(root,'docs','.papers','user','dist');mkdirSync(join(docs,'docs','getting-started'),{recursive:true});mkdirSync(join(docs,'assets'),{recursive:true});
   writeFileSync(join(docs,'docs','getting-started','faq.html'),'<h1>Rich FAQ fixture</h1>');writeFileSync(join(docs,'assets','guide.css'),'body{}');
   for(const path of ['/help','/docs/getting-started/faq','/docs/getting-started/faq/','/docs/getting-started/faq.html']){
    const response=await fetch(base+path);assert.equal(response.status,200);assert.equal(await response.text(),'<h1>Rich FAQ fixture</h1>');assert.match(response.headers.get('content-type'),/^text\/html/);

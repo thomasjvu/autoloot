@@ -27,7 +27,7 @@ For direct API operation on the server machine:
 1. Authenticate locally through `POST /api/admin/setup` on first use, or `/api/admin/login` thereafter, with `username` and `password`. Retain the HttpOnly session cookie in memory and send it on subsequent requests. Then fetch `GET http://localhost:4173/api/bootstrap` in memory. The response contains `admin`, `state`, `viewerUrl` and `overlayUrl`.
 2. Send that capability as `X-Autoloot-Admin` together with the authenticated session cookie on creator requests. Use `Content-Type: application/json` for JSON POST bodies.
 3. Read authenticated `GET /api/state` to inspect current creator state. Without the capability, this endpoint returns a sanitized public snapshot.
-4. After a mutation, inspect the returned state or fetch state again. Consult the matching route in `server.mjs` for its current body schema and the engine guards in `lib/engine.mjs` before constructing a new command.
+4. After a mutation, inspect the returned state or fetch state again. Consult the matching route in `server.mjs` for its current body schema and the engine guards in `lib/commerce/engine.mjs` before constructing a new command.
 
 Keep the capability out of output, shared links and committed files. It changes on server restart, which also clears administrator sessions. A capability alone grants no access. Bootstrap requires a loopback connection, a localhost/loopback Host header, and no forwarding headers. Do not spoof headers to bypass remote access restrictions. For browser-origin requests, Origin must match the request host; a 403 is an access/configuration failure to resolve, not a reason to disable checks.
 
@@ -37,7 +37,7 @@ Public updates stream from `GET /api/events` using SSE. Prefer ordinary state re
 
 - **Creator:** localhost dashboard/admin capability; can manage inventory, show terms, auctions, orders and runs within the user's requested scope.
 - **Buyer:** `/shop`, with its own authenticated buyer session. Demo login is limited to demo purchases; Twitch login registers a real buyer. Preserve session cookies when using buyer APIs. Order mutations and receipts enforce ownership; an order ID alone grants no access.
-- **NFT delivery agent:** use the separate `X-Autoloot-Nft-Agent` credential for authorized jobs. It does not grant general admin access. Read [NFT delivery](docs/nft-delivery.md) before handling transfers.
+- **NFT delivery agent:** use the separate `X-Autoloot-Nft-Agent` credential for authorized jobs. It does not grant general admin access. Read [NFT delivery](docs/user/content/operations/nft-delivery.md) before handling transfers.
 
 ## Use the creator site
 
@@ -55,21 +55,21 @@ Useful creator POST routes include `/api/products`, `/api/products/edit`, `/api/
 
 ## Sales accounting
 
-Sales & numbers contains seller-only collected/refunded totals and private cost annotations. Read [Accounting](docs/accounting.md) for formulas and export scope. Do not claim payout reconciliation or profit; unknown costs remain unknown.
+Sales & numbers contains seller-only collected/refunded totals and private cost annotations. Read [Accounting](docs/user/content/operations/accounting.md) for formulas and export scope. Do not claim payout reconciliation or profit; unknown costs remain unknown.
 
 ## Bounded agent-led sales
 
-Read [Agent-led runs](docs/agent-led-runs.md) when asked to host or automate a sales session. In Studio → Agent-led run → Configure run, select 1–20 existing single-unit products, Auction or Buy now per step, and a 1–240 minute arming window. Configure prices, shipping and auction terms before arming. Arming freezes the queue and terms.
+Read [Agent-led runs](docs/user/content/operations/agent-led-runs.md) when asked to host or automate a sales session. In Studio → Agent-led run → Configure run, select 1–20 existing single-unit products, Auction or Buy now per step, and a 1–240 minute arming window. Configure prices, shipping and auction terms before arming. Arming freezes the queue and terms.
 
-Admin routes are `POST /api/run/arm` with `requestId`, `minutes`, and `steps` containing `productId` and `format`, plus `/api/run/pause`, `/api/run/resume`, and `/api/run/stop`. Resolve exact format values from `lib/runs.mjs`.
+Admin routes are `POST /api/run/arm` with `requestId`, `minutes`, and `steps` containing `productId` and `format`, plus `/api/run/pause`, `/api/run/resume`, and `/api/run/stop`. Resolve exact format values from `lib/commerce/runs.mjs`.
 
 Operate within the user's armed inventory, formats and time limit. The runner waits for payment and recorded physical shipment or verified NFT delivery before advancing a sold item. Exceptions pause for review. Stop does not cancel/refund existing orders; a current auction remains paused for manual resolution. Inventory purchasing, physical opening and planned break formats are outside this runner's implemented abilities.
 
 ## CSV imports and fulfillment
 
-Read [CSV and shipping](docs/csv-and-shipping.md) for inventory mapping, SKU updates, shipping exports and bulk tracking. Use `/api/import/preview` before `/api/import/apply`, preserving the preview fingerprint and identical inputs. Imports apply atomically and require every row to pass. Inventory imports unlist affected products; stock updates replace available quantity. `/api/fulfillment.csv` contains private customer addresses and requires creator access. Tracking import records actual shipment; never use it as evidence that a package was physically sent. CSV mapping is available; native Shopify/WooCommerce synchronization is not implemented.
+Read [CSV and shipping](docs/user/content/operations/csv-and-shipping.md) for inventory mapping, SKU updates, shipping exports and bulk tracking. Use `/api/import/preview` before `/api/import/apply`, preserving the preview fingerprint and identical inputs. Imports apply atomically and require every row to pass. Inventory imports unlist affected products; stock updates replace available quantity. `/api/fulfillment.csv` contains private customer addresses and requires creator access. Tracking import records actual shipment; never use it as evidence that a package was physically sent. CSV mapping is available; native Shopify/WooCommerce synchronization is not implemented.
 
-For Shippo rate quotes, label purchase, reconciliation and dispatch, read [Shipping labels](docs/shipping.md). Use the seller's server-side token and the order's test/live environment. Before buying postage, present the saved rate and exact USD cost for the seller's authorization. Purchasing a label does not establish package handoff or complete physical fulfillment. Never issue another purchase for an uncertain attempt: use `/api/shipping/refresh`. Pirate Ship uses `/api/pirateship.csv` and reviewed tracking imports; there is no Pirate Ship API connection.
+For Shippo rate quotes, label purchase, reconciliation and dispatch, read [Shipping labels](docs/user/content/operations/shipping.md). Use the seller's server-side token and the order's test/live environment. Before buying postage, present the saved rate and exact USD cost for the seller's authorization. Purchasing a label does not establish package handoff or complete physical fulfillment. Never issue another purchase for an uncertain attempt: use `/api/shipping/refresh`. Pirate Ship uses `/api/pirateship.csv` and reviewed tracking imports; there is no Pirate Ship API connection.
 
 ## Verify and troubleshoot
 
@@ -85,8 +85,8 @@ Runtime data lives in `.data` by default, including private orders, buyer sessio
 Load further guidance only as needed:
 
 - [README](README.md): demo walkthrough, Twitch/Stripe/Codex configuration and current features.
-- [Storage and recovery](docs/storage.md): SQLite ownership, backup and restore.
-- [Production](docs/production.md): supported deployment and launch checks.
-- [Twitch and OBS](docs/twitch-widgets.md): widget URLs, buyer registration and stream setup.
-- [Operator policies](docs/operator-policies.md): seller identity and published policies.
-- [NFT delivery](docs/nft-delivery.md): authorization, scoped jobs, signing bridge and chain verification.
+- [Storage and recovery](docs/dev/content/developers/storage.md): SQLite ownership, backup and restore.
+- [Production](docs/dev/content/operations/production.md): supported deployment and launch checks.
+- [Twitch and OBS](docs/user/content/operations/twitch-widgets.md): widget URLs, buyer registration and stream setup.
+- [Operator policies](docs/user/content/operations/operator-policies.md): seller identity and published policies.
+- [NFT delivery](docs/user/content/operations/nft-delivery.md): authorization, scoped jobs, signing bridge and chain verification.

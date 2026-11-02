@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Engine, seed, cents } from "../lib/engine.mjs";
+import { Engine, seed, cents } from "../lib/commerce/engine.mjs";
 function setup() {
   let time = 100000;
   const e = new Engine(seed(), { now: () => time });
@@ -171,7 +171,7 @@ test('auction shipping terms survive show edits, pause and restart, while later 
  const direct=restored.buyNow({productId:'p4',userId:'demo-buyer',username:'buyer',requestId:'new-show'});assert.equal(direct.shippingPrice,2500);
 });
 test('NFT auction snapshots zero shipping',()=>{
- const {e}=setup();e.state.show.shippingPrice=500;e.product('p1').fulfillment={type:'nft'};start(e);bid(e);e.finish();
+ const {e}=setup();e.features={nft:true};e.state.show.shippingPrice=500;e.product('p1').fulfillment={type:'nft'};start(e);bid(e);e.finish();
  assert.equal(e.state.auction.shippingPrice,0);assert.equal(e.state.orders[0].shippingPrice,0);assert.equal(e.state.orders[0].total,4500);
 });
 test('legacy auction missing shipping pauses without halting and can be cancelled safely',()=>{
@@ -179,4 +179,11 @@ test('legacy auction missing shipping pauses without halting and can be cancelle
  const quantity=e.product('p1').quantity;assert.throws(()=>e.finish(),/shipping terms are missing/);assert.equal(e.state.auction.status,'live');assert.equal(e.product('p1').quantity,quantity);assert.equal(e.state.orders.length,0);
  advance(61000);e.tick();assert.equal(e.state.auction.status,'paused');assert.equal(e.halted,false);assert.throws(()=>e.resume(),/shipping terms are missing/);assert.throws(()=>bid(e,'46','two','m2'),/No|live auction/);
  assert.throws(()=>e.finish(),/shipping terms are missing/);e.finish(true);assert.equal(e.state.auction.status,'cancelled');assert.equal(e.product('p1').quantity,quantity);
+});
+
+test('draft store prevents auction, chat bids, direct purchases and shipping at engine boundary',()=>{
+ const {e}=setup();e.state.storeAccess={draft:true};
+ assert.throws(()=>start(e),/draft/);assert.throws(()=>bid(e),/draft/);
+ assert.throws(()=>e.buyNow({productId:'p1',userId:'one',username:'one'}),/draft/);
+ assert.throws(()=>e.orderUpdate('missing','ship'),/draft/);
 });

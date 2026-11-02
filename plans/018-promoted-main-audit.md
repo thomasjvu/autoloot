@@ -11,7 +11,7 @@ Merged main: npm run check passed82 modules; npm test244/244; npm run demo:check
 | Priority | Finding | Category | Impact | Effort | Risk | Confidence | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | Help/FAQ lacks tracked fallback when optional rich docs build is absent | UX/docs/tests | Fresh checkout deployments route users to404 | S–M | LOW | HIGH | lib/http/static.mjs5–14 redirects help and serves docs only from documentation/dist; README47 says ignored separate checkout; workspace-navigation.js6 always links there; runs-http.test.mjs57 checks redirect only |
-| 2 | Submission guide claims no label purchasing | Docs | Operator follows inaccurate feature-description checklist | S | LOW | HIGH | docs/hackathon.md23 contradicts implemented labels and line39 |
+| 2 | Submission guide claims no label purchasing | Docs | Operator follows inaccurate feature-description checklist | S | LOW | HIGH | docs/dev/content/operations/hackathon.md23 contradicts implemented labels and line39 |
 
 Finding1 is conditional: current local installation has a rich docs build and FAQ returns200. git ls-files documentation yields no files and the build is ignored, so that success is not reproducible from tracked deployment contents. public/help.html exists but is unconditionally redirected, bypassing a possible tracked fallback. Remediation: preserve optional rich docs, provide tracked minimal Help/FAQ otherwise, test final redirect destination in a tree without optional docs. Finding2 remediation: describe implemented Shippo labels and separate real-provider rehearsal boundary.
 

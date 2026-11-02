@@ -1,8 +1,9 @@
 // The tour only navigates and explains. It never changes show data or permissions.
 const key='autoloot-tour-v1';
 const steps=[
- {tab:'studio',title:'Your show starts here',copy:'I’m Munny! I’ll help you find your way. This is your home base: add your first lot here, then follow your show as it happens.',target:'.welcome-copy,.auction-panel'},
+ {tab:'studio',title:'Your show starts here',copy:'I’m Munny! I’ll help you find your way. This is your home base: add your first lot here, open Your show for the auction controls.',target:'.welcome-copy,.auction-panel'},
  {tab:'inventory',title:'Bring your own lineup',copy:'Here’s where your lineup begins. Add an item you own, or browse the catalog. You choose the price and condition; I can help draft the details.',target:'.workspace-main [data-action="add-product"]'},
+ {tab:'show',title:'Host your show',copy:'Your auction, lineup, audience vote and chat live here. Open Your show from the menu whenever you’re ready to host.',target:'.auction-panel'},
  {tab:'orders',title:'Keep track of every sale',copy:'I’ll keep you pointed toward orders that need attention. This table brings payment, delivery and shipping together; each buyer gets their own private view.',target:'.orders-panel'},
  {tab:'connections',title:'Choose how much to hand over',copy:'Tell me how you want to host: lead each lot, have me check with you, or let an approved queue continue. You can always pause.',target:'.automation-options'},
  {tab:'studio',title:'Munny is a click away',copy:'That’s me down here! Open my panel for chat, notifications and show activity. A red count means something needs you. Come say hi whenever you like.',target:'.mochi-quick-toggle'}
@@ -11,7 +12,7 @@ let dismissed=false,index=-1,dialog,navigate,returnFocus,outcome='',refresh,obse
 try{outcome=localStorage.getItem(key)||'';dismissed=Boolean(outcome);}catch{}
 export function tutorialStatus(){return {completed:outcome==='completed',skipped:outcome==='skipped'};}
 function remember(result){outcome=result;dismissed=true;try{localStorage.setItem(key,result);}catch{}}
-function stepTarget(){const selector=index===3&&window.innerWidth<=600?'.automation-option.selected':steps[index]?.target;return selector?document.querySelector(selector)||document.querySelector('.workspace-main h1'):null;}
+function stepTarget(){const selector=steps[index]?.tab==='connections'&&window.innerWidth<=600?'.automation-option.selected':steps[index]?.target;return selector?document.querySelector(selector)||document.querySelector('.workspace-main h1'):null;}
 function clearHighlight(){document.querySelectorAll('.tour-highlight').forEach(el=>el.classList.remove('tour-highlight'));}
 function finish(result){document.body.classList.remove('tour-active');observer?.disconnect();cancelAnimationFrame(frame);window.removeEventListener('resize',scheduleSpotlight);window.removeEventListener('scroll',scheduleSpotlight,true);remember(result);index=-1;clearHighlight();dialog?.close();document.querySelector('.tour-invite')?.remove();refresh?.();if(returnFocus?.isConnected)returnFocus.focus();else {const heading=document.querySelector('.workspace-main h1,.workspace-main main');if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});}}}
 function scheduleSpotlight(){cancelAnimationFrame(frame);frame=requestAnimationFrame(positionSpotlight);}

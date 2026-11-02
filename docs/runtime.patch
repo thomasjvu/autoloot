@@ -1,0 +1,213 @@
+diff --git a/index.html b/index.html
+index ad1cfad..e6408b7 100644
+--- a/index.html
++++ b/index.html
+@@ -3,52 +3,49 @@
+   <head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
+-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+-    <meta name="theme-color" content="#090909" media="(prefers-color-scheme: dark)" />
++    <meta name="theme-color" content="#f3efdf" media="(prefers-color-scheme: light)" />
++    <meta name="theme-color" content="#20231e" media="(prefers-color-scheme: dark)" />
+ 
+-    <title>papers | Static documentation template</title>
++    <title>Autoloot | Twitch commerce documentation</title>
+     <meta
+       name="description"
+-      content="A minimal docs starter with install-ready defaults, generated content, and static-host deployment support."
++      content="Guides for Autoloot inventory, Twitch auctions, buyer orders, Checkout, Mochi, and OBS."
+     />
+-    <meta name="keywords" content="documentation, template, react, vite, typescript, pagefind" />
+-    <meta name="author" content="papers" />
+-    <meta name="application-name" content="papers Documentation" />
+-    <meta name="apple-mobile-web-app-title" content="papers" />
+-    <meta name="msapplication-TileColor" content="#090909" />
++    <meta name="keywords" content="Autoloot, Twitch, auctions, storefront, documentation" />
++    <meta name="author" content="Autoloot" />
++    <meta name="application-name" content="Autoloot Documentation" />
++    <meta name="apple-mobile-web-app-title" content="Autoloot" />
++    <meta name="msapplication-TileColor" content="#20231e" />
+     <meta name="robots" content="index, follow" />
+     <meta name="view-transition" content="same-origin" />
+ 
+     <link rel="canonical" href="/" />
+-    <link rel="icon" href="/favicon/favicon.ico" sizes="any" />
+-    <link rel="icon" href="/favicon/favicon-32x32.png" type="image/png" sizes="32x32" />
+-    <link rel="icon" href="/favicon/favicon-16x16.png" type="image/png" sizes="16x16" />
+-    <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
+-    <link rel="manifest" href="/favicon/site.webmanifest" />
++    <link rel="icon" href="/autoloot-mark.png" type="image/png" />
++    <link rel="apple-touch-icon" href="/autoloot-mark.png" />
+ 
+     <meta property="og:type" content="website" />
+     <meta property="og:locale" content="en_US" />
+-    <meta property="og:title" content="papers | Static documentation template" />
++    <meta property="og:title" content="Autoloot | Twitch commerce documentation" />
+     <meta
+       property="og:description"
+-      content="A minimal docs starter with install-ready defaults, generated content, and static-host deployment support."
++      content="Guides for Autoloot inventory, Twitch auctions, buyer orders, Checkout, Mochi, and OBS."
+     />
+-    <meta property="og:site_name" content="papers" />
++    <meta property="og:site_name" content="Autoloot" />
+     <meta property="og:url" content="/" />
+     <meta property="og:image" content="/images/og-image.svg" />
+-    <meta property="og:image:alt" content="papers documentation" />
++    <meta property="og:image:alt" content="Autoloot documentation" />
+     <meta property="og:image:type" content="image/svg+xml" />
+     <meta property="og:image:width" content="1200" />
+     <meta property="og:image:height" content="630" />
+ 
+     <meta name="twitter:card" content="summary_large_image" />
+-    <meta name="twitter:title" content="papers | Static documentation template" />
++    <meta name="twitter:title" content="Autoloot | Twitch commerce documentation" />
+     <meta
+       name="twitter:description"
+-      content="A minimal docs starter with install-ready defaults, generated content, and static-host deployment support."
++      content="Guides for Autoloot inventory, Twitch auctions, buyer orders, Checkout, Mochi, and OBS."
+     />
+     <meta name="twitter:image" content="/images/twitter-card.svg" />
+-    <meta name="twitter:image:alt" content="papers documentation" />
++    <meta name="twitter:image:alt" content="Autoloot documentation" />
+ 
+     <link
+       rel="alternate"
+diff --git a/src/components/Navigation.tsx b/src/components/Navigation.tsx
+index a4990e5..e571d63 100644
+--- a/src/components/Navigation.tsx
++++ b/src/components/Navigation.tsx
+@@ -12,7 +12,6 @@ import { useTheme } from '../providers/useTheme';
+ 
+ import DocsLogoMark from './DocsLogoMark';
+ import SettingsMenu from './SettingsMenu';
+-import { withDocsBasePath } from '../../shared/docsBasePath.js';
+ 
+ type NavigationProps = {
+   docsPath?: string;
+@@ -25,9 +24,9 @@ type NavItem = {
+ };
+ 
+ const navItems: NavItem[] = [
+-  { label: 'Design System', href: withDocsBasePath('developer-guides/design-system') },
+-  { label: 'Deployment', href: withDocsBasePath('deployment/overview') },
+-  { label: 'LLMs.txt', href: withDocsBasePath('llms') },
++  { label: 'Streamer guide', href: '/docs/streamer/auctions' },
++  { label: 'Integrations', href: '/docs/integrations/twitch' },
++  { label: 'LLMs.txt', href: '/llms.txt' },
+ ];
+ 
+ export default function Navigation({
+diff --git a/src/components/docs/DocumentationPage.tsx b/src/components/docs/DocumentationPage.tsx
+index 47a6424..d8b1f4b 100644
+--- a/src/components/docs/DocumentationPage.tsx
++++ b/src/components/docs/DocumentationPage.tsx
+@@ -286,11 +286,14 @@ const DocumentationPage = React.memo(
+                       </span>
+                     )}
+                     <span
+-                      className="min-w-0 truncate font-black uppercase tracking-[0.12em]"
++                      className="min-w-0 truncate font-black"
+                       style={{
+                         color: 'var(--papers-text-color)',
+-                        fontFamily: 'var(--mono-font)',
+-                        fontSize: 'clamp(1.15rem, 1.8vw, 1.45rem)',
++                        fontFamily: 'var(--brand-font)',
++                        fontSynthesis: 'none',
++                        letterSpacing: 0,
++                        textTransform: 'lowercase',
++                        fontSize: '2rem',
+                         lineHeight: 1,
+                       }}
+                     >
+@@ -358,25 +361,17 @@ const DocumentationPage = React.memo(
+                 className="border-t pt-4 space-y-2"
+                 style={{ borderColor: 'var(--border-unified)' }}
+               >
+-                <button
+-                  onClick={() =>
+-                    navigate(
+-                      buildCanonicalCollectionPath(activeCollection, 'llms', {
+-                        version: routeContext.activeVersion,
+-                        locale: routeContext.activeLocale,
+-                      })
+-                    )
+-                  }
++                <a
++                  href="/llms.txt"
+                   className="flex w-full items-center justify-between rounded-lg border px-3 py-2 text-sm transition-opacity hover:opacity-80"
+                   style={utilityButtonStyle}
+-                  type="button"
+                 >
+                   <span className="flex items-center gap-2">
+                     <Icon icon="mingcute:file-info-line" className="h-4 w-4" />
+                     <span>LLMs.txt</span>
+                   </span>
+                   <Icon icon="mingcute:arrow-right-line" className="h-4 w-4" />
+-                </button>
++                </a>
+ 
+                 <div
+                   className="flex items-center justify-between rounded-lg border px-3 py-2"
+diff --git a/scripts/generate-llms.mjs b/scripts/generate-llms.mjs
+index ede74bd..2386ddc 100644
+--- a/scripts/generate-llms.mjs
++++ b/scripts/generate-llms.mjs
+@@ -12,7 +12,6 @@ import { homepageConfig } from '../shared/documentation-config.js';
+ import { createAgentDiscoveryManifest } from '../shared/seo.js';
+ import { loadViteEnv, resolveEnvMode } from './lib/loadViteEnv.mjs';
+ import { createHostedSkillArtifact, createAllLlmsArtifacts } from './lib/llmsArtifacts.mjs';
+-import { resolveCollectionContentRoot } from './lib/collectionContentRoot.mjs';
+ 
+ const rootDir = process.cwd();
+ 
+@@ -54,12 +53,7 @@ async function main() {
+     fs.writeFileSync(path.join(publicDir, 'llms-full.txt'), llmsArtifacts.llmsFullTxt, 'utf8');
+     console.log('Generated llms-full.txt');
+ 
+-    const primaryCollection =
+-      collections.find((collection) => collection.id === 'docs') || collections[0];
+-    const skillRoot = primaryCollection
+-      ? resolveCollectionContentRoot(primaryCollection, rootDir)
+-      : path.join(rootDir, 'src', 'docs', 'content');
+-    const skillSource = fs.readFileSync(path.join(skillRoot, 'skill.md'), 'utf8');
++    const skillSource = fs.readFileSync(path.join(rootDir, 'agent-guidance.md'), 'utf8');
+     fs.writeFileSync(
+       path.join(publicDir, 'skill.md'),
+       createHostedSkillArtifact(skillSource, {
+diff --git a/scripts/check-docs.mjs b/scripts/check-docs.mjs
+index 913301a..c6fe78c 100644
+--- a/scripts/check-docs.mjs
++++ b/scripts/check-docs.mjs
+@@ -236,7 +236,7 @@ async function main() {
+   const siteSubtitle = homepageConfig.hero?.subtitle || 'Documentation';
+   const siteDescription = homepageConfig.hero?.description || '';
+   const skillSource = readFileText(
+-    join(resolveCollectionContentRoot(primaryCollection, rootDir), 'skill.md')
++    join(rootDir, 'agent-guidance.md')
+   );
+   assert(
+     readFileText(hostedSkillPath) ===
+diff --git a/scripts/preview-smoke.mjs b/scripts/preview-smoke.mjs
+index 187e7f3..d2f3a2a 100644
+--- a/scripts/preview-smoke.mjs
++++ b/scripts/preview-smoke.mjs
+@@ -168,18 +168,6 @@ async function main() {
+       );
+     }
+ 
+-    const llmsRoute = await fetchText(baseUrl, withDocsBasePath('llms'));
+-    assert(
+-      llmsRoute.body.includes('<title>LLMs.txt |'),
+-      `Served ${withDocsBasePath('llms')} route has unexpected metadata.`
+-    );
+-
+-    const skillRoute = await fetchText(baseUrl, withDocsBasePath('skill'));
+-    assert(
+-      skillRoute.body.includes('<title>Agent Skill |'),
+-      `Served ${withDocsBasePath('skill')} route has unexpected metadata.`
+-    );
+-
+     for (const spec of openapiConfig.specs) {
+       const routePath = buildOpenApiRoutePath(
+         openapiConfig,

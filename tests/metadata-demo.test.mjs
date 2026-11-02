@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {Metadata,rawQuotes} from '../lib/rip.mjs';
-import {Catalog} from '../lib/catalog.mjs';
+import {Metadata,rawQuotes} from '../lib/integrations/rip.mjs';
+import {Catalog} from '../lib/integrations/catalog.mjs';
 
 test('bundled catalog searches, paginates and selects without provider or price calls',async()=>{
   const metadata=new Metadata({mode:'demo',key:'unused',fetcher:()=>{throw Error('Demo must not fetch');}});

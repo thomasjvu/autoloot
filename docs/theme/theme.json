@@ -1,0 +1,35 @@
+{
+  "id": "autoloot",
+  "name": "Autoloot",
+  "description": "Cream, charcoal, sage, and lime from the Autoloot web UI.",
+  "author": "Autoloot",
+  "css": "tokens.css",
+  "fontCss": "fonts.css",
+  "iconSet": "mingcute",
+  "defaultColorMode": "light",
+  "features": {
+    "lightDarkToggle": true
+  },
+  "fonts": [
+    {
+      "preload": "/fonts/Mona-Sans.woff",
+      "type": "font/woff",
+      "crossOrigin": true
+    },
+    {
+      "preload": "/fonts/Hubot-Sans.woff",
+      "type": "font/woff",
+      "crossOrigin": true
+    },
+    {
+      "preload": "/fonts/MapleMono-Variable.woff2",
+      "type": "font/woff2",
+      "crossOrigin": true
+    },
+    {
+      "preload": "/fonts/AutolootDisplay-Black.woff2",
+      "type": "font/woff2",
+      "crossOrigin": true
+    }
+  ]
+}

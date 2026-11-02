@@ -1,0 +1,11 @@
+{
+  "provider": "built-in image_gen",
+  "background": {
+    "prompt": "Use case: illustration-story. Redesign the referenced Autoloot collectible shop as a MUCH SIMPLER CLOSE-UP livestream backdrop. Existing shop image is style/palette reference only. New camera is at the customer counter, medium close framing, no visible floor or ceiling, no deep room perspective. Hand drawn cel shaded anime background, clean confident dark outlines, warm cream plaster, honey oak, muted lime accents. Composition: left 60 percent of frame is a broad almost empty warm cream wall with subtle soft illumination reserved for a large separately composited waist-up character; at far left edge ONE short floating wood shelf with only three simple generic card boxes and a single small plant. Right 35 percent has ONE modest straight-on widescreen display, simple rectangular charcoal screen with thin wooden frame, no text. Display occupies approximately x1250..1810 y230..610 in 1920x1080 coordinates. A single horizontal wood trim at lower wall. Quiet flat values, restrained detail, no racks of merchandise, no repeating packs, no piles, no framed pictures, no signs, no logo, no letters, no character, no counter in this plate. Close cozy focused inviting shopkeeper scene, like talking directly across the counter. Fill 16:9 canvas edge to edge. Do not reproduce the busy reference layout.",
+    "reference": "shop-interior-v1.png"
+  },
+  "counter": {
+    "prompt": "Edit reference counter asset: simplify to a plain close-up shop counter with honey oak wooden top ledge and clean warm cream front, same hand-drawn cel-shaded anime dark outline style. REMOVE ALL plants, leaves, parcels, decorative objects and lime stripes. Keep only one broad uninterrupted horizontal wood top and a simple cream front with two restrained panel seams. Straight-on close customer perspective. Counter fills width, with flat level top at y400 of a 16:9 canvas and front to bottom. Genuine transparent alpha above and around counter. No floor, no room, no people, no objects, no text, no logo. Calm simple surfaces, warm soft light, usable as a foreground PNG layer.",
+    "reference": "shop-counter-v1.png"
+  }
+}

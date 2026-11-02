@@ -1,6 +1,6 @@
 import {Hono} from 'hono';
 import {randomBytes,createHash} from 'node:crypto';
-import {parseObservation} from '../lib/vision.mjs';
+import {parseObservation} from '../lib/integrations/vision.mjs';
 import {body,equal} from '../lib/http/response.mjs';
 const digest=value=>createHash('sha256').update(value).digest('hex');
 const id=()=>randomBytes(24).toString('hex');

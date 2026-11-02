@@ -8,14 +8,14 @@ Planned at `2d23cf8` plus the full uncommitted workspace on 2026-10-26.
 Separate anonymous client rate limits behind Caddy. The current boundary permits a commerce or identity outcome inconsistent with the operator/buyer intent described below.
 
 ## Current state and drift check
-Repository: /Users/area/live-shopping-companion. server.mjs:284-298 chooses session.id || req.socket.remoteAddress for anonymous sign-in, with 60/minute. deploy/Caddyfile:6 reverse-proxies all buyers from loopback. lib/runtime.mjs localAdminRequest rejects all forwarding headers and must remain restrictive.
-Run `git diff --stat 2d23cf8..HEAD -- lib/runtime.mjs server.mjs deploy/Caddyfile docs/production.md .env.example tests/runtime.test.mjs tests/server.test.mjs tests/production-http.test.mjs` and `git diff -- lib/runtime.mjs server.mjs deploy/Caddyfile docs/production.md .env.example tests/runtime.test.mjs tests/server.test.mjs tests/production-http.test.mjs`. The baseline explicitly includes dirty/untracked work copied into the executor worktree; compare these anchors before editing and stop on mismatch. Preserve all existing changes.
+Repository: /Users/area/live-shopping-companion. server.mjs:284-298 chooses session.id || req.socket.remoteAddress for anonymous sign-in, with 60/minute. deploy/Caddyfile:6 reverse-proxies all buyers from loopback. lib/platform/runtime.mjs localAdminRequest rejects all forwarding headers and must remain restrictive.
+Run `git diff --stat 2d23cf8..HEAD -- lib/platform/runtime.mjs server.mjs deploy/Caddyfile docs/dev/content/operations/production.md .env.example tests/runtime.test.mjs tests/server.test.mjs tests/production-http.test.mjs` and `git diff -- lib/platform/runtime.mjs server.mjs deploy/Caddyfile docs/dev/content/operations/production.md .env.example tests/runtime.test.mjs tests/server.test.mjs tests/production-http.test.mjs`. The baseline explicitly includes dirty/untracked work copied into the executor worktree; compare these anchors before editing and stop on mismatch. Preserve all existing changes.
 
 ## Conventions
-Plain Node ES modules, single-host SQLite, integer USD cents, synchronous authoritative engine transitions and explicit thrown Error messages. Match node:test and strict assertions in tests/commerce.test.mjs and tests/runtime.test.mjs. Provider transports are fixture-mocked; never use real funds, account messages or credentials. docs/architecture.md states that buyer identity and server-side order ownership are authoritative. Keep local admin access distinct from buyer identity.
+Plain Node ES modules, single-host SQLite, integer USD cents, synchronous authoritative engine transitions and explicit thrown Error messages. Match node:test and strict assertions in tests/commerce.test.mjs and tests/runtime.test.mjs. Provider transports are fixture-mocked; never use real funds, account messages or credentials. docs/dev/content/developers/architecture.md states that buyer identity and server-side order ownership are authoritative. Keep local admin access distinct from buyer identity.
 
 ## Scope
-Only these files may change: lib/runtime.mjs server.mjs deploy/Caddyfile docs/production.md .env.example tests/runtime.test.mjs tests/server.test.mjs tests/production-http.test.mjs.
+Only these files may change: lib/platform/runtime.mjs server.mjs deploy/Caddyfile docs/dev/content/operations/production.md .env.example tests/runtime.test.mjs tests/server.test.mjs tests/production-http.test.mjs.
 All other source files, dependencies, storage layout, unrelated UI, marketing and design are out of scope. Report if another file is required.
 
 ## Git workflow

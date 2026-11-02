@@ -5,18 +5,12 @@ function setup() {
   const spoken = [], utterances=[], classes = new Map();
   const rig={src:"/characters/munny-idle.svg",getAttribute(){return this.src;},setAttribute(name,value){this.src=value;}};
   const custom={...rig,src:"/media/custom.png"};
-  globalThis.window = {
-    speechSynthesis: {
-      cancel() {},
-      speak: (u) => {
-        spoken.push(u.text);utterances.push(u);
-      },
-    },
-  };
-  globalThis.SpeechSynthesisUtterance = class {
-    constructor(text) {
-      this.text = text;
-    }
+  globalThis.window = {};
+  globalThis.Audio=class {
+    constructor(url){this.url=url;utterances.push(this);spoken.push('vn-message');}
+    play(){return Promise.resolve();}
+    pause(){}
+    removeAttribute(){}
   };
   globalThis.document = { querySelectorAll:()=>[rig,custom], body: { dataset: {}, classList: { toggle:(name,value)=>classes.set(name,value) } } };
   const player = new CohostPlayer();
@@ -39,7 +33,7 @@ test("cohost ignores initial history and speaks each fresh event once", () => {
     s.companion = { ...s.companion, eventId: "new", message: "New bid!" };
     player.update(s);
     player.update(s);
-    assert.deepEqual(spoken, ["New bid!"]);
+    assert.deepEqual(spoken, ["vn-message"]);
     s.companion = {
       ...s.companion,
       eventId: "stale",
@@ -68,13 +62,13 @@ test("cohost countdown resets after a clock extension", t => {
     };
     player.update(s);
     player.update(s);
-    assert.deepEqual(spoken, ["3"]);
+    assert.equal(spoken.length,1);
     s.auction.endsAt = Date.now() + 2000;
     player.update(s);
-    assert.equal(spoken.at(-1), "2");
+    assert.equal(spoken.length,2);
     s.auction.endsAt=now+10000;player.update(s);
     now+=7500;player.update(s);player.update(s);
-    assert.deepEqual(spoken,['3','2','3']);
+    assert.equal(spoken.length,3);
   } finally {
     cleanup();
   }
@@ -105,5 +99,22 @@ test("avatar-only mode never speaks and reduced motion is reflected", () => {
 
 test('mouth follows utterance lifecycle and leaves custom avatars unchanged',()=>{
  const {player,utterances,rig,custom,cleanup}=setup();
- try{player.arm(true);player.speak('Hello');assert.equal(rig.src,'/characters/munny-idle.svg');utterances[0].onstart();assert.equal(rig.src,'/characters/munny-idle.svg#talk');assert.equal(custom.src,'/media/custom.png');utterances[0].onend();assert.equal(rig.src,'/characters/munny-idle.svg');player.speak('Again');utterances[1].onstart();player.arm(false);assert.equal(rig.src,'/characters/munny-idle.svg');}finally{cleanup();}
+ try{player.arm(true);player.speak('Hello');assert.equal(rig.src,'/characters/munny-idle.svg');utterances[0].onplaying();assert.equal(rig.src,'/characters/munny-idle.svg#talk');assert.equal(custom.src,'/media/custom.png');utterances[0].onended();assert.equal(rig.src,'/characters/munny-idle.svg');player.speak('Again');utterances[1].onplaying();player.arm(false);assert.equal(rig.src,'/characters/munny-idle.svg');}finally{cleanup();}
+});
+
+test('workspace stays silent on Studio login and does not replay hidden conversation messages',()=>{
+ const {player,spoken,utterances,rig,cleanup}=setup();
+ const state={companion:{enabled:true,voice:true,message:'Welcome back'}};
+ try{
+  player.updateWorkspace(state,false);assert.equal(spoken.length,0);
+  state.companion.message='An auction update';player.updateWorkspace(state,false);
+  player.updateWorkspace(state,true);assert.equal(spoken.length,0);
+  state.companion.message='Fresh visible reply';player.updateWorkspace(state,true);assert.equal(spoken.length,1);
+  utterances[0].onplaying();assert.equal(rig.src,'/characters/munny-idle.svg#talk');
+  player.updateWorkspace(state,false);assert.equal(player.audio,null);assert.equal(rig.src,'/characters/munny-idle.svg');
+  state.companion.message='Hidden reply';player.updateWorkspace(state,false);player.updateWorkspace(state,true);assert.equal(spoken.length,1);
+  state.companion.message='Disconnected reply';player.updateWorkspace(state,true,false);assert.equal(spoken.length,1);
+  player.updateWorkspace(state,true,true);assert.equal(spoken.length,1);
+  state.companion.voice=false;state.companion.message='Muted';player.updateWorkspace(state,true);assert.equal(spoken.length,1);
+ }finally{cleanup();}
 });

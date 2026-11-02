@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {emptyWorkspace} from '../lib/workspace.mjs';
+import {emptyWorkspace} from '../lib/commerce/workspace.mjs';
 import {inventoryPage} from '../public/workspace/inventory.js';
 import {ordersPage} from '../public/workspace/orders.js';
 import {settingsPage} from '../public/workspace/settings.js';
@@ -20,7 +20,10 @@ test('studio and product dialogs read current state on every invocation',()=>{
  let s=state();const studio=createStudioViews({getState:()=>s,clock:()=>'',companionCard:noop,tutorialStatus:()=>({})});
  assert.match(studio.studio(),/Add your first lot/);
  s={...s,products:[{id:'p',title:'New product',quantity:1,price:100,art:'card'}],show:{title:'New title'},activity:[],bids:[],chat:[]};
- assert.match(studio.studio(),/New title/);assert.match(studio.studio(),/New product/);
+ assert.match(studio.studio(),/welcome-panel/);assert.match(studio.studio(),/data-tab="show"/);
+ assert.doesNotMatch(studio.studio(),/auction-panel/);
+ assert.match(studio.showPage(),/New title/);assert.match(studio.showPage(),/New product/);
+ assert.doesNotMatch(studio.showPage(),/welcome-panel/);
  let markup='';const form={};const $=selector=>selector==='#start-form'?form:null;
  const dialog=createProductDialogs({getState:()=>s,getToken:noop,$,modal:html=>markup=html,api:noop,toast:noop,fetch:noop});
  dialog.startDialog('p');assert.match(markup,/New product/);s.products[0].title='Updated product';dialog.startDialog('p');assert.match(markup,/Updated product/);
@@ -63,3 +66,21 @@ test('settings groups branded connections and moves detailed controls into dedic
  assert.match(settingsPanel(s,'stream'),/id="settings-widget-preset"/);assert.match(settingsPanel(s,'stream'),/data-action="copy-widget"/);
  assert.throws(()=>settingsPanel(s,'unknown'),/Unknown/);
 });
+
+
+test('Your show has a distinct active navigation destination',async()=>{
+ const {workspaceNavigation}=await import('../public/workspace-navigation.js');
+ const html=workspaceNavigation({tab:'show',twitch:{},brand:''});
+ assert.match(html,/data-tab="show" aria-current="page"/);assert.match(html,/>Your show<\/span>/);
+});
+test('practice reference scans appear for exact sample identities without replacing seller images',async()=>{
+ const {visual,productDescription}=await import('../public/shared/presenters.js');
+ const sample={id:'p1',title:'Charizard ex · 151 #199/165',practiceOnly:true,art:'card',description:'Text-only practice listing; no physical item offered.'};
+ assert.match(visual(sample),/src="\/demo\/cards\/sv3pt5-199.png"/);
+ assert.match(productDescription(sample),/Reference card scan/);
+ assert.match(visual({...sample,image:'/uploads/owned.jpg'}),/owned.jpg/);
+ assert.doesNotMatch(visual({...sample,practiceOnly:false}),/demo\/cards/);
+ assert.doesNotMatch(visual({...sample,title:'My own card'}),/demo\/cards/);
+});
+
+test('card format distinguishes raw singles and unverified slab claims', async()=>{const {cardFormat}=await import('../public/shared/presenters.js');assert.equal(cardFormat({art:'card',category:'Pokémon / singles'}),'RAW');assert.equal(cardFormat({category:'Pokémon / slabs',condition:'Demo · grade unverified',title:'PSA 10'}),'GRADED / UNVERIFIED');assert.equal(cardFormat({title:'PSA 9',art:'card'}),'GRADED');assert.equal(cardFormat({category:'Accessories'}),'');});

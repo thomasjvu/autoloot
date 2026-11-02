@@ -1,28 +1,29 @@
-import {SolanaCheckout} from './lib/solana-checkout.mjs';
-import {CodexConnection} from './lib/codex-connection.mjs';
+import {featureFlags} from './lib/commerce/features.mjs';
+import {SolanaCheckout} from './lib/integrations/solana-checkout.mjs';
+import {CodexConnection} from './lib/integrations/codex-connection.mjs';
 import {createRequestPolicy} from './lib/http/policy.mjs';
 import {createEventHub} from './lib/http/events.mjs';
 import {createProjections} from './lib/http/projections.mjs';
-import {createHostedNodeAuth} from './lib/hosted-node-auth.mjs';
-import {AdminAuth} from './lib/admin-auth.mjs';
+import {createHostedNodeAuth} from './lib/auth/hosted-node-auth.mjs';
+import {AdminAuth} from './lib/auth/admin-auth.mjs';
 
-import {RipSession} from './lib/rip-session.mjs';
-import {Vision} from './lib/vision.mjs';
+import {RipSession} from './lib/commerce/rip-session.mjs';
+import {Vision} from './lib/integrations/vision.mjs';
 const vision=new Vision();
-import {Shipping} from './lib/shipping.mjs';
-import { runtimeConfig, localAdminRequest } from './lib/runtime.mjs';
+import {Shipping} from './lib/integrations/shipping.mjs';
+import { runtimeConfig, localAdminRequest } from './lib/platform/runtime.mjs';
 const runtime = runtimeConfig();
 import {createAdaptorServer} from '@hono/node-server';
 import {createHttpApp} from './lib/http/app.mjs';
 import {nodeRequestContext} from './lib/http/node-platform.mjs';
 import {createNodeAssets} from './lib/http/node-assets.mjs';
-import {codexReply} from './lib/companion.mjs';
-import { NftDelivery, walletBridge } from "./lib/nft.mjs";
-import { Storage } from "./lib/storage.mjs";
+import {codexReply} from './lib/integrations/companion.mjs';
+import { NftDelivery, walletBridge } from "./lib/commerce/nft.mjs";
+import { Storage } from "./lib/persistence/storage.mjs";
 process.umask(0o077);
-import {emptyWorkspace} from "./lib/workspace.mjs";
-import { Metadata } from "./lib/rip.mjs";
-import { Catalog } from "./lib/catalog.mjs";
+import {emptyWorkspace} from "./lib/commerce/workspace.mjs";
+import { Metadata } from "./lib/integrations/rip.mjs";
+import { Catalog } from "./lib/integrations/catalog.mjs";
 const metadata = new Metadata();
 const catalog = new Catalog(metadata);
 let rip;
@@ -34,10 +35,10 @@ import {
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomBytes } from "node:crypto";
-import { Engine, seed } from "./lib/engine.mjs";
-import { Twitch } from "./lib/twitch.mjs";
-import { Runs } from "./lib/runs.mjs";
-import { Payments } from "./lib/payments.mjs";
+import { Engine, seed } from "./lib/commerce/engine.mjs";
+import { Twitch } from "./lib/integrations/twitch.mjs";
+import { Runs } from "./lib/commerce/runs.mjs";
+import { Payments } from "./lib/integrations/payments.mjs";
 const root = fileURLToPath(new URL(".", import.meta.url));
 const data = process.env.DATA_DIR || join(root, ".data");
 mkdirSync(data, { recursive: true, mode: 0o700 });
@@ -60,6 +61,7 @@ function broadcast(){events.broadcast();}
 let stateFor;
 const events=createEventHub({stateFor:role=>stateFor(role),adminValid:req=>adminAuth.valid(req)});
 engine = new Engine(initial, {
+  features:featureFlags(process.env),
   save: (s) => storage.save(s),
   onChange: broadcast,
 });
@@ -160,7 +162,8 @@ const codexConnection=new CodexConnection();
 let closing=false;
 const policy=createRequestPolicy({runtime,auth:adminAuth,adminToken:admin,agentToken:()=>process.env.NFT_AGENT_TOKEN,localHost,storage,engine,twitch,broadcast,isClosing:()=>closing});
 const platform=createNodeAssets({root,imageDir,twitchConfigFile,shippingConfigFile});
-const app=createHttpApp({...(hostedAuth?{hosted:true,authRoutes:hostedAuth.routes,canStartStreamerLogin:()=>true}:{}),policy,requestContext:nodeRequestContext,...platform,auth:adminAuth,events,admin,port,base,engine,twitch,payments,nft,shipping,runs,catalog,rip,metadata,stateFor,localHost,broadcast,announce,companion,codexConnection,oauthHandoffs,storage,solanaCheckout,companionRuntime:{reply:codexReply}});
+const localDocsOrigin=process.env.NODE_ENV!=='production'&&!runtime.hosted&&['localhost','127.0.0.1','[::1]'].includes(new URL(base).hostname)?'http://localhost:3333':undefined;
+const app=createHttpApp({docsOrigin:localDocsOrigin,...(hostedAuth?{hosted:true,authRoutes:hostedAuth.routes,canStartStreamerLogin:()=>true}:{}),policy,requestContext:nodeRequestContext,...platform,auth:adminAuth,events,admin,port,base,engine,twitch,payments,nft,shipping,runs,catalog,rip,metadata,stateFor,localHost,broadcast,announce,companion,codexConnection,oauthHandoffs,storage,solanaCheckout,companionRuntime:{reply:codexReply}});
 const server=createAdaptorServer({fetch:app.fetch,overrideGlobalObjects:false,autoCleanupIncoming:false});
 server.requestTimeout=30000;
 server.headersTimeout=10000;

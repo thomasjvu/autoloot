@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {Engine,seed} from '../lib/engine.mjs';
-import {Shipping} from '../lib/shipping.mjs';
-import {Payments} from '../lib/payments.mjs';
-import {previewImport,pirateShipCsv} from '../lib/csv.mjs';
+import {Engine,seed} from '../lib/commerce/engine.mjs';
+import {Shipping} from '../lib/integrations/shipping.mjs';
+import {Payments} from '../lib/integrations/payments.mjs';
+import {previewImport,pirateShipCsv} from '../lib/commerce/csv.mjs';
 const recipient={name:'Buyer',line1:'1 Main St',city:'Boston',state:'MA',postal_code:'02110',country:'US'};
 const parcel={length:'7',width:'5',height:'2',weight:'8'};
 function fixture({fail=false,save=()=>{},gate=null}={}){

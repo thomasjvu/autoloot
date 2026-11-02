@@ -1,0 +1,8 @@
+01 - Shop entrance - layered 18s duration frames 540
+V1 1 clips
+V2 1 clips
+V3 1 clips
+V4 1 clips
+V5 1 clips
+02 - Submission assembly - 2m45s duration frames 4949
+V1 2 clips

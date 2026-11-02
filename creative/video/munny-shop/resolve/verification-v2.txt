@@ -1,0 +1,7 @@
+Intro: 540 frames
+V1: 1 clip
+V2: 1 clip
+V3: 1 clip
+V4: 1 clip
+V5: 1 clip
+Submission: 4950 frames

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createAdminRoutes} from '../lib/admin-routes.mjs';
+import {createAdminRoutes} from '../lib/auth/admin-routes.mjs';
 import {routeApp,post} from './helpers/hono.mjs';
 test('logout leaves other authenticated SSE sessions and viewer streams open',async()=>{
   const current={headers:{cookie:'current'},socket:{}},other={headers:{cookie:'other'}};

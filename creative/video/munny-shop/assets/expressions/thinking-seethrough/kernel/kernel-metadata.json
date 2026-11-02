@@ -1,0 +1,15 @@
+{
+  "id": "thomasjvu/autoloot-munny-thinking-see-through",
+  "title": "Autoloot Munny Thinking See-through",
+  "code_file": "run_gpu.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "thomasjvu/autoloot-munny-thinking-expression-source"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

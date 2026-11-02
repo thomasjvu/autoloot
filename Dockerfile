@@ -4,7 +4,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY public ./public
 COPY browser ./browser
-COPY scripts/build-wallet.mjs ./scripts/build-wallet.mjs
+COPY scripts/build/wallet.mjs ./scripts/build/wallet.mjs
 RUN npm run build:wallet && npm prune --omit=dev
 
 FROM node:22-bookworm-slim
@@ -16,7 +16,7 @@ COPY --from=build /app/public ./public
 COPY package.json server.mjs ./
 COPY lib ./lib
 COPY data/metadata-demo ./data/metadata-demo
-COPY scripts ./scripts
+COPY scripts/runtime ./scripts/runtime
 COPY deploy/container-entrypoint.sh ./deploy/container-entrypoint.sh
 RUN mkdir /data && chown node:node /data
 EXPOSE 4173

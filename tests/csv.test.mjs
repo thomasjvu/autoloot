@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {Engine,seed} from '../lib/engine.mjs';
-import {parseCsv,encodeCsv,previewImport,applyImport,fulfillmentCsv,pirateShipCsv} from '../lib/csv.mjs';
+import {Engine,seed} from '../lib/commerce/engine.mjs';
+import {parseCsv,encodeCsv,previewImport,applyImport,fulfillmentCsv,pirateShipCsv} from '../lib/commerce/csv.mjs';
 const fresh=()=>new Engine(seed());
 const inventory={kind:'inventory',csv:'sku,title,quantity,condition,price,buyNowPrice,image\r\nA,"Card, blue",2,Used,12.50,15.00,https://example.com/card.jpg'};
 const apply=(e,input)=>{const p=previewImport(e,input);assert.equal(p.valid,true,JSON.stringify(p.rows));applyImport(e,{...input,fingerprint:p.fingerprint});return p;};

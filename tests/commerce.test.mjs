@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import Stripe from "stripe";
-import { Engine, seed } from "../lib/engine.mjs";
-import { Payments } from "../lib/payments.mjs";
+import { Engine, seed } from "../lib/commerce/engine.mjs";
+import { Payments } from "../lib/integrations/payments.mjs";
 function fixture() {
   const e = new Engine(seed());
   e.setMode("live");

@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Engine, seed } from "../lib/engine.mjs";
-import { Twitch } from "../lib/twitch.mjs";
+import { Engine, seed } from "../lib/commerce/engine.mjs";
+import { Twitch } from "../lib/integrations/twitch.mjs";
 function setup() {
   const e = new Engine(seed());
   e.setMode("live");
@@ -215,4 +215,12 @@ test('an EventSub close before welcome rejects immediately', async t => {
   sockets[0].close();
   assert.match((await outcome).message, /closed before it was ready/);
   assert.equal(twitch.status.connected, false);
+});
+
+test('disabled Twitch commands are ignored before executing or sending replies',async()=>{
+ const {e,t,event,messages}=setup();
+ e.state.chatCommands={bid:false,register:false,lot:false,vote:false,enter:false};
+ for(const command of ['!bid 100','!register','!lot','!vote 1','!enter'])await t.onChat(event(command));
+ assert.equal(e.state.bids.length,0);assert.deepEqual(messages,[]);
+ e.state.chatCommands.lot=true;await t.onChat(event('!lot'));assert.equal(messages.length,1);
 });

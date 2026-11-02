@@ -28,7 +28,7 @@ test('credentials, hidden fields, modal and maximum forms are excluded; standalo
 });
 test('giveaway markup keys drafts to mode, generation, prize identity and recipient revision',()=>{
  const g=id=>({id,title:'Prize',mode:'demo',status:'drawn',winnerUserId:'u',winner:'winner',claimDeadline:999,claim:{status:'submitted',submittedAt:1,updatedAt:2},draws:[]});
- const html=giveawaysPage({mode:'demo',twitch:{},giveaway:g('a'),giveawayHistory:[g('b')]});assert.match(html,/data-draft-key="[^"<>]+"/);assert.match(html,/data-prize-dispatch="a" data-draft-key=/);assert.match(html,/data-prize-dispatch="b" data-draft-key=/);assert.ok(html.includes('&quot;new-giveaway&quot;'));
+ const html=giveawaysPage({features:{giveaways:true},mode:'demo',twitch:{},giveaway:g('a'),giveawayHistory:[g('b')]});assert.match(html,/data-draft-key="[^"<>]+"/);assert.match(html,/data-prize-dispatch="a" data-draft-key=/);assert.match(html,/data-prize-dispatch="b" data-draft-key=/);assert.ok(html.includes('&quot;new-giveaway&quot;'));
 });
 test('pending submission stays disabled across rerender, rejects duplicates and recovers after success or failure',async()=>{
  const oldDocument=globalThis.document,oldFormData=globalThis.FormData;

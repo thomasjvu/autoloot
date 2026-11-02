@@ -3,9 +3,8 @@
 </p>
 
 <h1 align="center">Autoloot</h1>
-<p align="center">Your stream. Your shop. Your pace.</p>
 
-![Autoloot — live selling with Munny](marketing/submission/autoloot-cover-hands-fixed.png)
+![Autoloot — live selling with Munny](creative/marketing/autoloot-cover-hands-fixed.png)
 
 A Twitch selling workspace for auctions, buy-now lots, inventory, and private buyer orders. **Munny**, your optional AI cohost, helps run the show.
 
@@ -33,19 +32,32 @@ npm start
 
 Open [localhost:4173](http://localhost:4173) and create your administrator account. To try a credential-free show, choose **Settings → Practice show → Load sample lots**.
 
-Copy `.env.example` to `.env` to configure integrations. The example enables production mode. Keep credentials and `.data/` private; one server owns one local SQLite data directory. Twitch, payments, shipping, and AI providers require your own accounts. Review the [deployment guide](docs/production.md) before live use.
+Copy `.env.example` to `.env` to configure integrations. The example enables production mode. Keep credentials and `.data/` private; one server owns one local SQLite data directory. Twitch, payments, shipping, and AI providers require your own accounts. Review the [deployment guide](docs/dev/content/operations/production.md) before live use.
 
 ## Deployment
 
-Use [deployment targets](dev-docs/content/developers/deployment.md) for Railway
+Use [deployment targets](docs/dev/content/developers/deployment.md) for Railway
 (Node with persistent SQLite), self-hosted Node, or Cloudflare Workers. Hosted
 Node requires `AUTOLOOT_NODE_MODE=hosted` and a configured Twitch owner.
 
 ## Documentation
 
-Start with the [documentation index](docs/README.md) for setup, selling, payments, shipping, and development. The separate local `documentation/` Papers checkout contains the user guides; developer references are maintained in `dev-docs/`.
+The repository separates the marketing site (`apps/marketing/`), shared backend
+code (`lib/`), shipped browser assets (`public/` and `browser/`), creative
+production (`creative/`), and purpose-based tooling (`scripts/`).
 
-See [release checks](docs/release.md) before shipping and [marketing deployment](marketing/README.md) for the standalone site.
+All documentation lives in [`docs/`](docs/README.md):
+
+- [`docs/user/`](docs/user/README.md): setup, selling, bidding, payments and shipping.
+- [`docs/dev/`](docs/dev/README.md): architecture, APIs, deployment, operations and audits.
+- [`docs/dev/design.md`](docs/dev/design.md): the canonical design system.
+
+Guide sources, navigation and branding are tracked in Git. Papers runtimes and
+build output stay ignored under `docs/.papers/`. Preview with `npm run docs:dev`
+(port 3333) or `npm run dev-docs:dev` (port 3334).
+
+See [release checks](docs/dev/content/developers/release.md) before shipping and
+[marketing deployment](apps/marketing/README.md) for the standalone site.
 
 ```sh
 npm run check

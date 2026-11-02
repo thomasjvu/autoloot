@@ -1,0 +1,32 @@
+{
+  "joyful": {
+    "master": "joyful-master.png",
+    "status": "See-through complete; 17 color layers; fitted face visually reviewed",
+    "note": "Explicit color PSD extraction; semantic face order corrected; original body, hair, ears and shoes retained. Closed mouth is a registered drawn pose.",
+    "kernel": "https://www.kaggle.com/code/thomasjvu/autoloot-munny-joyful-see-through",
+    "rig": [
+      "../munny-joyful-open.svg",
+      "../munny-joyful-closed.svg"
+    ]
+  },
+  "surprised": {
+    "master": "surprised-master.png",
+    "status": "See-through complete; 21 color layers; fitted face visually reviewed",
+    "note": "Explicit color PSD extraction; semantic face order corrected; original body, hair, ears and shoes retained. Closed mouth is a registered drawn pose.",
+    "kernel": "https://www.kaggle.com/code/thomasjvu/autoloot-munny-surprised-see-through",
+    "rig": [
+      "../munny-surprised-open.svg",
+      "../munny-surprised-closed.svg"
+    ]
+  },
+  "thinking": {
+    "master": "thinking-master.png",
+    "status": "See-through complete; 21 color layers; fitted face visually reviewed",
+    "note": "Explicit color PSD extraction; semantic face order corrected; original body, hair, ears and shoes retained. Closed mouth is a registered drawn pose. Thinking open mouth is a registered drawn pose.",
+    "kernel": "https://www.kaggle.com/code/thomasjvu/autoloot-munny-thinking-see-through",
+    "rig": [
+      "../munny-thinking-open.svg",
+      "../munny-thinking-closed.svg"
+    ]
+  }
+}

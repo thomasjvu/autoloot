@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {Engine,seed} from '../lib/engine.mjs';
-import {buyerPrizes,publicGiveaway} from '../lib/giveaways.mjs';
+import {Engine,seed} from '../lib/commerce/engine.mjs';
+import {buyerPrizes,publicGiveaway} from '../lib/commerce/giveaways.mjs';
 const recipient={name:'Winner',line1:'1 Main St',city:'Boston',state:'MA',postal_code:'02110',country:'US'};
-function fixture(mode='demo'){let now=1000;const state=seed();state.mode=mode;const e=new Engine(state,{now:()=>now}),session={id:'winner',login:'renamed',kind:mode==='live'?'twitch':'demo'};e.openGiveaway({title:'Prize',rules:'Free, US, seven days',duration:60});e.enterGiveaway({userId:session.id,username:'Original',source:mode==='live'?'twitch':'demo'});e.closeGiveaway();e.drawGiveaway();return {e,session,setNow:v=>now=v};}
+function fixture(mode='demo'){let now=1000;const state=seed();state.mode=mode;const e=new Engine(state,{now:()=>now,features:{giveaways:true}}),session={id:'winner',login:'renamed',kind:mode==='live'?'twitch':'demo'};e.openGiveaway({title:'Prize',rules:'Free, US, seven days',duration:60});e.enterGiveaway({userId:session.id,username:'Original',source:mode==='live'?'twitch':'demo'});e.closeGiveaway();e.drawGiveaway();return {e,session,setNow:v=>now=v};}
 test('archive retains frozen roster, stable winner, claim and draw evidence',()=>{
  const {e,session}=fixture();const g=e.state.giveaway;e.claimGiveaway({id:g.id,address:recipient,confirmed:true},session);const saved=structuredClone(g);e.openGiveaway({title:'Next',rules:'Free',duration:60});assert.deepEqual(e.state.giveawayHistory[0],saved);assert.equal(buyerPrizes(e.state,session,e.now())[0].id,saved.id);e.dispatchGiveaway({id:saved.id,tracking:'USPS 123',confirmed:true});assert.equal(e.state.giveawayHistory[0].claim.status,'dispatched');assert.equal(e.state.orders.length,0);
 });

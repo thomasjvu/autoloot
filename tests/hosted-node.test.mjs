@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {runtimeConfig} from '../lib/runtime.mjs';
-import {createHostedNodeAuth} from '../lib/hosted-node-auth.mjs';
-import {validateWorkerProduction} from '../scripts/worker-production.mjs';
+import {runtimeConfig} from '../lib/platform/runtime.mjs';
+import {createHostedNodeAuth} from '../lib/auth/hosted-node-auth.mjs';
+import {validateWorkerProduction} from '../scripts/deploy/worker-production.mjs';
 import {readFileSync} from 'node:fs';
 
 test('hosted Node requires explicit owner, credentials, persistent storage and HTTPS',()=>{

@@ -1,5 +1,7 @@
 // Shared presentation rules; these never authorize bids or change auction state.
 export const widgetPresets = {
+  'chalk-auction': {label:'Chalkboard auction',width:960,height:500,type:'auction',theme:'chalk'},
+  'chalk-vote': {label:'Chalkboard vote',width:1000,height:550,type:'vote',theme:'chalk'},
   pull: {label:'Pull spotlight',width:640,height:200},
   ribbon: {label:'Recent pulls',width:1280,height:200},
   full: { label: 'Full show', width: 1280, height: 720 },

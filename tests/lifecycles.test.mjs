@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {checkoutState,checkoutHeld,refundState,refundHeld,transition,shipmentGraph,deliveryGraph,runGraph,runPhaseGraph} from '../lib/lifecycles.mjs';
+import {checkoutState,checkoutHeld,refundState,refundHeld,transition,shipmentGraph,deliveryGraph,runGraph,runPhaseGraph} from '../lib/commerce/lifecycles.mjs';
 
 test('checkout evidence preserves holds including zero timestamps and processing',()=>{
  for(const [fields,state,held] of [

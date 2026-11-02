@@ -1,6 +1,6 @@
 # Maintainability audit — October 27, 2026
 
-Audited commit: 5a5190b. Read-only runtime-source review; no implementation changes. Scope: current server composition, HTTP policy/routes/DTO/body/SSE seams, frontend page/controller/connection boundaries, CSS ownership and verification, critical-state/test coverage, CI/dependency posture and architecture/onboarding docs. Hotspot-weighted review; not an exhaustive provider/marketing/Python/model-quality audit. No browser automation or real provider calls.
+Audited commit: 5a5190b. Read-only runtime-source review; no implementation changes. Scope: current server composition, HTTP policy/routes/DTO/body/SSE seams, frontend page/controller/connection boundaries, CSS ownership and verification, critical-state/test coverage, CI/dependency posture and architecture/onboarding docs. Hotspot-weighted review; not an exhaustive provider/apps/marketing/Python/model-quality audit. No browser automation or real provider calls.
 
 ## Verdict
 
@@ -27,7 +27,7 @@ Architecture is maintainable enough for continued scoped development. Do not sta
 
 ### P3 — Make lexical binding validation repeatable in CI
 
-- Evidence: scripts/check.mjs:11 checks syntax;14–20 uses regex to check local module paths. This does not detect unresolved variables, temporal-dead-zone shadowing, or missing named exports. .forgejo/workflows/check.yml runs this check plus the Node/demo suites.
+- Evidence: scripts/check/app.mjs:11 checks syntax;14–20 uses regex to check local module paths. This does not detect unresolved variables, temporal-dead-zone shadowing, or missing named exports. .forgejo/workflows/check.yml runs this check plus the Node/demo suites.
 - Impact: extraction mistakes can survive syntax validation if their runtime branch lacks coverage. This refactor already required manual lexical review and a clock-shadowing correction.
 - Fix sketch: add a small maintained lint/binding check (or checked-in equivalent) with browser/Node environments and tests; use AST-based import analysis if expanding graph enforcement. Keep runtime branch regression tests as well.
 - Effort S/M; fix risk LOW; confidence HIGH. Current syntax/import/cycle tests remain useful; this finding concerns their verification scope, not a current unresolved binding claim.
@@ -47,7 +47,7 @@ Architecture is maintainable enough for continued scoped development. Do not sta
 ## Considered, not blockers
 
 - Engine725 lines / app637 lines: still sizeable, but cohesive enough with current extracted seams; extract further when a concrete change needs it, not for a line-count target.
-- Full snapshot persistence/projection grows with retained orders/history (lib/storage.mjs:123–132, lib/http/projections.mjs:43–46). Track volume and latency before changing the local single-streamer persistence model; not a proven current performance failure.
+- Full snapshot persistence/projection grows with retained orders/history (lib/persistence/storage.mjs:123–132, lib/http/projections.mjs:43–46). Track volume and latency before changing the local single-streamer persistence model; not a proven current performance failure.
 - Separate ignored documentation checkout is explicitly documented in README; packaging docs is a release/distribution task, not hidden refactor breakage.
 - CSS source fingerprint requires deliberate updates for future design changes; rendered regression coverage should supplement it when browser testing is available.
 

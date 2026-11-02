@@ -1,4 +1,4 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {defaultProfile,validateProfile,companionProfile} from '../lib/companion-profile.mjs';
+import test from 'node:test';import assert from 'node:assert/strict';import {defaultProfile,validateProfile,companionProfile} from '../lib/integrations/companion-profile.mjs';
 test('companion profile validates display preferences and allows only local uploaded avatars',()=>{
  assert.deepEqual(companionProfile({}),defaultProfile);
  const profile=validateProfile({name:'Pip',tone:'calm',instructions:'Short replies',avatar:'/media/'+'a'.repeat(32)+'.png'});assert.equal(profile.name,'Pip');

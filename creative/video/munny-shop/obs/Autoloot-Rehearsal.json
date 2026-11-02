@@ -1,0 +1,770 @@
+{
+  "name": "Autoloot Rehearsal",
+  "current_scene": "01 - Welcome to Autoloot",
+  "current_program_scene": "01 - Welcome to Autoloot",
+  "scene_order": [
+    {
+      "name": "01 - Welcome to Autoloot"
+    },
+    {
+      "name": "02 - Live auction"
+    },
+    {
+      "name": "03 - Chat chooses the lot"
+    },
+    {
+      "name": "04 - Be right back"
+    },
+    {
+      "name": "05 - Full video rehearsal"
+    }
+  ],
+  "sources": [
+    {
+      "prev_ver": 520093696,
+      "name": "Munny - welcome and babble",
+      "uuid": "350295f9-0a41-4179-ae0d-b98d8b592b85",
+      "id": "browser_source",
+      "versioned_id": "browser_source",
+      "settings": {
+        "url": "http://127.0.0.1:4188/stream/shop.html?autoplay=1&sound=1",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "fps_custom": true,
+        "shutdown": true,
+        "restart_when_active": true,
+        "reroute_audio": true,
+        "css": "body { margin: 0px auto; overflow: hidden; }"
+      },
+      "mixers": 63,
+      "sync": 0,
+      "flags": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "enabled": true,
+      "muted": false,
+      "push-to-mute": false,
+      "push-to-mute-delay": 0,
+      "push-to-talk": false,
+      "push-to-talk-delay": 0,
+      "hotkeys": {},
+      "deinterlace_mode": 0,
+      "deinterlace_field_order": 0,
+      "monitoring_type": 0,
+      "private_settings": {}
+    },
+    {
+      "prev_ver": 520093696,
+      "name": "Munny shop - live room",
+      "uuid": "4bf006ca-758c-4d96-b48d-734e47c430a7",
+      "id": "browser_source",
+      "versioned_id": "browser_source",
+      "settings": {
+        "url": "http://127.0.0.1:4188/stream/shop.html?mode=live&expression=joyful&sound=1",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "fps_custom": true,
+        "shutdown": true,
+        "restart_when_active": true,
+        "reroute_audio": true,
+        "css": "body { margin: 0px auto; overflow: hidden; }"
+      },
+      "mixers": 63,
+      "sync": 0,
+      "flags": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "enabled": true,
+      "muted": false,
+      "push-to-mute": false,
+      "push-to-mute-delay": 0,
+      "push-to-talk": false,
+      "push-to-talk-delay": 0,
+      "hotkeys": {},
+      "deinterlace_mode": 0,
+      "deinterlace_field_order": 0,
+      "monitoring_type": 0,
+      "private_settings": {}
+    },
+    {
+      "prev_ver": 520093696,
+      "name": "Board - live content backing",
+      "uuid": "b7eaf2bc-8363-4208-a639-121fb46eb747",
+      "id": "color_source_v3",
+      "versioned_id": "color_source_v3",
+      "settings": {
+        "color": 4280822053,
+        "width": 920,
+        "height": 490
+      },
+      "mixers": 0,
+      "sync": 0,
+      "flags": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "enabled": true,
+      "muted": false,
+      "push-to-mute": false,
+      "push-to-mute-delay": 0,
+      "push-to-talk": false,
+      "push-to-talk-delay": 0,
+      "hotkeys": {},
+      "deinterlace_mode": 0,
+      "deinterlace_field_order": 0,
+      "monitoring_type": 0,
+      "private_settings": {}
+    },
+    {
+      "prev_ver": 520093696,
+      "name": "Autoloot - public auction widget",
+      "uuid": "a2f4cb9e-8d87-48a5-864b-223bf795151a",
+      "id": "browser_source",
+      "versioned_id": "browser_source",
+      "settings": {
+        "url": "http://127.0.0.1:4173/overlay?widget=chalk-auction",
+        "width": 960,
+        "height": 500,
+        "fps": 30,
+        "fps_custom": true,
+        "shutdown": true,
+        "restart_when_active": true,
+        "reroute_audio": true,
+        "css": "body{margin:0;overflow:hidden}"
+      },
+      "mixers": 0,
+      "sync": 0,
+      "flags": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "enabled": true,
+      "muted": false,
+      "push-to-mute": false,
+      "push-to-mute-delay": 0,
+      "push-to-talk": false,
+      "push-to-talk-delay": 0,
+      "hotkeys": {},
+      "deinterlace_mode": 0,
+      "deinterlace_field_order": 0,
+      "monitoring_type": 0,
+      "private_settings": {}
+    },
+    {
+      "prev_ver": 520093696,
+      "name": "Autoloot - public vote widget",
+      "uuid": "16736096-a8d4-4301-b3d0-0e3c4c21d59e",
+      "id": "browser_source",
+      "versioned_id": "browser_source",
+      "settings": {
+        "url": "http://127.0.0.1:4173/overlay?widget=chalk-vote",
+        "width": 1000,
+        "height": 550,
+        "fps": 30,
+        "fps_custom": true,
+        "shutdown": true,
+        "restart_when_active": true,
+        "reroute_audio": true,
+        "css": "body{margin:0;overflow:hidden}"
+      },
+      "mixers": 0,
+      "sync": 0,
+      "flags": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "enabled": true,
+      "muted": false,
+      "push-to-mute": false,
+      "push-to-mute-delay": 0,
+      "push-to-talk": false,
+      "push-to-talk-delay": 0,
+      "hotkeys": {},
+      "deinterlace_mode": 0,
+      "deinterlace_field_order": 0,
+      "monitoring_type": 0,
+      "private_settings": {}
+    },
+    {
+      "prev_ver": 520093696,
+      "name": "Munny - break screen",
+      "uuid": "51265500-035b-42c4-b5a8-1b96c2f70b5f",
+      "id": "browser_source",
+      "versioned_id": "browser_source",
+      "settings": {
+        "url": "http://127.0.0.1:4188/stream/shop.html?mode=brb&autoplay=1",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "fps_custom": true,
+        "shutdown": true,
+        "restart_when_active": true,
+        "reroute_audio": true,
+        "css": "body { margin: 0px auto; overflow: hidden; }"
+      },
+      "mixers": 0,
+      "sync": 0,
+      "flags": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "enabled": true,
+      "muted": false,
+      "push-to-mute": false,
+      "push-to-mute-delay": 0,
+      "push-to-talk": false,
+      "push-to-talk-delay": 0,
+      "hotkeys": {},
+      "deinterlace_mode": 0,
+      "deinterlace_field_order": 0,
+      "monitoring_type": 0,
+      "private_settings": {}
+    },
+    {
+      "prev_ver": 520093696,
+      "name": "Full video - rehearsal only",
+      "uuid": "61c383f1-9c3e-4922-a081-653e46530fd6",
+      "id": "ffmpeg_source",
+      "versioned_id": "ffmpeg_source",
+      "settings": {
+        "is_local_file": true,
+        "local_file": "/Users/area/live-shopping-companion/creative/video/munny-shop/renders/Autoloot-Munny-Practice-Demo-Final.mp4",
+        "looping": false,
+        "restart_on_activate": true,
+        "close_when_inactive": true,
+        "clear_on_media_end": false,
+        "hw_decode": true
+      },
+      "mixers": 63,
+      "sync": 0,
+      "flags": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "enabled": true,
+      "muted": false,
+      "push-to-mute": false,
+      "push-to-mute-delay": 0,
+      "push-to-talk": false,
+      "push-to-talk-delay": 0,
+      "hotkeys": {},
+      "deinterlace_mode": 0,
+      "deinterlace_field_order": 0,
+      "monitoring_type": 0,
+      "private_settings": {}
+    },
+    {
+      "prev_ver": 520093696,
+      "name": "01 - Welcome to Autoloot",
+      "uuid": "db631220-3bb6-46b8-b9ca-165ba07b5a5a",
+      "id": "scene",
+      "versioned_id": "scene",
+      "settings": {
+        "id_counter": 1,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "Munny - welcome and babble",
+            "source_uuid": "350295f9-0a41-4179-ae0d-b98d8b592b85",
+            "visible": true,
+            "locked": true,
+            "rot": 0.0,
+            "pos": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "scale": {
+              "x": 1.0,
+              "y": 1.0
+            },
+            "align": 5,
+            "bounds_type": 0,
+            "bounds_align": 0,
+            "bounds": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "id": 1,
+            "group_item_backup": false,
+            "scale_filter": "bilinear",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "show_transition": {
+              "duration": 0
+            },
+            "hide_transition": {
+              "duration": 0
+            }
+          }
+        ]
+      },
+      "mixers": 0,
+      "sync": 0,
+      "flags": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "enabled": true,
+      "muted": false,
+      "push-to-mute": false,
+      "push-to-mute-delay": 0,
+      "push-to-talk": false,
+      "push-to-talk-delay": 0,
+      "hotkeys": {},
+      "deinterlace_mode": 0,
+      "deinterlace_field_order": 0,
+      "monitoring_type": 0,
+      "private_settings": {}
+    },
+    {
+      "prev_ver": 520093696,
+      "name": "02 - Live auction",
+      "uuid": "5b88b05b-7b91-41bf-a21a-0bfa98ecbb97",
+      "id": "scene",
+      "versioned_id": "scene",
+      "settings": {
+        "id_counter": 3,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "Munny shop - live room",
+            "source_uuid": "4bf006ca-758c-4d96-b48d-734e47c430a7",
+            "visible": true,
+            "locked": true,
+            "rot": 0.0,
+            "pos": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "scale": {
+              "x": 1.0,
+              "y": 1.0
+            },
+            "align": 5,
+            "bounds_type": 0,
+            "bounds_align": 0,
+            "bounds": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "id": 1,
+            "group_item_backup": false,
+            "scale_filter": "bilinear",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "show_transition": {
+              "duration": 0
+            },
+            "hide_transition": {
+              "duration": 0
+            }
+          },
+          {
+            "name": "Board - live content backing",
+            "source_uuid": "b7eaf2bc-8363-4208-a639-121fb46eb747",
+            "visible": true,
+            "locked": true,
+            "rot": 0.0,
+            "pos": {
+              "x": 940.0,
+              "y": 125.0
+            },
+            "scale": {
+              "x": 1.0,
+              "y": 1.0
+            },
+            "align": 5,
+            "bounds_type": 0,
+            "bounds_align": 0,
+            "bounds": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "id": 2,
+            "group_item_backup": false,
+            "scale_filter": "bilinear",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "show_transition": {
+              "duration": 0
+            },
+            "hide_transition": {
+              "duration": 0
+            }
+          },
+          {
+            "name": "Autoloot - public auction widget",
+            "source_uuid": "a2f4cb9e-8d87-48a5-864b-223bf795151a",
+            "visible": true,
+            "locked": true,
+            "rot": 0.0,
+            "pos": {
+              "x": 970.0,
+              "y": 140.0
+            },
+            "scale": {
+              "x": 0.9,
+              "y": 0.9
+            },
+            "align": 5,
+            "bounds_type": 0,
+            "bounds_align": 0,
+            "bounds": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "id": 3,
+            "group_item_backup": false,
+            "scale_filter": "bilinear",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "show_transition": {
+              "duration": 0
+            },
+            "hide_transition": {
+              "duration": 0
+            }
+          }
+        ]
+      },
+      "mixers": 0,
+      "sync": 0,
+      "flags": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "enabled": true,
+      "muted": false,
+      "push-to-mute": false,
+      "push-to-mute-delay": 0,
+      "push-to-talk": false,
+      "push-to-talk-delay": 0,
+      "hotkeys": {},
+      "deinterlace_mode": 0,
+      "deinterlace_field_order": 0,
+      "monitoring_type": 0,
+      "private_settings": {}
+    },
+    {
+      "prev_ver": 520093696,
+      "name": "03 - Chat chooses the lot",
+      "uuid": "71e346e0-0960-46e9-b31c-8f71f9f6deda",
+      "id": "scene",
+      "versioned_id": "scene",
+      "settings": {
+        "id_counter": 3,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "Munny shop - live room",
+            "source_uuid": "4bf006ca-758c-4d96-b48d-734e47c430a7",
+            "visible": true,
+            "locked": true,
+            "rot": 0.0,
+            "pos": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "scale": {
+              "x": 1.0,
+              "y": 1.0
+            },
+            "align": 5,
+            "bounds_type": 0,
+            "bounds_align": 0,
+            "bounds": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "id": 1,
+            "group_item_backup": false,
+            "scale_filter": "bilinear",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "show_transition": {
+              "duration": 0
+            },
+            "hide_transition": {
+              "duration": 0
+            }
+          },
+          {
+            "name": "Board - live content backing",
+            "source_uuid": "b7eaf2bc-8363-4208-a639-121fb46eb747",
+            "visible": true,
+            "locked": true,
+            "rot": 0.0,
+            "pos": {
+              "x": 940.0,
+              "y": 125.0
+            },
+            "scale": {
+              "x": 1.0,
+              "y": 1.0
+            },
+            "align": 5,
+            "bounds_type": 0,
+            "bounds_align": 0,
+            "bounds": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "id": 2,
+            "group_item_backup": false,
+            "scale_filter": "bilinear",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "show_transition": {
+              "duration": 0
+            },
+            "hide_transition": {
+              "duration": 0
+            }
+          },
+          {
+            "name": "Autoloot - public vote widget",
+            "source_uuid": "16736096-a8d4-4301-b3d0-0e3c4c21d59e",
+            "visible": true,
+            "locked": true,
+            "rot": 0.0,
+            "pos": {
+              "x": 960.0,
+              "y": 140.0
+            },
+            "scale": {
+              "x": 0.86,
+              "y": 0.86
+            },
+            "align": 5,
+            "bounds_type": 0,
+            "bounds_align": 0,
+            "bounds": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "id": 3,
+            "group_item_backup": false,
+            "scale_filter": "bilinear",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "show_transition": {
+              "duration": 0
+            },
+            "hide_transition": {
+              "duration": 0
+            }
+          }
+        ]
+      },
+      "mixers": 0,
+      "sync": 0,
+      "flags": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "enabled": true,
+      "muted": false,
+      "push-to-mute": false,
+      "push-to-mute-delay": 0,
+      "push-to-talk": false,
+      "push-to-talk-delay": 0,
+      "hotkeys": {},
+      "deinterlace_mode": 0,
+      "deinterlace_field_order": 0,
+      "monitoring_type": 0,
+      "private_settings": {}
+    },
+    {
+      "prev_ver": 520093696,
+      "name": "04 - Be right back",
+      "uuid": "61289fcb-f6dd-4401-a601-937d6dd94439",
+      "id": "scene",
+      "versioned_id": "scene",
+      "settings": {
+        "id_counter": 1,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "Munny - break screen",
+            "source_uuid": "51265500-035b-42c4-b5a8-1b96c2f70b5f",
+            "visible": true,
+            "locked": true,
+            "rot": 0.0,
+            "pos": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "scale": {
+              "x": 1.0,
+              "y": 1.0
+            },
+            "align": 5,
+            "bounds_type": 0,
+            "bounds_align": 0,
+            "bounds": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "id": 1,
+            "group_item_backup": false,
+            "scale_filter": "bilinear",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "show_transition": {
+              "duration": 0
+            },
+            "hide_transition": {
+              "duration": 0
+            }
+          }
+        ]
+      },
+      "mixers": 0,
+      "sync": 0,
+      "flags": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "enabled": true,
+      "muted": false,
+      "push-to-mute": false,
+      "push-to-mute-delay": 0,
+      "push-to-talk": false,
+      "push-to-talk-delay": 0,
+      "hotkeys": {},
+      "deinterlace_mode": 0,
+      "deinterlace_field_order": 0,
+      "monitoring_type": 0,
+      "private_settings": {}
+    },
+    {
+      "prev_ver": 520093696,
+      "name": "05 - Full video rehearsal",
+      "uuid": "0de2ad2b-87fe-4ffa-8337-0ec79bb94b3a",
+      "id": "scene",
+      "versioned_id": "scene",
+      "settings": {
+        "id_counter": 1,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "Full video - rehearsal only",
+            "source_uuid": "61c383f1-9c3e-4922-a081-653e46530fd6",
+            "visible": true,
+            "locked": true,
+            "rot": 0.0,
+            "pos": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "scale": {
+              "x": 1.0,
+              "y": 1.0
+            },
+            "align": 5,
+            "bounds_type": 0,
+            "bounds_align": 0,
+            "bounds": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0,
+            "id": 1,
+            "group_item_backup": false,
+            "scale_filter": "bilinear",
+            "blend_method": "default",
+            "blend_type": "normal",
+            "show_transition": {
+              "duration": 0
+            },
+            "hide_transition": {
+              "duration": 0
+            }
+          }
+        ]
+      },
+      "mixers": 0,
+      "sync": 0,
+      "flags": 0,
+      "volume": 1.0,
+      "balance": 0.5,
+      "enabled": true,
+      "muted": false,
+      "push-to-mute": false,
+      "push-to-mute-delay": 0,
+      "push-to-talk": false,
+      "push-to-talk-delay": 0,
+      "hotkeys": {},
+      "deinterlace_mode": 0,
+      "deinterlace_field_order": 0,
+      "monitoring_type": 0,
+      "private_settings": {}
+    }
+  ],
+  "groups": [],
+  "quick_transitions": [
+    {
+      "name": "Cut",
+      "duration": 300,
+      "hotkeys": [],
+      "id": 1,
+      "fade_to_black": false
+    },
+    {
+      "name": "Fade",
+      "duration": 300,
+      "hotkeys": [],
+      "id": 2,
+      "fade_to_black": false
+    },
+    {
+      "name": "Fade",
+      "duration": 300,
+      "hotkeys": [],
+      "id": 3,
+      "fade_to_black": true
+    }
+  ],
+  "transitions": [],
+  "saved_projectors": [],
+  "current_transition": "Fade",
+  "transition_duration": 300,
+  "preview_locked": false,
+  "scaling_enabled": false,
+  "scaling_level": 0,
+  "scaling_off_x": 0.0,
+  "scaling_off_y": 0.0,
+  "virtual-camera": {
+    "type2": 3
+  },
+  "modules": {},
+  "version": 2
+}

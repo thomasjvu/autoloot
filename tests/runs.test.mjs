@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { Engine, seed } from '../lib/engine.mjs';
-import { Runs } from '../lib/runs.mjs';
+import { Engine, seed } from '../lib/commerce/engine.mjs';
+import { Runs } from '../lib/commerce/runs.mjs';
 function fixture() {
   let now = Date.now(), online = true, checkout = true;
   const e = new Engine(seed(), {now:() => now});

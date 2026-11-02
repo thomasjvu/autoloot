@@ -8,7 +8,7 @@ Autoloot already has full-show, auction, vote and companion overlay presets. Add
 
 ## Current source and drift gate
 
-Root: `/Users/area/live-shopping-companion`. Inspect `git diff --stat 2d23cf8..HEAD -- server.mjs public/app.js public/integration.js lib/storage.mjs` AND `git diff --` for these paths; this plan includes uncommitted changes. Stop and reconcile if the following anchors no longer match:
+Root: `/Users/area/live-shopping-companion`. Inspect `git diff --stat 2d23cf8..HEAD -- server.mjs public/app.js public/integration.js lib/persistence/storage.mjs` AND `git diff --` for these paths; this plan includes uncommitted changes. Stop and reconcile if the following anchors no longer match:
 
 - `public/integration.js:2-7`: `widgetPresets` defines full, auction, vote and mochi dimensions. `widgetUrl` produces `/overlay?widget=...` source URLs.
 - `public/app.js:445`: inline overlay markup renders vote, companion and auction from public state.
@@ -31,7 +31,7 @@ Later options: bounded-run next-lot strip using already approved queue state; a 
 
 ## Scope
 
-May change: `public/integration.js`, new `public/overlay-widgets.js`, `public/app.js` only to delegate overlay rendering/lifecycle, widget CSS in the existing style files, a focused public-event projection module, `server.mjs` only for projection wiring, and relevant tests/docs. A prerequisite durable pull service may require `lib/storage.mjs` and engine state validation; specify that in a separate change before implementation.
+May change: `public/integration.js`, new `public/overlay-widgets.js`, `public/app.js` only to delegate overlay rendering/lifecycle, widget CSS in the existing style files, a focused public-event projection module, `server.mjs` only for projection wiring, and relevant tests/docs. A prerequisite durable pull service may require `lib/persistence/storage.mjs` and engine state validation; specify that in a separate change before implementation.
 
 Out of scope: purchases, bids, allocation formats, signer permissions, paid randomness, Twitch Extension packaging, marketing deployment, arbitrary third-party JS/plugins, a new frontend framework, camera-frame retention.
 
@@ -57,4 +57,4 @@ Preserve existing route contracts and avoid changing money or fulfillment code t
 
 ## Implementation status
 
-The spotlight and recent-pulls pilot are implemented through `public/overlay-widgets.js`, the existing preset registry and the explicit confirmed-pull projection in `lib/public-state.mjs`. Pull IDs and announcements are saved together through `lib/rip-session.mjs`. These widgets intentionally render current confirmed state without replaying animations or emitting sounds, so reconnect/restart cannot trigger duplicate celebrations. Offline records are labeled. Cosmetic chat reactions remain a future option. Browser/OBS dimension and visual verification is still required; automated projection and preset checks pass.
+The spotlight and recent-pulls pilot are implemented through `public/overlay-widgets.js`, the existing preset registry and the explicit confirmed-pull projection in `lib/commerce/public-state.mjs`. Pull IDs and announcements are saved together through `lib/commerce/rip-session.mjs`. These widgets intentionally render current confirmed state without replaying animations or emitting sounds, so reconnect/restart cannot trigger duplicate celebrations. Offline records are labeled. Cosmetic chat reactions remain a future option. Browser/OBS dimension and visual verification is still required; automated projection and preset checks pass.

@@ -1,0 +1,205 @@
+/* Autoloot street palette, from public/street.css. */
+:root {
+  color-scheme: light;
+  --table-wrap-radius: 0;
+  --autoloot-paper: #f3efdf;
+  --autoloot-ink: #252823;
+  --autoloot-sage: #e6e8d8;
+  --autoloot-lime: #d2ee64;
+  --autoloot-orange: #ed844f;
+  --primary-color: #252823;
+  --secondary-color: #d5d7c8;
+  --accent-color: #62665a;
+  --background-color: #f3efdf;
+  --card-color: #e6e8d8;
+  --border-color: #25282324;
+  --border-soft: #e6e8d8;
+  --border-unified: #b5b8aa;
+  --papers-text-color: #252823;
+  --papers-text-secondary: #353d2e;
+  --muted-color: #62665a;
+  --mono-font: 'Maple Mono', 'SFMono-Regular', Consolas, monospace;
+  --brand-font: 'Autoloot Display', 'Arial Rounded MT Bold', sans-serif;
+  --title-font: 'Hubot Sans', sans-serif;
+  --body-font: 'Mona Sans', sans-serif;
+  --serif-font: 'DM Serif Display', 'Times New Roman', serif;
+  --icon-color: #252823;
+  --primary-color-rgb: 37, 40, 35;
+  --hover-color: rgba(37, 40, 35, 0.05);
+  --tag-bg-color: #d2ee64;
+  --tag-text-color: #252823;
+  --link-hover-color: #252823;
+  --button-hover-bg: rgba(37, 40, 35, 0.08);
+  --toc-bg-color: #f3efdf;
+  --toc-border-color: #d5d7c8;
+  --toc-text-color: #62665a;
+  --toc-text-hover-color: #252823;
+  --toc-button-bg: #f3efdf;
+  --toc-button-hover-bg: #e6e8d8;
+  --mindmap-bg-color: #e6e8d8;
+  --mindmap-border-color: #d5d7c8;
+  --mindmap-text-color: #252823;
+  --mindmap-node-connected: #62665a;
+  --mindmap-node-current: #252823;
+  --mindmap-node-search: #a44920;
+  --mindmap-legend-text: #62665a;
+  --animation-text-color: #252823;
+  --selection-bg-color: #d2ee64;
+  --selection-text-color: #252823;
+  --success-color: #526b26;
+  --warning-color: #a44920;
+  --error-color: #934225;
+  --info-color: #526b26;
+  --surface-color: #e6e8d8;
+  --surface-muted: #e6e8d8;
+  --surface-elevated: #f3efdf;
+  --overlay-color: rgba(0, 0, 0, 0.55);
+  --focus-ring-color: #71882c;
+  --control-bg: #f3efdf;
+  --control-border-color: #b5b8aa;
+  --control-hover-bg: rgba(37, 40, 35, 0.05);
+  --control-active-bg: rgba(37, 40, 35, 0.08);
+  --control-text-color: #252823;
+  --danger-soft-bg: #f2d5bf;
+  --danger-soft-border: #ed844f;
+  --danger-soft-text: #713e23;
+  --skeleton-base: rgba(37, 40, 35, 0.08);
+  --skeleton-strong: rgba(37, 40, 35, 0.12);
+  --code-bg: #eeecdf;
+  --code-header-bg: var(--code-bg);
+  --code-border-color: #d5d7c8;
+  --code-text-color: #252823;
+  --code-muted-color: #62665a;
+  --code-subtle-color: #62665a;
+  --code-line-number-color: #62665a;
+  --code-active-bg: #252823;
+  --code-active-text: #f3efdf;
+  --code-inserted-color: #526b26;
+  --code-deleted-color: #844524;
+  --code-inserted-bg: rgba(22, 163, 74, 0.1);
+  --code-deleted-bg: rgba(220, 38, 38, 0.09);
+  --code-block-radius: 12px;
+  --code-block-clip-path: none;
+  --code-block-border-width: 1px;
+  --code-block-header-divider: none;
+  --code-block-shadow: none;
+  --inline-code-bg: #e6e8d8;
+  --inline-code-border-color: #d5d7c8;
+  --inline-code-text-color: #252823;
+  --highlight-bg: #d2ee64;
+  --highlight-text: #252823;
+  --highlight-border: #71882c;
+  --papers-radius-sm: 6px;
+  --papers-radius-md: 10px;
+  --papers-radius-lg: 14px;
+  --papers-radius-xl: 20px;
+}
+
+.dark {
+  color-scheme: dark;
+  --primary-color: #d2ee64;
+  --secondary-color: #444b3b;
+  --accent-color: #b5b8aa;
+  --background-color: #20231e;
+  --card-color: #252823;
+  --border-color: #79816e;
+  --border-soft: #30352b;
+  --border-unified: #444b3b;
+  --papers-text-color: #f3efdf;
+  --papers-text-secondary: #e6e8d8;
+  --muted-color: #b5b8aa;
+  --icon-color: #f3efdf;
+  --primary-color-rgb: 210, 238, 100;
+  --hover-color: rgba(255, 255, 255, 0.06);
+  --tag-bg-color: #d2ee64;
+  --tag-text-color: #252823;
+  --link-hover-color: #f3efdf;
+  --button-hover-bg: rgba(255, 255, 255, 0.08);
+  --toc-bg-color: #252823;
+  --toc-border-color: #444b3b;
+  --toc-text-color: #b5b8aa;
+  --toc-text-hover-color: #f3efdf;
+  --toc-button-bg: #2d3228;
+  --toc-button-hover-bg: #394131;
+  --mindmap-bg-color: #252823;
+  --mindmap-border-color: #444b3b;
+  --mindmap-text-color: #e6e8d8;
+  --mindmap-node-connected: #a4af90;
+  --mindmap-node-current: #d2ee64;
+  --mindmap-node-search: #ed844f;
+  --mindmap-legend-text: #b5b8aa;
+  --animation-text-color: #f3efdf;
+  --selection-bg-color: #d2ee64;
+  --selection-text-color: #252823;
+  --success-color: #d2ee64;
+  --warning-color: #ed844f;
+  --error-color: #f0a17e;
+  --info-color: #becd9d;
+  --surface-color: #252823;
+  --surface-muted: #2d3228;
+  --surface-elevated: #30352b;
+  --overlay-color: rgba(0, 0, 0, 0.8);
+  --focus-ring-color: rgba(210, 238, 100, 0.18);
+  --control-bg: #252823;
+  --control-border-color: #444b3b;
+  --control-hover-bg: rgba(255, 255, 255, 0.06);
+  --control-active-bg: rgba(255, 255, 255, 0.1);
+  --control-text-color: #f3efdf;
+  --danger-soft-bg: rgba(248, 113, 113, 0.12);
+  --danger-soft-border: rgba(248, 113, 113, 0.22);
+  --danger-soft-text: #f4c5aa;
+  --skeleton-base: rgba(255, 255, 255, 0.08);
+  --skeleton-strong: rgba(255, 255, 255, 0.12);
+  --code-bg: #252823;
+  --code-header-bg: var(--code-bg);
+  --code-border-color: #444b3b;
+  --code-text-color: #d2ee64;
+  --code-muted-color: #b5b8aa;
+  --code-subtle-color: #e6e8d8;
+  --code-line-number-color: #a4af90;
+  --code-active-bg: #d2ee64;
+  --code-active-text: #252823;
+  --code-inserted-color: #d2ee64;
+  --code-deleted-color: #f0a17e;
+  --code-inserted-bg: rgba(74, 222, 128, 0.12);
+  --code-deleted-bg: rgba(248, 113, 113, 0.12);
+  --code-block-radius: 12px;
+  --code-block-clip-path: none;
+  --code-block-border-width: 1px;
+  --code-block-header-divider: none;
+  --code-block-shadow: none;
+  --inline-code-bg: #2d3228;
+  --inline-code-border-color: #444b3b;
+  --inline-code-text-color: #d2ee64;
+  --highlight-bg: rgba(250, 204, 21, 0.2);
+  --highlight-text: #f3efdf;
+  --highlight-border: rgba(250, 204, 21, 0.4);
+}
+
+/* A full lime navigation surface in both color modes. */
+.docs-sidebar {
+  --sidebar-bg-color: var(--autoloot-lime);
+  --papers-text-color: #252823;
+  --muted-color: #50583b;
+  --hover-color: #25282312;
+  --border-unified: #25282330;
+  --primary-color: #252823;
+  --primary-color-rgb: 37, 40, 35;
+  color: var(--autoloot-ink);
+}
+
+/* Charcoal selection contrasts with the lime navigation surface. */
+nav[aria-label='Documentation'] a[aria-current='page'] {
+  background: var(--autoloot-ink);
+  color: var(--autoloot-lime);
+}
+nav[aria-label='Documentation'] a:hover {
+  background: var(--hover-color);
+}
+nav[aria-label='Documentation'] a[aria-current='page']:hover {
+  background: var(--autoloot-ink);
+}
+::selection {
+  background: var(--selection-bg-color);
+  color: var(--selection-text-color);
+}

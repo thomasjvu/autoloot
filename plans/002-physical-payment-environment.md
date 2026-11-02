@@ -8,14 +8,14 @@ Planned at `2d23cf8` plus the full uncommitted workspace on 2026-10-26.
 Block live physical fulfillment funded by Stripe test payments. The current boundary permits a commerce or identity outcome inconsistent with the operator/buyer intent described below.
 
 ## Current state and drift check
-Repository: /Users/area/live-shopping-companion. lib/shipping.mjs:37 checks paid status and order.mode but not paymentLive. lib/engine.mjs:448-458 allows shipping all paid statuses. lib/nft.mjs:47 already rejects live paid orders unless paymentLive===true. lib/csv.mjs:69 uses orderUpdate for tracking, while lines 87-93 independently choose export rows.
-Run `git diff --stat 2d23cf8..HEAD -- lib/engine.mjs lib/shipping.mjs lib/csv.mjs public/app.js tests/commerce.test.mjs tests/shipping.test.mjs tests/csv.test.mjs` and `git diff -- lib/engine.mjs lib/shipping.mjs lib/csv.mjs public/app.js tests/commerce.test.mjs tests/shipping.test.mjs tests/csv.test.mjs`. The baseline explicitly includes dirty/untracked work copied into the executor worktree; compare these anchors before editing and stop on mismatch. Preserve all existing changes.
+Repository: /Users/area/live-shopping-companion. lib/integrations/shipping.mjs:37 checks paid status and order.mode but not paymentLive. lib/commerce/engine.mjs:448-458 allows shipping all paid statuses. lib/commerce/nft.mjs:47 already rejects live paid orders unless paymentLive===true. lib/commerce/csv.mjs:69 uses orderUpdate for tracking, while lines 87-93 independently choose export rows.
+Run `git diff --stat 2d23cf8..HEAD -- lib/commerce/engine.mjs lib/integrations/shipping.mjs lib/commerce/csv.mjs public/app.js tests/commerce.test.mjs tests/shipping.test.mjs tests/csv.test.mjs` and `git diff -- lib/commerce/engine.mjs lib/integrations/shipping.mjs lib/commerce/csv.mjs public/app.js tests/commerce.test.mjs tests/shipping.test.mjs tests/csv.test.mjs`. The baseline explicitly includes dirty/untracked work copied into the executor worktree; compare these anchors before editing and stop on mismatch. Preserve all existing changes.
 
 ## Conventions
-Plain Node ES modules, single-host SQLite, integer USD cents, synchronous authoritative engine transitions and explicit thrown Error messages. Match node:test and strict assertions in tests/commerce.test.mjs and tests/runtime.test.mjs. Provider transports are fixture-mocked; never use real funds, account messages or credentials. docs/architecture.md states that buyer identity and server-side order ownership are authoritative. Keep local admin access distinct from buyer identity.
+Plain Node ES modules, single-host SQLite, integer USD cents, synchronous authoritative engine transitions and explicit thrown Error messages. Match node:test and strict assertions in tests/commerce.test.mjs and tests/runtime.test.mjs. Provider transports are fixture-mocked; never use real funds, account messages or credentials. docs/dev/content/developers/architecture.md states that buyer identity and server-side order ownership are authoritative. Keep local admin access distinct from buyer identity.
 
 ## Scope
-Only these files may change: lib/engine.mjs lib/shipping.mjs lib/csv.mjs public/app.js tests/commerce.test.mjs tests/shipping.test.mjs tests/csv.test.mjs.
+Only these files may change: lib/commerce/engine.mjs lib/integrations/shipping.mjs lib/commerce/csv.mjs public/app.js tests/commerce.test.mjs tests/shipping.test.mjs tests/csv.test.mjs.
 All other source files, dependencies, storage layout, unrelated UI, marketing and design are out of scope. Report if another file is required.
 
 ## Git workflow

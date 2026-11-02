@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {Engine} from '../lib/engine.mjs';
-import {emptyWorkspace} from '../lib/workspace.mjs';
-import {RipSession} from '../lib/rip-session.mjs';
+import {Engine} from '../lib/commerce/engine.mjs';
+import {emptyWorkspace} from '../lib/commerce/workspace.mjs';
+import {RipSession} from '../lib/commerce/rip-session.mjs';
 const card={id:'card',name:'Pikachu',number:'25',setName:'Set'};
 const metadata={base:'catalog',search:async()=>[card],detail:async()=>({card})};
 const vision={mode:()=> 'local',status:()=>({mode:'local'}),observe:async()=>({kind:'card',name:'Pikachu'})};

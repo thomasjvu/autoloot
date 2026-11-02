@@ -1,3 +1,4 @@
+import {CHAT_COMMANDS,commandEnabled} from '/shared/chat-commands.js';
 import {companionAsset} from '/shared/companion-asset.js';
 import {animateSetupProgress} from '/progress-bar.js';
 import {policyPresets,applyPolicyPreset} from '/policy-presets.js';
@@ -11,7 +12,7 @@ import {inventoryPage} from '/workspace/inventory.js';
 import {ordersPage} from '/workspace/orders.js';
 import {settingsPage,settingsPanel} from '/workspace/settings.js';
 import {wireInventory,wireOrders} from '/workspace/commerce-controls.js';
-import {esc,usd,productArt,assetDescription,visual,statusBadge,brand,heading,time} from '/shared/presenters.js';
+import {esc,usd,productArt,assetDescription,cardFormat,visual,statusBadge,brand,heading,time} from '/shared/presenters.js';
 import {createStorefront} from '/storefront.js';
 import {giveawaysPage,wireGiveaways} from "/giveaways.js";
 
@@ -30,7 +31,8 @@ import { CohostPlayer } from "/showtime.js";
 import { widgetPresets, widgetType, widgetUrl, nextBid } from "/integration.js";
 const isNftOrder = o => o.product?.fulfillment?.type === 'nft';
 const cohostPlayer = new CohostPlayer();
-const overlayType = widgetType(location.search);
+const overlayPreset = widgetType(location.search);
+const overlayType = widgetPresets[overlayPreset].type || overlayPreset;
 let selectedWidget = "full";
 try { selectedWidget = widgetType("?widget=" + encodeURIComponent(localStorage.getItem("autoloot-widget") || "full")); } catch {}
 let liveConnection = true;
@@ -49,7 +51,6 @@ let state,
   tab = "studio",
   search = "",
   filter = "all",
-  lastSpoken = "",
   serverOffset = 0;
 const isOverlay = location.pathname === "/overlay",
   isShop = location.pathname === "/shop";
@@ -163,7 +164,7 @@ function runDialog() {
    } catch (error) { toast(error.message); button.disabled = false; }
  };
 }
-const {studio,votePanel}=createStudioViews({getState:()=>state,clock,companionCard,tutorialStatus});
+const {studio,showPage,votePanel}=createStudioViews({getState:()=>state,clock,companionCard,tutorialStatus});
 let inventoryView='owned';
 function inventory(){return inventoryPage(state,{search,inventoryView});}
 function orders(){return ordersPage(state,{filter},{nftOrderDetails,reservationNotice});}
@@ -230,14 +231,14 @@ function mochiQuick(){
 }
 let runAuditExpanded = false;
 function render() {
-  if(tab!=='rip')disposeRip();
+  if(tab!=='rip'||!state.features?.ripStudio)disposeRip();
   if (!state) return;
   serverOffset = Date.now() - state.serverTime;
   if (isOverlay) return renderOverlay();
   if (isShop) return renderShop();
   const activityExpanded = $("#show-activity")?.open || false;
   $("#app").innerHTML =
-    `${workspaceNavigation({tab,mobileMenuOpen,adminAccount:state.adminAccount,twitch:state.twitch,companion:state.companion,companionError:state.companionError,brand:brand()})}<div class="workspace-main">${header()}<main>${{ studio, inventory, orders, audience, giveaways:()=>giveawaysPage(state), companion: companionPage, connections, rip: () => ripPage(state), catalog: () => inventory(), accounting:()=>accountingPage(state) }[tab]()}</main></div><footer class="app-footer"><span>© ${new Date().getFullYear()} Autoloot. All rights reserved.</span><nav aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/docs/getting-started/faq">Docs</a></nav></footer>${mochiQuick()}`;
+    `${workspaceNavigation({features:state.features,tab,mobileMenuOpen,adminAccount:state.adminAccount,twitch:state.twitch,companion:state.companion,companionError:state.companionError,brand:brand()})}<div class="workspace-main">${header()}<main>${{ studio, show: showPage, inventory, orders, audience, giveaways:()=>giveawaysPage(state), companion: companionPage, connections, rip: () => state.features?.ripStudio ? ripPage(state) : `<div class="page-heading"><h1>Rip studio</h1></div><section class="panel"><h2>Coming soon</h2><p>Scan and review card reveals from your camera or shared screen.</p></section>`, catalog: () => inventory(), accounting:()=>accountingPage(state) }[tab]()}</main></div><footer class="app-footer"><span>© ${new Date().getFullYear()} Autoloot. All rights reserved.</span><nav aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/docs/getting-started/faq">Docs</a></nav></footer>${mochiQuick()}`;
 
   $("#app").dataset.draftSurface=JSON.stringify([tab,state.mode]);
   if ($("#show-activity")) $("#show-activity").open = activityExpanded;
@@ -248,15 +249,7 @@ function render() {
   wire();
   mountTutorial(section=>{tab=section;mobileMenuOpen=false;mochiQuickOpen=false;render();},render);
   enterSection(tab, $(".workspace-main main"));
-  cohostPlayer.arm(Boolean(state.companion.voice));
-  if (
-    state.companion.voice &&
-    state.companion.message !== lastSpoken &&
-    "speechSynthesis" in window
-  ) {
-    lastSpoken = state.companion.message;
-    cohostPlayer.speak(lastSpoken);
-  }
+  cohostPlayer.updateWorkspace(state, tab === 'companion' || (mochiQuickOpen && munnyPanelTab === 'chat'), liveConnection);
 }
 let lastVisualEvent = null;
 function renderOverlay() {
@@ -264,11 +257,11 @@ function renderOverlay() {
     lastVisualEvent !== null && lastVisualEvent !== state.companion.eventId;
   lastVisualEvent = state.companion.eventId;
   document.documentElement.classList.add("overlay-root");
-  document.body.className = `overlay-body widget-${overlayType}`;
+  document.body.className = `overlay-body widget-${overlayType}${widgetPresets[overlayPreset].theme === 'chalk' ? ' overlay-chalk' : ''}`;
   cohostPlayer.update(cohostState(), serverOffset);
   const a = state.auction;
   $("#app").innerHTML =
-    `<div class="overlay-canvas">${['pull','ribbon'].includes(overlayType)?pullWidget(state.pulls,overlayType,liveConnection):''}<button class="overlay-audio-toggle" id="overlay-audio-toggle">${state.companion.overlayVoice ? "Enable / test voice" : "Voice off"}</button>${["full", "vote"].includes(overlayType) && state.vote ? `<div class="overlay-vote">${votePanel(true)}</div>` : ""}${["full", "mochi"].includes(overlayType) && state.companion.enabled ? `<div class="overlay-mochi ${react ? "cohost-react" : ""}"><div class="overlay-bubble">${esc(state.companion.message)}</div>${mochi()}<div class="overlay-name">${esc(companionName())} / ${state.companion.provider === "codex" ? "AI cohost · may make mistakes" : "Software cohost"}</div></div>` : ""}${["full", "auction"].includes(overlayType) ? `<div class="overlay-auction">${a ? `<div class="overlay-thumb art-${a.product.art}">${visual(a.product)}</div><div class="overlay-info"><small>${state.mode === "demo" ? "DEMO" : esc(a.status.toUpperCase())} / AUTOLOOT</small><h2>${esc(a.product.title)}</h2><p>${a.highest ? "@" + esc(a.highest.username) : "!bid " + (a.product.price / 100).toFixed(2)}</p></div><div class="overlay-price"><strong>${usd(a.highest?.amount || a.product.price)}</strong><span data-clock>${clock(a)}</span></div>` : `<strong>AUTOLOOT / ${esc(state.show.title)}</strong><span>Next lot loading_</span>`}</div>` : ""}</div>`;
+    `<div class="overlay-canvas">${['pull','ribbon'].includes(overlayType)?pullWidget(state.pulls,overlayType,liveConnection):''}<button class="overlay-audio-toggle" id="overlay-audio-toggle">${state.companion.overlayVoice ? "Enable / test voice" : "Voice off"}</button>${["full", "vote"].includes(overlayType) && state.vote ? `<div class="overlay-vote">${votePanel(true)}</div>` : ""}${["full", "mochi"].includes(overlayType) && state.companion.enabled ? `<div class="overlay-mochi ${react ? "cohost-react" : ""}"><div class="overlay-bubble">${esc(state.companion.message)}</div>${mochi()}<div class="overlay-name">${esc(companionName())} / ${state.companion.provider === "codex" ? "AI cohost · may make mistakes" : "Software cohost"}</div></div>` : ""}${["full", "auction"].includes(overlayType) ? `<div class="overlay-auction">${a ? `<div class="overlay-thumb art-${a.product.art}">${visual(a.product)}</div><div class="overlay-info"><h2>${esc(a.product.title)}</h2><p class="overlay-format">${esc(cardFormat(a.product))}</p></div><div class="overlay-price"><span data-clock>${clock(a)}</span><div class="overlay-bid-row"><strong>${overlayPreset.startsWith('chalk-')?usd(a.highest?.amount || a.product.price).replace(/\.00$/,''):usd(a.highest?.amount || a.product.price)}</strong><span class="overlay-bidder">${a.highest ? "Bid by " + esc(a.highest.username) : "Opening bid"}</span></div></div>` : `<strong>AUTOLOOT / ${esc(state.show.title)}</strong><span>Next lot loading_</span>`}</div>` : ""}</div>`;
   $("#overlay-audio-toggle").hidden = !["full", "mochi"].includes(overlayType);
   $("#overlay-audio-toggle").onclick = () => {
     if (!state.companion.overlayVoice) {
@@ -387,6 +380,14 @@ async function action(name) {
 
     else if(name==='link-admin-twitch') location.href='/auth/twitch?role=admin-link&admin='+encodeURIComponent(adminToken);
     else if(name==='unlink-admin-twitch'){await api('/api/admin/twitch/unlink',{});location.href='/admin-login.html';}
+    else if(name==='store-settings'){
+      modal(`<h2>Store access</h2><form id="store-access-form" class="stack-form"><label class="consent"><input name="draft" type="checkbox" ${state.store?.draft?'checked':''}> Draft mode</label><p class="field-help">Pause new sales and fulfillment. Existing payments and refunds can still be reconciled.</p><label>Store password<input name="password" type="password" minlength="8" maxlength="128" autocomplete="new-password" placeholder="${state.store?.passwordProtected?'Leave blank to keep current password':'Optional · at least 8 characters'}"></label>${state.store?.passwordProtected?'<label class="consent"><input name="removePassword" type="checkbox"> Remove store password</label>':''}<button class="btn primary">Save store access</button></form>`);
+      $('#store-access-form').onsubmit=async event=>{event.preventDefault();const f=new FormData(event.target);try{await api('/api/store/settings',{draft:f.has('draft'),password:f.get('password'),removePassword:f.has('removePassword')});$('#modal').close();state=await api('/api/state');render();}catch(error){toast(error.message);}};
+    }
+    else if(name==='chat-commands'){
+      modal(`<h2>Twitch commands</h2><form id="chat-command-form" class="stack-form">${CHAT_COMMANDS.map(command=>`<label class="consent"><input type="checkbox" name="${command.id}" ${commandEnabled(state.chatCommands,command.id)?'checked':''}><span>${command.label} <code>${command.usage}</code></span></label>`).join('')}<button class="btn primary">Save commands</button></form>`);
+      $('#chat-command-form').onsubmit=async event=>{event.preventDefault();const form=new FormData(event.target);try{await api('/api/chat/commands',Object.fromEntries(CHAT_COMMANDS.map(command=>[command.id,form.has(command.id)])));$('#modal').close();state=await api('/api/state');render();}catch(error){toast(error.message);}};
+    }
     else if (name === "add-product") addProduct();
     else if (name === "auction-settings")
       startDialog(state.auction?.productId || state.products[0]?.id);
@@ -511,7 +512,7 @@ function wire() {
   $('#mochi-quick-form')?.addEventListener('submit',event=>{event.preventDefault();const prompt=new FormData(event.target).get('prompt');mochiQuickDraft='';ask(prompt);});
 
   wireCatalog({api,state,toast,refresh:async()=>{state=await api("/api/state");render();}});
-  wireRip({api, token:adminToken, toast, state, refresh:async()=>{state=await api("/api/state");render();}});
+  if(state.features?.ripStudio)wireRip({api, token:adminToken, toast, state, refresh:async()=>{state=await api("/api/state");render();}});
   $("#demo-vote-form")?.addEventListener("submit", async (e) => {
     e.preventDefault();
     try {

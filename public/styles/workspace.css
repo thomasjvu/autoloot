@@ -1095,11 +1095,9 @@ body:has(#modal[open]){overflow:hidden}
 
 /* Blink and breathing are baked into the eight drawn poses. *//* Homepage overview: opaque surfaces and a distinct Twitch panel. */.setup-checklist{background:#fff;border-color:#25282316}
 
-.studio-widget-sales{background:#d2ee64;border-color:#25282318}
+.studio-widget-orders{background:#171914;border-color:#171914;color:#fff}.studio-widget-orders h2,.studio-widget-orders .studio-widget-value,.studio-widget-orders .studio-widget-value small,.studio-widget-orders>.text-btn{color:#fff}.studio-widget-orders .studio-widget-icon{background:#fff;color:#171914}
 
-.studio-widget-orders{background:#fff;border-color:#25282316}
-
-.studio-widget-codex{background:#0b8063;border-color:#0b8063;color:#fff}.studio-widget-codex .studio-widget-icon{background:#fff}.studio-widget-codex .studio-widget-icon img{width:26px;height:26px}.studio-widget-codex .widget-dot{background:#ffffff70}.studio-widget-codex .widget-dot.connected{background:#bfe986}
+.studio-widget-codex{background:#0b8063;border-color:#0b8063;color:#fff}.studio-widget-codex h2,.studio-widget-codex .text-btn{color:#fff}.studio-widget-codex .studio-widget-icon{background:#fff}.studio-widget-codex .studio-widget-icon img{width:26px;height:26px}.studio-widget-codex .widget-dot{background:#ffffff70}.studio-widget-codex .widget-dot.connected{background:#bfe986}
 
 .studio-widget-twitch{background:#6441a5;border-color:transparent;color:#fff}
 
@@ -1131,7 +1129,7 @@ body:has(#modal[open]){overflow:hidden}
 
 .studio-widget-sales p{color:#f0eeff}
 
-.studio-widget-sales .studio-widget-icon{background:#ffffff20;color:#fff}
+.studio-widget-sales .studio-widget-icon{background:#fff;color:#171914}
 
 .studio-widget-sales .text-btn:hover{background:#ffffff18}
 
@@ -1163,7 +1161,7 @@ body:has(#modal[open]){overflow:hidden}
 
 .studio-widget-twitch .twitch-widget-icon img{width:26px;height:26px;max-width:100%;object-fit:contain;filter:none}
 
-.giveaway-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:24px}
+.giveaway-layout{display:grid;grid-template-columns:minmax(0,720px);justify-content:center;gap:18px}
 
 .giveaway-main,.giveaway-points{padding:28px;background:var(--paper)}
 
@@ -1175,7 +1173,6 @@ body:has(#modal[open]){overflow:hidden}
 
 .giveaway-layout .btn{margin:8px 8px 8px 0}
 
-.giveaway-layout .stack-form{margin-top:24px}
 
 .giveaway-numbers{margin:24px 0;display:flex;justify-content:space-between;align-items:center;gap:20px}
 
@@ -1197,7 +1194,7 @@ body:has(#modal[open]){overflow:hidden}
 
 .companion-options{display:flex;flex-direction:column;gap:14px}
 
-.companion-options>.settings-panel{padding:24px;background:#fff}
+.companion-options>.settings-panel{padding:24px}
 
 .companion-options h2{font-size:18px;margin-bottom:18px}
 
@@ -1265,3 +1262,9 @@ body:has(#modal[open]){overflow:hidden}
 .catalog-entry{padding:18px;background:#f0efe8;border-radius:18px;margin-bottom:24px}.catalog-entry p{font-size:12px;margin:12px 0 0}
 .metadata-badge img{width:240px;height:auto;max-width:100%}
 @media(max-width:600px){.activity-chart{padding:18px}.sales-bars{gap:3px}.status-bar-row{grid-template-columns:112px minmax(0,1fr) 24px;gap:10px;font-size:12px}.chart-axis{font-size:10px}}
+
+.giveaway-points{align-self:start}
+.giveaway-points>summary{font-weight:650;cursor:pointer;list-style-position:inside}
+.giveaway-points-content{padding-top:20px}
+
+.companion-codex-card{background:#0b8063;color:#fff;border-color:#0b8063}.companion-codex-card h2,.companion-codex-card .field-help,.companion-codex-card .text-btn{color:#fff}.companion-codex-card .studio-widget-title{margin-bottom:20px}.companion-codex-card .studio-widget-title h2{font-size:26px;line-height:1.1;margin:0;letter-spacing:-.6px}.companion-codex-card .studio-widget-icon{background:#fff}.companion-codex-card .btn.primary{background:#fff;color:#0b8063}.companion-codex-card .preference-toggle{color:#fff}

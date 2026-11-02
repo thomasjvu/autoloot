@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>Munny’s shop — OBS source</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent}
+#stage{position:absolute;width:1920px;height:1080px;transform-origin:top left;overflow:hidden;font-family:Arial,sans-serif;color:#302921}
+.plate{position:absolute;width:1920px;height:1080px;inset:0;pointer-events:none}
+#munny,#mouthOpen{position:absolute;left:-120px;top:40px;width:1100px;height:1650px;object-fit:contain}
+#mouthOpen{opacity:0}
+#panel{position:absolute;left:170px;top:809px;width:1580px;height:205px;border:5px solid #3a3028;border-radius:44px;background:#fff4d9;box-shadow:0 8px 0 #2c2622;padding:57px 55px 28px}
+#name{position:absolute;left:35px;top:-35px;background:#d2df4b;border:4px solid #3a3028;border-radius:22px;padding:13px 30px;font-size:30px;font-weight:800}
+#words{font-size:46px;font-weight:700;line-height:1.3;white-space:pre-line}
+#cue{position:absolute;right:50px;bottom:27px;color:#878348;font-size:28px}
+#status{position:absolute;right:68px;top:72px;padding:18px 30px;border-radius:18px;background:#fff4d9;color:#302921;font-size:30px;border:4px solid #3a3028;display:none}
+#start{position:absolute;left:700px;top:500px;font-size:32px;padding:20px;background:#d2df4b;border:3px solid #302921;border-radius:16px;cursor:pointer}
+body.overlay .background,body.overlay .counter{display:none}body.overlay #munny,body.overlay #mouthOpen{left:30px;top:625px;width:300px;height:450px}body.overlay #panel{left:300px;width:1450px}
+body.live #panel,body.live #start{display:none}body.live.has-dialogue #panel{display:block}
+</style>
+<div id="stage">
+<img class="plate background" src="../assets/shop-background-v3.png" alt="">
+<img id="munny" src="../assets/munny-mouth-closed-v2.svg" alt="Munny">
+<img id="mouthOpen" src="../assets/munny-mouth-open-v2.svg" alt="" aria-hidden="true">
+<img class="plate counter" src="../assets/counter-positioned-v2.png" alt="">
+<div id="status"></div>
+<div id="panel"><div id="name">Munny</div><div id="words"></div><div id="cue">▾</div></div>
+<button id="start">Welcome in →</button>
+</div>
+<script type="module">
+import {createObjectUrl} from './vn-tts.js';
+const q=new URLSearchParams(location.search), stage=document.querySelector('#stage');
+const mode=q.get('mode')||'shop', sound=q.get('sound')==='1';
+if(mode==='overlay')document.body.classList.add('overlay');
+if(mode==='live')document.body.classList.add('live');
+const status=document.querySelector('#status');
+const pages=mode==='starting'?["Welcome to Autoloot!","The show is starting soon. Get comfy!"]:mode==='brb'?["I'll be right back!","Keep your spot. The shop will reopen shortly."]:["Oh! Welcome to Autoloot!","I'm Munny. Let's put on a selling show!"];
+if(mode==='starting'||mode==='brb'){status.style.display='block';status.textContent=mode==='starting'?'Starting soon':'Be right back'}
+const words=document.querySelector('#words'),munny=document.querySelector('#munny'),mouthOpen=document.querySelector('#mouthOpen'),cue=document.querySelector('#cue');
+let page=0,timer,ctx,hideTimer,allowAudio=sound;
+let expression='neutral';
+function setExpression(value){expression=['joyful','surprised','thinking'].includes(value)?value:'neutral';const prefix=expression==='neutral'?'../assets/munny-mouth-':'../assets/munny-'+expression+'-';const suffix=expression==='neutral'?'-v2':'';munny.src=prefix+'closed'+suffix+'.svg';mouthOpen.src=prefix+'open'+suffix+'.svg'}
+setExpression(q.get('expression'));
+function resize(){stage.style.transform=`scale(${Math.min(innerWidth/1920,innerHeight/1080)})`}
+addEventListener('resize',resize);resize();
+
+function schedule(text){let reveal=[],bursts=[],elapsed=0,last=-1;[...text].forEach((c,i)=>{reveal.push(elapsed);if(/[a-z0-9]/i.test(c)&&elapsed-last>=.095){bursts.push({time:elapsed,duration:.065,pitch:[470,590,520,680,550,620,495][i%7]});last=elapsed}elapsed+=1/28;if('.!?,'.includes(c))elapsed+=.15;else if(c===' ')elapsed+=.025});return {reveal,bursts,duration:elapsed}}
+function pose(open){mouthOpen.style.opacity=open?'1':'0';munny.style.opacity=open?'0':'1';mouthOpen.dataset.speaking=String(open)}
+let vnAudio=null,vnUrl=null,speechTimer,speechNotBefore=0;
+function stopVn(){if(vnAudio){vnAudio.pause();vnAudio=null}if(vnUrl){URL.revokeObjectURL(vnUrl);vnUrl=null}}
+function startVn(text,audible){stopVn();if(!audible||!text)return;try{vnUrl=createObjectUrl({text,pitch:1.25,speed:1.65,baseFrequency:250,vowelVolume:.24,consonantVolume:.16});vnAudio=new Audio(vnUrl);vnAudio.play().catch(stopVn)}catch{stopVn()}}
+function show(text,audible=sound){clearTimeout(speechTimer);stopVn();const delay=speechNotBefore-performance.now();if(delay>0){cancelAnimationFrame(timer);pose(false);speechTimer=setTimeout(()=>renderDialogue(text,audible),delay)}else renderDialogue(text,audible)}
+function renderDialogue(text,audible=sound){allowAudio=audible;clearTimeout(hideTimer);document.body.classList.toggle('has-dialogue',Boolean(text));cancelAnimationFrame(timer);words.textContent='';cue.hidden=true;pose(false);startVn(text,audible);const data=schedule(text),chars=[...text],start=performance.now();let nextBurst=0;function tick(now){const t=(now-start)/1000;words.textContent=chars.slice(0,data.reveal.filter(v=>v<=t).length).join('');while(nextBurst<data.bursts.length&&data.bursts[nextBurst].time<=t){const b=data.bursts[nextBurst++];/* VN-TTS owns audible dialogue. */}pose(data.bursts.some(b=>b.time<=t&&t<b.time+b.duration));if(t<data.duration)timer=requestAnimationFrame(tick);else{pose(false);cue.hidden=false;if(mode==='live')hideTimer=setTimeout(()=>document.body.classList.remove('has-dialogue'),3500)}}timer=requestAnimationFrame(tick)}
+function next(){document.querySelector('#start').hidden=true;show(pages[page++%pages.length])}
+document.querySelector('#start').onclick=next;
+addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();next()}else if(e.code==='KeyJ'){setExpression('joyful')}else if(e.code==='KeyN'){setExpression('neutral')}else if(e.code==='KeyS'){setExpression('surprised')}else if(e.code==='KeyT'){setExpression('thinking')}});
+// For an OBS browser source: autoplay reveals the first page; use Interact + Space for the next.
+if(q.get('autoplay')==='1'&&mode!=='live')next();
+// Custom page for a captured demo beat; stays local to the browser source.
+if(q.has('text')){document.querySelector('#start').hidden=true;show(q.get('text'))}
+
+// Original local WAVs; only this room produces audio, not the auction/vote widgets.
+const effects={bid:new Audio('../assets/sfx/bid-kaching.wav'),sold:new Audio('../assets/sfx/sale-finalized.wav')};
+function playEffect(kind){if(!sound||q.get('sfx')==='0')return;const clip=effects[kind];clip.currentTime=0;clip.volume=.65;speechNotBefore=performance.now()+(kind==='bid'?700:1200);clip.play().catch(()=>{});}
+let previousAuction=null;
+function auctionEvents(auction,connected,follow){
+ const previous=previousAuction;previousAuction=auction?{...auction}:null;
+ // Startup and reconnection establish a baseline; never replay old alerts.
+ if(!connected||!wasConnected)return false;
+ const newLot=auction&&auction.status==='live'&&(!previous||previous.id!==auction.id);
+ if(newLot&&follow){setExpression('joyful');show(`Next up: ${auction.title}. Opening at ${new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(auction.price/100)}. Let's take a look!`);return true;}
+ if(auction&&previous&&auction.id===previous.id){
+  if(auction.status==='live'&&auction.bidCount>previous.bidCount)playEffect('bid');
+  if(auction.status==='sold'&&previous.status!=='sold')playEffect('sold');
+ }
+ return false;
+}
+// The local visual-control relay exposes only public companion fields.
+let lastRevision=null,lastCue=null,lastEvent=null,wasConnected=false;
+async function pollLive(){
+ try{
+  const response=await fetch('/stream/state',{cache:'no-store'});if(!response.ok)throw Error('Relay unavailable');
+  const data=await response.json(),c=data.control,companion=data.companion;
+  const introduced=auctionEvents(data.auction,Boolean(data.connected),c.follow);
+  if(lastRevision===null){lastRevision=c.revision;lastCue=c.cueRevision;setExpression(c.expression)}
+  else if(c.revision!==lastRevision){lastRevision=c.revision;setExpression(c.expression);if(lastCue!==c.cueRevision&&Date.now()-c.at<15000)show(c.text);lastCue=c.cueRevision}
+  if(data.connected&&companion){
+   const fresh=wasConnected&&lastEvent!==null&&lastEvent!==companion.eventId;
+   lastEvent=companion.eventId;
+   if(!introduced&&c.follow&&fresh&&companion.enabled&&Date.now()-companion.at<15000){
+    if(companion.mood==='excited'||companion.mood==='happy')setExpression('joyful');
+    show(companion.message||'',sound&&Boolean(companion.overlayVoice));
+   }
+  }else if(wasConnected){clearTimeout(speechTimer);stopVn();cancelAnimationFrame(timer);pose(false);document.body.classList.remove('has-dialogue')}
+  wasConnected=Boolean(data.connected);
+ }catch{clearTimeout(speechTimer);stopVn();wasConnected=false}
+ finally{setTimeout(pollLive,700)}
+}
+if(mode==='live'||q.get('control')==='1')pollLive();
+</script></html>

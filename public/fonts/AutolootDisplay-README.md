@@ -22,15 +22,15 @@ Contains 448 encoded characters, including Latin-1 accents, common extended Lati
 - `AutolootDisplay-Black.woff2`: self-hosted web font.
 - `AutolootDisplay-Black.ttf`: installable desktop font; version 4.000.
 - `AutolootDisplay-OFL.txt`: license, shipped with the marketing build.
-- `../../scripts/fonts/build-autoloot-display.py`: reproducible build from committed cover outlines and vendored source.
-- `../../scripts/fonts/check-autoloot-display.py`: coverage and HarfBuzz shaping checks.
-- `../../scripts/fonts/render-autoloot-specimen.py`: static specimen rendering.
+- `../../creative/fonts/build-autoloot-display.py`: reproducible build from committed cover outlines and vendored source.
+- `../../creative/fonts/check-autoloot-display.py`: coverage and HarfBuzz shaping checks.
+- `../../creative/fonts/render-autoloot-specimen.py`: static specimen rendering.
 
-Install `fonttools[woff] uharfbuzz pillow` in a Python environment. Run the build and check scripts from any directory. Source provenance and checksum are in `scripts/fonts/vendor/fredoka/SOURCE.md`.
+Install `fonttools[woff] uharfbuzz pillow` in a Python environment. Run the build and check scripts from any directory. Source provenance and checksum are in `creative/fonts/vendor/fredoka/SOURCE.md`.
 
 ## Cover tracing
 
-`../../scripts/fonts/trace-cover-wordmark.py` extracts the cover’s lettering to `cover-wordmark-outlines.json` and `public/brand/autoloot-wordmark-tilted.svg`. The font build exports both `public/brand/autoloot-wordmark.svg` (upright) and `public/brand/autoloot-wordmark-tilted.svg` (original). Optional regeneration requires `pillow numpy vtracer`; the ordinary font build needs only the committed JSON and upstream TTF. Browser reference comparison: `marketing/submission/autoloot-wordmark-alternates.html`.
+`../../creative/fonts/trace-cover-wordmark.py` extracts the cover’s lettering to `cover-wordmark-outlines.json` and `public/brand/autoloot-wordmark-tilted.svg`. The font build exports both `public/brand/autoloot-wordmark.svg` (upright) and `public/brand/autoloot-wordmark-tilted.svg` (original). Optional regeneration requires `pillow numpy vtracer`; the ordinary font build needs only the committed JSON and upstream TTF. Browser reference comparison: `creative/marketing/autoloot-wordmark-alternates.html`.
 
 ## Attribution and license
 

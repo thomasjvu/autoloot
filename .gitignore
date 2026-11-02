@@ -3,8 +3,8 @@ node_modules/
 .data/
 .DS_Store
 *.log
-# Separate local documentation checkout and generated local artifacts
-documentation/
+# Papers runtimes, generated documentation and retired local source backups
+docs/.papers/
 __pycache__/
 *.pyc
 
@@ -16,7 +16,7 @@ __pycache__/
 # Local UI verification captures
 output/ui/
 
-marketing/dist/
+apps/marketing/dist/
 
 .venv-vision/
 __pycache__/

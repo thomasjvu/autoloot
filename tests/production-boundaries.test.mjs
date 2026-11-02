@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {Engine} from '../lib/engine.mjs';
-import {emptyWorkspace,demoContent} from '../lib/workspace.mjs';
-import {publicCompanion,publicPulls} from '../lib/public-state.mjs';
+import {Engine} from '../lib/commerce/engine.mjs';
+import {emptyWorkspace,demoContent} from '../lib/commerce/workspace.mjs';
+import {publicCompanion,publicPulls} from '../lib/commerce/public-state.mjs';
 import {pullWidget} from '../public/overlay-widgets.js';
 
 test('public companion and pull fields are explicit allowlists',()=>{

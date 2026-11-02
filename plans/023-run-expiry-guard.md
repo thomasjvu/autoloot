@@ -7,10 +7,10 @@ P1; effort S–M; risk MED; bug; planned at 283f098, 2026-10-29. Depends on appr
 Run-owned direct and maximum bids currently accept after run.expiresAt until the 200ms runner poll. Reject at the command boundary without losing accepted bids or disabling existing order reconciliation.
 
 ## Current state and conventions
-Node ESM, vanilla UI, single-writer SQLite. Engine in lib/engine.mjs imports runActive/runOwns from runs.mjs. bid() calls this.tick() before checking live status. installMaxBids in lib/max-bids.mjs similarly ticks before checks. Runs.tick() pauses expired runs; server polls engine.tick before runs.tick. Engine.tick auto-finishes auctions. tests/runs.test.mjs uses node:test, strict assert, injected clock and in-memory Engine+Runs; follow that pattern. docs/agent-led-runs.md states pause/stop retains bids/orders and manual resolution, deadline stops new sales. No live provider calls.
+Node ESM, vanilla UI, single-writer SQLite. Engine in lib/commerce/engine.mjs imports runActive/runOwns from runs.mjs. bid() calls this.tick() before checking live status. installMaxBids in lib/commerce/max-bids.mjs similarly ticks before checks. Runs.tick() pauses expired runs; server polls engine.tick before runs.tick. Engine.tick auto-finishes auctions. tests/runs.test.mjs uses node:test, strict assert, injected clock and in-memory Engine+Runs; follow that pattern. docs/user/content/operations/agent-led-runs.md states pause/stop retains bids/orders and manual resolution, deadline stops new sales. No live provider calls.
 
 ## Scope
-Only lib/engine.mjs, lib/max-bids.mjs, tests/runs.test.mjs, tests/max-bids.test.mjs, docs/agent-led-runs.md may change. No public shapes, pricing/resolver rules, UI, provider, timer-frequency or persistence changes.
+Only lib/commerce/engine.mjs, lib/commerce/max-bids.mjs, tests/runs.test.mjs, tests/max-bids.test.mjs, docs/user/content/operations/agent-led-runs.md may change. No public shapes, pricing/resolver rules, UI, provider, timer-frequency or persistence changes.
 
 ## Git workflow / drift
 Create isolated worktree /Users/area/.codex/worktrees/run-expiry/live-shopping-companion on new codex/run-expiry-guard based EXACTLY 283f098. Never edit original checkout or preceding worktree. Run git diff --stat 283f098..HEAD -- the scope paths: empty expected. npm ci in isolated tree if needed. Commit logical change, e.g. Enforce run authorization before accepting auction bids. No push/merge. Reviewer maintains plans index.

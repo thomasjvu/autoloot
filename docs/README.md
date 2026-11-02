@@ -1,35 +1,26 @@
 # Documentation
 
-## User guides
+All guide sources and site configuration live here and are tracked in Git.
 
-- [Quick walkthrough](walkthrough.md)
-- [FAQ](faq.md)
+| Folder | Contents | Preview |
+| --- | --- | --- |
+| [user](user/README.md) | Setup, buyer and seller workflows, integrations | `npm run docs:dev` — port 3333 |
+| [dev](dev/README.md) | Architecture, APIs, deployment, recovery, audits and design | `npm run dev-docs:dev` — port 3334 |
+| `theme/` | Shared Autoloot fonts and Papers theme | Both sites |
+| `.papers/` | Ignored local Papers runtimes and generated output | Never edit as source |
 
-## Setup and operation
+Each site has `content/`, `documentation-config.js`, and an immutable
+`papers.lock.json`. User images are in `user/public/`; the design specification
+is `dev/design.md`. Build output is `.papers/user/dist/` and `.papers/dev/dist/`.
+Existing rendered `/docs/...` paths are retained. Repository links now point at
+the canonical files instead of compatibility stubs.
 
-| Guide | Purpose |
-| --- | --- |
-| [Production](production.md) | Single-host deployment, launch checks and monitoring |
-| [Hosted migration](hosted-migration.md) | Hono, D1 and the Cloudflare hosted target |
-| [Metadata](metadata.md) | Credential-free demo catalog and scoped API credentials |
-| [Twitch and OBS](twitch-widgets.md) | Channel login, chat commands and stream widgets |
-| [Codex connection](codex-connection.md) | Local companion sign-in, credentials and disconnect |
-| [Payments](payment-onboarding.md) | Seller-owned Stripe account and onboarding scope |
-| [USDC checkout](crypto-checkout.md) | Optional Solana wallet payments, verification and recovery |
-| [Bidding](bidding.md) | Direct bids, private maximums and moderation |
-| [Seller policies](operator-policies.md) | Public identity, support, fulfillment and privacy notices |
-| [Agent-led runs](agent-led-runs.md) | Queue limits, per-lot review, pause and recovery |
-| [Giveaways](giveaways.md) | Free entry, private prize claims and history |
-| [Shipping](shipping.md) | Shippo labels, dispatch and Pirate Ship workflow |
-| [CSV](csv-and-shipping.md) | Inventory mapping, exports and tracking imports |
-| [NFT delivery](nft-delivery.md) | Supported assets, wallet adapter and verified fulfillment |
-| [Sales accounting](accounting.md) | Metrics, private cost records and export limitations |
-| [Livestream vision](vision.md) | Moondream via Prime/local setup and recognition limits |
-| [Storage](storage.md) | SQLite, backups, integrity checks and restore |
+Requires Node.js 24+. The wrapper can bootstrap each runtime independently from
+the exact locked Papers commit using its supported generator, `runtime.patch`
+for Autoloot customizations, and the shared locked dependency manifests. A first
+run requires network access. Neither site is deployed.
 
-## Developer documentation
-
-Developer reference, architecture, lifecycle contracts, release guides, audits, and the design system live in the separate [Autoloot Dev Docs](../dev-docs/README.md) Papers site. Run `npm run dev-docs:dev` to preview it on port 3334.
-
-
-Documentation describes the single-streamer implementation. Tests and local previews do not establish real payment, provider custody or funded-wallet integration success.
+```sh
+npm run docs:check
+npm run dev-docs:check
+```

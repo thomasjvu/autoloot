@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {mkdtempSync,rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {Storage} from '../lib/storage.mjs';
-import {emptyWorkspace} from '../lib/workspace.mjs';
+import {Storage} from '../lib/persistence/storage.mjs';
+import {emptyWorkspace} from '../lib/commerce/workspace.mjs';
 
 test('audit records persist independently of workspace activity trimming and page without duplicates',()=>{
  const dir=mkdtempSync(join(tmpdir(),'autoloot-audit-'));let storage=new Storage(dir);

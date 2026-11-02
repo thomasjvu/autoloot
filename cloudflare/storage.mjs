@@ -1,5 +1,5 @@
 import {createHash} from 'node:crypto';
-import {assetKey} from '../lib/nft.mjs';
+import {assetKey} from '../lib/commerce/nft.mjs';
 const hash=value=>createHash('sha256').update(value).digest('hex');
 
 // The Durable Object is the only writer. Engine commits remain synchronous and

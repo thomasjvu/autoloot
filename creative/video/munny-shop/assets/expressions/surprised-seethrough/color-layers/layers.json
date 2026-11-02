@@ -1,0 +1,219 @@
+{
+  "canvas": [
+    768,
+    768
+  ],
+  "source": "../output/output/source.psd",
+  "layers": [
+    {
+      "name": "tail",
+      "file": "00.png",
+      "bbox": [
+        212,
+        348,
+        380,
+        466
+      ]
+    },
+    {
+      "name": "legwear",
+      "file": "01.png",
+      "bbox": [
+        292,
+        345,
+        492,
+        675
+      ]
+    },
+    {
+      "name": "bottomwear",
+      "file": "02.png",
+      "bbox": [
+        329,
+        293,
+        495,
+        409
+      ]
+    },
+    {
+      "name": "topwear",
+      "file": "03.png",
+      "bbox": [
+        277,
+        160,
+        523,
+        380
+      ]
+    },
+    {
+      "name": "back hair",
+      "file": "04.png",
+      "bbox": [
+        286,
+        28,
+        498,
+        186
+      ]
+    },
+    {
+      "name": "neck",
+      "file": "05.png",
+      "bbox": [
+        365,
+        137,
+        401,
+        183
+      ]
+    },
+    {
+      "name": "ears",
+      "file": "06.png",
+      "bbox": [
+        328,
+        106,
+        353,
+        141
+      ]
+    },
+    {
+      "name": "face",
+      "file": "07.png",
+      "bbox": [
+        352,
+        60,
+        460,
+        169
+      ]
+    },
+    {
+      "name": "nose",
+      "file": "08.png",
+      "bbox": [
+        408,
+        140,
+        412,
+        143
+      ]
+    },
+    {
+      "name": "mouth",
+      "file": "09.png",
+      "bbox": [
+        392,
+        145,
+        406,
+        161
+      ]
+    },
+    {
+      "name": "eyebrow-r",
+      "file": "10.png",
+      "bbox": [
+        379,
+        88,
+        404,
+        100
+      ]
+    },
+    {
+      "name": "irides-l",
+      "file": "11.png",
+      "bbox": [
+        418,
+        126,
+        434,
+        145
+      ]
+    },
+    {
+      "name": "eyewhite-r",
+      "file": "12.png",
+      "bbox": [
+        366,
+        104,
+        394,
+        132
+      ]
+    },
+    {
+      "name": "eyewhite-l",
+      "file": "13.png",
+      "bbox": [
+        417,
+        124,
+        442,
+        147
+      ]
+    },
+    {
+      "name": "eyelash-l",
+      "file": "14.png",
+      "bbox": [
+        420,
+        119,
+        451,
+        141
+      ]
+    },
+    {
+      "name": "eyebrow-l",
+      "file": "15.png",
+      "bbox": [
+        431,
+        108,
+        450,
+        117
+      ]
+    },
+    {
+      "name": "irides-r",
+      "file": "16.png",
+      "bbox": [
+        372,
+        109,
+        389,
+        131
+      ]
+    },
+    {
+      "name": "eyelash-r",
+      "file": "17.png",
+      "bbox": [
+        363,
+        100,
+        397,
+        123
+      ]
+    },
+    {
+      "name": "front hair",
+      "file": "18.png",
+      "bbox": [
+        336,
+        12,
+        480,
+        159
+      ]
+    },
+    {
+      "name": "handwear-l",
+      "file": "19.png",
+      "bbox": [
+        424,
+        140,
+        555,
+        309
+      ]
+    },
+    {
+      "name": "handwear-r",
+      "file": "20.png",
+      "bbox": [
+        236,
+        190,
+        405,
+        349
+      ]
+    }
+  ]
+}

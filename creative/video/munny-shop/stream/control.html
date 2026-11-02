@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Munny — stream controls</title>
+<style>body{margin:40px auto;max-width:750px;padding:0 24px;background:#f6f0de;color:#302921;font:18px system-ui}h1{font-size:36px}button,textarea{font:inherit;border:2px solid #302921;border-radius:14px;padding:14px;background:#fff9e9;color:inherit}button{cursor:pointer}button[aria-pressed=true],#send{background:#d2df4b}section{margin:32px 0}textarea{box-sizing:border-box;width:100%;min-height:130px}.row{display:flex;gap:10px;flex-wrap:wrap}small{display:block;line-height:1.5}#status{min-height:28px}label{display:block;margin:20px 0}</style>
+<h1>Munny’s stream desk</h1><p>Cue her expressions and dialogue in the OBS shop.</p>
+<section><h2>Expression</h2><div class="row" id="expressions"></div></section>
+<section><h2>Dialogue</h2><textarea id="text" maxlength="350" placeholder="Welcome in! What should we sell next?"></textarea><p><button id="send">Say this →</button> <button id="stop">Clear dialogue</button></p><label><input id="follow" type="checkbox" checked> Follow fresh app events</label><small>Only new events speak. Opening a scene does not replay old dialogue. Source audio requires sound=1 and an enabled OBS mixer.</small></section>
+<p id="status" role="status">Connecting…</p><small>Visual controls only. These cues do not place bids, launch auctions, send chat messages or start streaming.</small>
+<script>
+const $=s=>document.querySelector(s),names=['neutral','joyful','surprised','thinking'];
+async function cue(data){try{const r=await fetch('/stream/control',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const v=await r.json();if(!r.ok)throw Error(v.error);$('#status').textContent='Cue sent to the shop.'}catch(e){$('#status').textContent=e.message}}
+for(const name of names){const b=document.createElement('button');b.textContent=name[0].toUpperCase()+name.slice(1);b.dataset.expression=name;b.onclick=()=>cue({expression:name});$('#expressions').append(b)}
+$('#send').onclick=()=>cue({text:$('#text').value});$('#stop').onclick=()=>cue({text:''});$('#follow').onchange=()=>cue({follow:$('#follow').checked});
+async function status(){try{const r=await fetch('/stream/state');const s=await r.json();for(const b of document.querySelectorAll('[data-expression]'))b.setAttribute('aria-pressed',String(b.dataset.expression===s.control.expression));$('#follow').checked=s.control.follow;$('#status').textContent=s.connected?'App connected · local practice controls ready':'Shop ready · app is offline'}catch{$('#status').textContent='Start scripts/serve.py to connect'}finally{setTimeout(status,2000)}}status();
+</script></html>
