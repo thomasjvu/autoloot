@@ -77,8 +77,10 @@ For local Worker development use `npm run worker:migrate:local` and
 Node's `.env` is not automatically loaded by Wrangler. Keep secrets mode 0600.
 Use the same localhost origin in `PUBLIC_URL` and the browser.
 
-Current code is built and tested locally. No Cloudflare account resources,
-public domain, production secret injection or deployment have been performed.
+The Autoloot Cloudflare resources are provisioned and the Worker is deployed
+in setup-only mode at [autoloot-workspace.thomasjvu.workers.dev](https://autoloot-workspace.thomasjvu.workers.dev).
+Owner sign-in and live commerce remain disabled pending Twitch configuration.
+See [deployment targets](deployment.md) for the activation steps.
 
 ## Local companion
 

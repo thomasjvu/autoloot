@@ -120,3 +120,16 @@ is authoritative in Durable Object SQLite, not the D1 projection. Rehearse Durab
 Object recovery and R2 retention before accepting payments.
 
 See [Wrangler configuration](https://developers.cloudflare.com/workers/wrangler/configuration/).
+
+## Provisioned installation
+
+The initial Worker is deployed at
+[autoloot-workspace.thomasjvu.workers.dev](https://autoloot-workspace.thomasjvu.workers.dev).
+It uses D1 database `autoloot` (ID `6ab66e5d-07a5-48ab-91f2-4314b39fbe4f`),
+R2 bucket `autoloot-media`, and workspace ID `production`. The D1 migration is
+applied and the Metadata service secret is installed. Account-specific deployment
+settings are kept in ignored `wrangler.production.json` in the operator checkout.
+
+`AUTOLOOT_SETUP_ONLY="1"` remains enabled by request. HTTP 503 on every route is
+intentional until the Twitch owner ID and credentials are configured and the
+setup flag is removed. No live payment provider is configured or rehearsed.
