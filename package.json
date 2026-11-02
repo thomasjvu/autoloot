@@ -2,6 +2,7 @@
   "name": "autoloot",
   "version": "0.2.0",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "node --env-file-if-exists=.env server.mjs",

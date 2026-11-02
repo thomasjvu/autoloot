@@ -1,12 +1,12 @@
 # Repository and release
 
-Primary source: https://forgejo.thomasjvu.com/phantasy/autoloot (private).
+Primary source: https://github.com/thomasjvu/autoloot (private). Forgejo is an automatically updated mirror.
 
-Main is the integration branch. Forgejo Actions checks syntax, tests, and the disposable shopping journey on Node 22. The workflow requires a runner with the `docker` label and outbound access to the checkout action/npm. Local credentials, show data and the separate documentation checkout are ignored.
+Main is the integration branch. GitHub Actions checks syntax, tests, and the disposable shopping journey on Node 22 using an Ubuntu runner. Local credentials, show data and the separate documentation checkout are ignored.
 
 Deployment templates are available in `deploy/`; no hosted deployment is verified. The current server binds to localhost and runs a local Codex CLI; a public deployment needs a deliberately chosen host, persistent storage, admin authentication, secrets, HTTPS/public callback URL, and a strategy for the local cohost process. Do not expose the streamer admin bootstrap via a public reverse proxy.
 
-The standalone icon package lives in `packages/autoloot-icons`, under MIT. The application as a whole has no open-source license grant. Practice lots use built-in placeholders; no third-party card scans or seller photographs are bundled.
+The standalone icon package lives in `packages/autoloot-icons`, under MIT. The application is MIT-licensed; retain bundled font and third-party license notices. Practice lots use built-in placeholders; no third-party card scans or seller photographs are bundled.
 
 Use [the release rehearsal checklist](live-rehearsal.md) for the remaining real-account, payment, OBS, mobile and recognition gates. It also documents the 15-minute reservation policy and restart behavior for pending orders. Desktop browser verification has been performed; real Twitch/Stripe/OBS and mobile-device verification remain separate gates.
 

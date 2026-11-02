@@ -47,6 +47,6 @@ npm test
 npm run demo:check
 ```
 
-[GitHub](https://github.com/thomasjvu/autoloot) is the primary repository. [Forgejo](https://forgejo.thomasjvu.com/phantasy/autoloot) is a mirror, updated by GitHub Actions after branch and tag pushes. Mirror credentials are stored in the repository’s `FORGEJO_MIRROR_TOKEN` Actions secret.
+Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for project conventions and pull request checks.
 
-The application has no open-source license grant. The [icon package](packages/autoloot-icons) is MIT; [Maple Mono](public/fonts/OFL.txt) is SIL OFL.
+Licensed under [MIT](LICENSE). Bundled fonts and third-party assets retain their own licenses; see [Maple Mono](public/fonts/OFL.txt) and [Autoloot Display](public/fonts/AutolootDisplay-OFL.txt).
