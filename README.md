@@ -68,3 +68,5 @@ npm run demo:check
 Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for project conventions and pull request checks.
 
 Licensed under [MIT](LICENSE). Bundled fonts and third-party assets retain their own licenses; see [Maple Mono](public/fonts/OFL.txt) and [Autoloot Display](public/fonts/AutolootDisplay-OFL.txt).
+
+Pokémon card imagery appearing in demonstration footage identifies example products in the seller workflow. Pokémon artwork and marks belong to their respective rights holders and are not covered by this repository's MIT license. Autoloot is independent and is not affiliated with or endorsed by The Pokémon Company, Nintendo, Creatures, or GAME FREAK. See [Pokémon Content Guidelines for Online Streaming Platforms](https://support.pokemon.com/hc/en-us/articles/17715339053972-Pok%C3%A9mon-Content-Guidelines-for-Online-Streaming-Platforms). Those guidelines cover co-streams of specified official broadcasts; this reference is attribution and context, not a claim that they authorize this application or its demo. See [practice artwork and catalog image sources](public/demo/cards/SOURCES.md) for how the application handles images.
