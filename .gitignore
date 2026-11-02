@@ -30,3 +30,6 @@ public/vendor/reown/
 .dev.vars
 .dev.vars.*
 output/cloudflare-check.json
+
+# Account-specific production deployment configuration
+wrangler.production.json

@@ -18,3 +18,9 @@ jobs:
       - run: npm run check
       - run: npm test
       - run: npm run demo:check
+      - run: npm run worker:check
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sh scripts/container-check.sh

@@ -6,7 +6,7 @@ import {tmpdir} from 'node:os';
 import {join,resolve} from 'node:path';
 const root=resolve(import.meta.dirname,'..'),directory=mkdtempSync(join(tmpdir(),'autoloot-cloudflare-'));
 const checks=[],origin='https://workspace.example';
-const options=convertV4MiniflareOptions({
+const workerOptions={
   workers:[{
     name:'workspace',modules:true,scriptPath:join(root,'.worker-build/worker.js'),compatibilityDate:'2026-10-30',compatibilityFlags:['nodejs_compat'],
     bindings:{PUBLIC_URL:origin,AUTOLOOT_WORKSPACE_ID:'fixture',AUTOLOOT_OWNER_TWITCH_ID:'42',TWITCH_CLIENT_ID:'fixture-client',TWITCH_CLIENT_SECRET:'fixture-secret',METADATA_MODE:'demo',STRIPE_API_KEY:'sk_test_fixture',STRIPE_WEBHOOK_SECRET:'whsec_fixture'},
@@ -15,7 +15,8 @@ const options=convertV4MiniflareOptions({
     outboundService:'providers',
   },{name:'providers',modules:true,scriptPath:join(root,'tests/fixtures/cloudflare/providers.mjs'),compatibilityDate:'2026-10-30'}],
   resourcePersistencePath:directory,
-});
+};
+const options=convertV4MiniflareOptions(workerOptions);
 let mf=new Miniflare(options);
 const call=(path,options={})=>mf.dispatchFetch(origin+path,{redirect:'manual',...options});
 async function login(role,code){
@@ -102,6 +103,15 @@ try{
   assert.equal((await call(upload.image)).status,200);
   assert.ok((await json(await call('/api/bootstrap',{headers:{Cookie:owner.cookie}}))).admin);
   checks.push('Runtime restart retains owner sessions, reserved stock, orders and R2 images');
+  await mf.dispose();
+  const setupOptions=structuredClone(workerOptions);
+  setupOptions.workers[0].bindings.AUTOLOOT_SETUP_ONLY='1';
+  setupOptions.workers[0].bindings.AUTOLOOT_OWNER_TWITCH_ID='';
+  mf=new Miniflare(convertV4MiniflareOptions(setupOptions));
+  const setup=await call('/');assert.equal(setup.status,503);assert.match(await setup.text(),/being set up/);
+  for(const path of ['/api/health','/api/bootstrap','/shop','/auth/twitch?role=streamer'])assert.equal((await call(path)).status,503);
+  assert.equal((await call('/api/stripe/webhook',{method:'POST',body:'{}'})).status,503);
+  checks.push('Setup-only deployment denies dashboard, commerce, OAuth and webhooks without an owner');
   mkdirSync(join(root,'output'),{recursive:true});writeFileSync(join(root,'output/cloudflare-check.json'),JSON.stringify({ok:true,runtime:'workerd',checks},null,2)+'\n');
   console.log(checks.map(c=>'PASS: '+c).join('\n'));
 }finally{await mf.dispose();rmSync(directory,{recursive:true,force:true});}

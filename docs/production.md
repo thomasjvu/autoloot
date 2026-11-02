@@ -1,6 +1,7 @@
 # Production deployment
 
-This page covers the local Node/server edition. For the shared Hono application
+This page covers the local Node/server edition. For Railway and hosted Node
+with Twitch owner authentication, see [deployment targets](../dev-docs/content/developers/deployment.md). For the shared Hono application
 on Cloudflare Workers with Durable Objects, D1 and R2, use
 [Cloudflare hosted setup](hosted-migration.md).
 

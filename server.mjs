@@ -3,6 +3,7 @@ import {CodexConnection} from './lib/codex-connection.mjs';
 import {createRequestPolicy} from './lib/http/policy.mjs';
 import {createEventHub} from './lib/http/events.mjs';
 import {createProjections} from './lib/http/projections.mjs';
+import {createHostedNodeAuth} from './lib/hosted-node-auth.mjs';
 import {AdminAuth} from './lib/admin-auth.mjs';
 
 import {RipSession} from './lib/rip-session.mjs';
@@ -48,7 +49,7 @@ try {
   initial = storage.load(initialWorkspace);
 }
 catch(error) { storage.close(); throw error; }
-const adminAuth=new AdminAuth(join(data,'admin-auth.json'));
+let adminAuth=runtime.hosted?null:new AdminAuth(join(data,'admin-auth.json'));
 const imageDir = join(data, "images");
 mkdirSync(imageDir, { recursive: true, mode: 0o700 });
 const oauthHandoffs = new Map();
@@ -63,7 +64,11 @@ engine = new Engine(initial, {
   onChange: broadcast,
 });
 rip = new RipSession(engine,metadata,vision);
-twitch = new Twitch(engine, broadcast, storage.sessionStore());
+twitch = new Twitch(engine, broadcast, storage.sessionStore(), {authorizeStreamer:identity=>{
+  if(runtime.hosted && identity.id!==process.env.AUTOLOOT_OWNER_TWITCH_ID)throw Error('This Twitch account does not own this workspace.');
+}});
+const hostedAuth=runtime.hosted?createHostedNodeAuth({twitch,owner:process.env.AUTOLOOT_OWNER_TWITCH_ID,events}):null;
+if(hostedAuth)adminAuth=hostedAuth.auth;
 const shippingConfigFile=join(data,'shippo.json');
 let shippoToken=process.env.SHIPPO_API_TOKEN || '';
 if(!shippoToken && existsSync(shippingConfigFile))shippoToken=JSON.parse(readFileSync(shippingConfigFile,'utf8')).token || '';
@@ -97,7 +102,7 @@ if (engine.state.auction?.status === "live") {
 const runs = new Runs(engine, { connected: () => twitch.status.connected, checkoutReady: () => payments.status.configured, nftReady:chain=>nft.configured(chain)&&Boolean(nft.adapter), deliverNft:(id,policy)=>nft.authorize(id,policy) });
 runs.recover();
 const {port, base} = runtime;
-function localHost(req) { return localAdminRequest(req, runtime); }
+function localHost(req) { return runtime.hosted?adminAuth.valid(req):localAdminRequest(req, runtime); }
 
 async function announce(message) {
   if (engine.state.mode !== "live") return;
@@ -155,16 +160,16 @@ const codexConnection=new CodexConnection();
 let closing=false;
 const policy=createRequestPolicy({runtime,auth:adminAuth,adminToken:admin,agentToken:()=>process.env.NFT_AGENT_TOKEN,localHost,storage,engine,twitch,broadcast,isClosing:()=>closing});
 const platform=createNodeAssets({root,imageDir,twitchConfigFile,shippingConfigFile});
-const app=createHttpApp({policy,requestContext:nodeRequestContext,...platform,auth:adminAuth,events,admin,port,base,engine,twitch,payments,nft,shipping,runs,catalog,rip,metadata,stateFor,localHost,broadcast,announce,companion,codexConnection,oauthHandoffs,storage,solanaCheckout,companionRuntime:{reply:codexReply}});
+const app=createHttpApp({...(hostedAuth?{hosted:true,authRoutes:hostedAuth.routes,canStartStreamerLogin:()=>true}:{}),policy,requestContext:nodeRequestContext,...platform,auth:adminAuth,events,admin,port,base,engine,twitch,payments,nft,shipping,runs,catalog,rip,metadata,stateFor,localHost,broadcast,announce,companion,codexConnection,oauthHandoffs,storage,solanaCheckout,companionRuntime:{reply:codexReply}});
 const server=createAdaptorServer({fetch:app.fetch,overrideGlobalObjects:false,autoCleanupIncoming:false});
 server.requestTimeout=30000;
 server.headersTimeout=10000;
 server.keepAliveTimeout=5000;
 server.maxRequestsPerSocket=1000;
 server.maxConnections=512;
-server.listen(port, "127.0.0.1", () =>
+server.listen(port, runtime.host, () =>
   console.log(
-    `Autoloot is ready at http://localhost:${port}\nViewer page: ${base}/shop\nLocal streamer access only. Metadata: ${metadata.mode}. Data: ${data} (SQLite)`,
+    `Autoloot is ready at http://localhost:${port}\nViewer page: ${base}/shop\n${runtime.hosted?'Hosted Twitch owner access.':'Local streamer access only.'} Metadata: ${metadata.mode}. Data: ${data} (SQLite)`,
   ),
 );
 async function shutdown() {

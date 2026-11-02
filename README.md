@@ -35,6 +35,12 @@ Open [localhost:4173](http://localhost:4173) and create your administrator accou
 
 Copy `.env.example` to `.env` to configure integrations. The example enables production mode. Keep credentials and `.data/` private; one server owns one local SQLite data directory. Twitch, payments, shipping, and AI providers require your own accounts. Review the [deployment guide](docs/production.md) before live use.
 
+## Deployment
+
+Use [deployment targets](dev-docs/content/developers/deployment.md) for Railway
+(Node with persistent SQLite), self-hosted Node, or Cloudflare Workers. Hosted
+Node requires `AUTOLOOT_NODE_MODE=hosted` and a configured Twitch owner.
+
 ## Documentation
 
 Start with the [documentation index](docs/README.md) for setup, selling, payments, shipping, and development. The separate local `documentation/` Papers checkout contains the user guides; developer references are maintained in `dev-docs/`.

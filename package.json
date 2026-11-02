@@ -30,7 +30,14 @@
     "worker:migrate:remote": "wrangler d1 migrations apply DB --remote",
     "worker:deploy": "wrangler deploy",
     "companion:connect": "node scripts/companion-bridge.mjs",
-    "worker:secrets": "node scripts/worker-secrets.mjs"
+    "worker:secrets": "node scripts/worker-secrets.mjs",
+    "dev-docs:dev": "PAPERS_TEMPLATE_ROOT=local node scripts/dev-docs.mjs dev",
+    "dev-docs:build": "PAPERS_TEMPLATE_ROOT=local node scripts/dev-docs.mjs build",
+    "dev-docs:check": "PAPERS_TEMPLATE_ROOT=local node scripts/dev-docs.mjs check",
+    "worker:production:check": "node scripts/worker-production.mjs",
+    "worker:production:build": "npm run build:wallet && node scripts/worker-production.mjs build",
+    "worker:production:migrate": "node scripts/worker-production.mjs migrate",
+    "worker:production:deploy": "npm run build:wallet && node scripts/worker-production.mjs deploy"
   },
   "engines": {
     "node": ">=22.16"

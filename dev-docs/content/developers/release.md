@@ -1,0 +1,13 @@
+# Repository and release
+
+Primary source: https://github.com/thomasjvu/autoloot (private). Forgejo at https://forgejo.thomasjvu.com/phantasy/autoloot is a mirror updated by GitHub Actions after branch and tag pushes. The mirror workflow uses the `FORGEJO_MIRROR_TOKEN` repository secret.
+
+Main is the integration branch. GitHub Actions checks syntax, tests, and the disposable shopping journey on Node 22 using an Ubuntu runner. Local credentials, show data and the separate documentation checkout are ignored.
+
+Deployment templates are available in `deploy/`; no hosted deployment is verified. The current server binds to localhost and runs a local Codex CLI; a public deployment needs a deliberately chosen host, persistent storage, admin authentication, secrets, HTTPS/public callback URL, and a strategy for the local cohost process. Do not expose the streamer admin bootstrap via a public reverse proxy.
+
+The standalone icon package lives in `packages/autoloot-icons`, under MIT. The application is MIT-licensed; retain bundled font and third-party license notices. Practice lots use built-in placeholders; no third-party card scans or seller photographs are bundled.
+
+Use [the release rehearsal checklist](/docs/developers/live-rehearsal) for the remaining real-account, payment, OBS, mobile and recognition gates. It also documents the 15-minute reservation policy and restart behavior for pending orders. Desktop browser verification has been performed; real Twitch/Stripe/OBS and mobile-device verification remain separate gates.
+
+Storage now uses SQLite with automatic local verified backups, integrity checking and offline restore. Read [storage and recovery](/docs/developers/storage) before upgrading or deploying. NFT orders can complete at verified digital delivery through the wallet-agent adapter (`nft-delivery.md`); no real signing/provider integration has been verified by local fixture tests.

@@ -1,0 +1,12 @@
+.git
+node_modules
+.env
+.env.*
+.dev.vars*
+.data
+.wrangler
+.worker-build
+output
+assets
+documentation
+dev-docs

@@ -25,6 +25,14 @@ import {createHostedBridge} from './bridge.mjs';
 const front=new Hono();
 front.all('*',async c=>{
   const env=c.env;
+  // Explicit provisioning mode never initializes a workspace or accepts sales.
+  if(env.AUTOLOOT_SETUP_ONLY==='1'){
+    c.header('Cache-Control','no-store');
+    c.header('X-Content-Type-Options','nosniff');
+    c.header('Content-Security-Policy',"default-src 'none'; frame-ancestors 'none'; base-uri 'none'");
+    if(c.req.method==='GET'&&new URL(c.req.url).pathname==='/')return c.html('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Autoloot — Setup</title><main><h1>Autoloot is being set up.</h1><p>This workspace is not open yet. Please check back later.</p></main></html>',503);
+    return c.json({ok:false,error:'Workspace setup is incomplete. Access is disabled.'},503);
+  }
   if(!env.PUBLIC_URL||!env.AUTOLOOT_WORKSPACE_ID||!/^\d+$/.test(env.AUTOLOOT_OWNER_TWITCH_ID||''))return c.json({error:'Hosted workspace origin and owner are not configured.'},503);
   if(new URL(c.req.url).origin!==new URL(env.PUBLIC_URL).origin)return c.json({error:'Untrusted request host.'},403);
   // No tenant or peer identity is taken from client-supplied internal headers.
