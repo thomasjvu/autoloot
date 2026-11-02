@@ -11,12 +11,25 @@ function run(command, args, cwd = root) {
   const result = spawnSync(command, args, { cwd, stdio: 'inherit' });
   if (result.status !== 0) process.exit(result.status || 1);
 }
+const expected = JSON.parse(readFileSync(resolve(home, 'papers.lock.json'), 'utf8'));
+function assertPinned(site) {
+  const path = resolve(site, 'papers.lock.json');
+  const actual = existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : null;
+  if (actual?.commit !== expected.commit || actual?.version !== expected.version || actual?.ref !== expected.ref) {
+    throw new Error(`Papers runtime at ${site} must match dev-docs/papers.lock.json (${expected.ref}). Use the supported Papers updater before building; see dev-docs/README.md.`);
+  }
+}
 if (!existsSync(resolve(runtime, 'package.json'))) {
   if (!existsSync(resolve(root, 'documentation/packages/create-papers/index.mjs'))) {
     throw new Error('The local Papers checkout at documentation/ is required. See dev-docs/README.md.');
   }
+  // This generator copies the local template; verify its identity before adopting it.
+  assertPinned(resolve(root, 'documentation'));
   run(process.execPath, ['documentation/packages/create-papers/index.mjs', runtime, '--no-install']);
+  run(process.execPath, [resolve(root, 'documentation/scripts/papers-upgrade.mjs'), '--site', runtime, '--init', expected.commit]);
+  writeFileSync(resolve(runtime, 'papers.lock.json'), JSON.stringify(expected, null, 2) + '\n');
 }
+assertPinned(runtime);
 // This local framework checkout is isolated from the commerce app and user guides.
 rmSync(resolve(runtime, 'src/docs/content'), { recursive: true, force: true });
 cpSync(resolve(home, 'content'), resolve(runtime, 'src/docs/content'), { recursive: true });
