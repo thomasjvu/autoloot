@@ -73,7 +73,7 @@ def main():
             if t<.8:d.rectangle((0,0,W,H),fill='black')
             elif t<3.8:
                 p=(t-.8)/3;e=p*p*(3-2*p);left=int(920*(1-e));right=int(1000+920*e)
-                d.rectangle((0,0,left,H),fill='#171412');d.polygon([(right,0),(W,0),(W,H),(right+int(160*(1-e)),H)],fill='#211a15');d.line([(left,0),(left,H)],fill='#b38b50',width=3)
+                d.rectangle((0,0,left,H),fill='#171412');d.rectangle((right,0,W,H),fill='#211a15');d.line([(left,0),(left,H)],fill='#b38b50',width=3)
             scene.alpha_composite(door)
             for process,layer in [(preview,scene),(char,character),(dialog,text)]:process.stdin.write(layer.tobytes())
             if frame in [90,156,159,180,360,510]:scene.convert('RGB').save(R/f'{VERSION}-review-{frame:03d}.jpg',quality=93)

@@ -1,0 +1,4 @@
+local root='/Users/area/live-shopping-companion/creative/video/munny-shop/';local r=resolve or Resolve();local pm=r:GetProjectManager();local p=pm:GetCurrentProject();local t=p:GetCurrentTimeline();assert(t:GetName()=='15 - Twitch and Codex evidence - 2m40s');local pool=p:GetMediaPool()
+local function add(path,start,count,pos)local c=pool:ImportMedia({root..path});assert(c and c[1]);assert(pool:AppendToTimeline({{mediaPoolItem=c[1],startFrame=start,endFrame=start+count-1,mediaType=1,trackIndex=2,recordFrame=pos}}))end
+add('capture/twitch-real/competitive-twitch-original.mov',8850,750,1332);add('renders/Autoloot-Munny-Practice-Demo-Final.mp4',2910,570,3018)
+t:SetCurrentTimecode('00:02:22:00');pm:SaveProject();assert(pm:ExportProject(p:GetName(),root..'resolve/Autoloot-Twitch-And-Codex-Evidence.drp'))

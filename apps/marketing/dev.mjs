@@ -6,7 +6,7 @@ import {dirname,resolve,extname,sep} from 'node:path';
 const root=dirname(fileURLToPath(import.meta.url)),dist=resolve(root,'dist');
 const port=Number(process.env.MARKETING_PORT||4174);
 if(!Number.isInteger(port)||port<1||port>65535)throw Error('Invalid MARKETING_PORT.');
-const types={'.html':'text/html; charset=utf-8','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.ico':'image/x-icon','.woff2':'font/woff2'};
+const types={'.html':'text/html; charset=utf-8','.css':'text/css','.svg':'image/svg+xml','.webp':'image/webp','.png':'image/png','.ico':'image/x-icon','.woff2':'font/woff2'};
 let builtAt=0;
 async function rebuild(){
  const latest=Math.max(...await Promise.all(['index.html','styles.css','build.mjs','_headers'].map(async f=>(await stat(resolve(root,f))).mtimeMs)));

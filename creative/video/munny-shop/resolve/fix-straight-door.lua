@@ -1,0 +1,2 @@
+local root='/Users/area/live-shopping-companion/creative/video/munny-shop/'
+local r=resolve or Resolve();local pm=r:GetProjectManager();local p=pm:GetCurrentProject();local tl=p:GetCurrentTimeline();local pool=p:GetMediaPool();local c=pool:ImportMedia({root..'renders/intro-straight-door.mp4'});assert(c and c[1]);assert(pool:AppendToTimeline({{mediaPoolItem=c[1],startFrame=0,endFrame=119,mediaType=1,trackIndex=2,recordFrame=0}}));pm:SaveProject();assert(pm:ExportProject(p:GetName(),root..'resolve/Autoloot-Munny-Straight-Door.drp'))

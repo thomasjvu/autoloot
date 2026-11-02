@@ -1,4 +1,4 @@
 {
-  "sha256": "8282efa0c45c292d238b025d4efd03e143d9644f6fd8c9eddf26872ef24a7ed8",
-  "note": "Reviewed custom Munny chalk auction layout: inline format, enlarged timer, price and bidder alignment; transparent native OBS widgets."
+  "sha256": "16cc3a1df54874217be9d173c8f61d779133afb7178362a1b9ee494bd236fc9a",
+  "note": "Reviewed custom Munny chalk auction layout and WOFF font export; Reown Settings icon uses a square 48px image."
 }

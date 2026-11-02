@@ -68,7 +68,7 @@ Studio always opens with its lime welcome hero, including practice mode and popu
 
 Munny uses purpose-made waist-up art, enlarged to meet the hero's top and bottom boundaries on desktop. Clip the lower figure within the rounded hero; keep her face, ears and gesture legible. Reserve roughly the right 42% for art so the text and controls remain clear. On narrow screens, stack text above a large, bottom-cropped character instead of shrinking her to a thumbnail. Do not animate or randomly rotate the pose.
 
-Hero art: `public/characters/mochi-hero-welcome.png` is the active welcoming open-palm pose; `mochi-hero-wave.png` is the alternate waving-with-cards pose. Both preserve the streetwear character identity and transparent backgrounds. The original full-body illustration remains the reference for other placements. See [generation prompts](/docs/developers/hero-art).
+Hero art: `public/characters/mochi-hero-welcome.webp` is the active welcoming open-palm pose; `mochi-hero-wave.webp` is the alternate waving-with-cards pose. Both preserve the streetwear character identity and transparent backgrounds. The original full-body illustration remains the reference for other placements. See [generation prompts](/docs/developers/hero-art).
 
 ## Interaction and motion
 

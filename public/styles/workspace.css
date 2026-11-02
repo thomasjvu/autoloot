@@ -576,6 +576,7 @@ body{background:var(--paper);color:var(--ink)}
 .service-card .service-icon{width:64px;height:64px;aspect-ratio:1;flex:0 0 64px;box-sizing:border-box;padding:12px 8px;background:#fff;border-radius:17px}
 
 .service-card .service-icon img{max-width:48px;max-height:32px}
+.service-card-reown .service-icon img{width:48px;height:48px;max-height:48px}
 
 .service-card h2,.service-card p{color:#fff}
 

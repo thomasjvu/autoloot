@@ -28,7 +28,7 @@ await copyFile(join(root,'styles.css'),join(dist,'styles.css'));
 const assets={
  'icon-192.png':'icon-192.png','favicon.ico':'favicon.ico',
  'characters/munny-idle.svg':'characters/munny-idle.svg',
- 'characters/mochi-hero-wave.png':'characters/mochi-hero-wave.png',
+ 'characters/mochi-hero-wave.webp':'characters/mochi-hero-wave.webp',
  'services/twitch.svg':'brand/services/twitch.svg','services/stripe.svg':'brand/services/stripe.svg',
  'services/README.md':'brand/services/README.md',
  'fonts/AutolootDisplay-OFL.txt':'fonts/AutolootDisplay-OFL.txt',

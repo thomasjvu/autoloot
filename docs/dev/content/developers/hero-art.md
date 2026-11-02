@@ -2,8 +2,8 @@
 
 Generated with the built-in imagegen tool, using `public/characters/mochi-street-v3.png` as the character/style reference and transparent output enabled. Original generation files are retained; project copies are used by the app.
 
-- Active: `public/characters/mochi-hero-welcome.png` — open-palm welcome.
-- Alternate: `public/characters/mochi-hero-wave.png` — waving with cards.
+- Active: `public/characters/mochi-hero-welcome.webp` — open-palm welcome.
+- Alternate: `public/characters/mochi-hero-wave.webp` — waving with cards.
 
 ## Welcome prompt
 
@@ -15,7 +15,7 @@ Generate a second new hero pose of this exact original Autoloot mascot Munny, us
 
 ## 404 illustration
 
-Saved as `public/characters/mochi-lost.png`, generated with built-in imagegen, transparent output, using `mochi-street-v3.png` as reference.
+Saved as `public/characters/mochi-lost.webp`, generated with built-in imagegen, transparent output, using `mochi-street-v3.png` as reference.
 
 Prompt: Create a cute 404-page illustration of this exact original Autoloot catgirl mascot Munny. Preserve charcoal bob haircut, cream cat ears, lime streetwear hoodie, charcoal top and shorts, orange headphones around neck, orange crossbody pouch, cream sneakers, cat tail, bold clean black outlines and flat cel shading. A new sweet comical pose: she sits cross-legged on the floor, head tilted with a puzzled little smile, holding a small folded blank map upside down and scratching one ear with her free hand. One tiny floating question mark beside her head. Cozy, playful, lost-but-cheerful expression. Full body, complete ears/tail/shoes, centered compact composition with small margins. Transparent background, no glow or backdrop, no words/numbers/logos; the webpage will supply the 404 text. Match the original streetwear illustration style. stylized-concept.
 
@@ -30,3 +30,13 @@ Munny messages use the MIT-licensed `@thomasjvu/vn-tts` 0.2.0 ESM build vendored
 Talking also applies a subtle 480ms squash-and-hop to the puppet's outer group, anchored near the feet. This is a rhythmic game-style bounce, not a breathing loop or audio beat detector. It only runs under `#talk`, keeps each internal layer registered, and is disabled with reduced motion.
 
 The accepted rhythmic talking bounce is saved as the reusable local skill `rhythmic-character-bounce`, including its CSS timing reference, fixed-canvas pivot workflow and playback/reduced-motion checks. Companion Codex headings use 26px type beside the 36px logo tile.
+
+## Shipping optimized assets
+
+Keep editable masters and contact sheets under `creative/`; ship only assets used by the application. Large transparent page illustrations use lossless WebP at their original dimensions. Preserve RGBA pixels when converting, including alpha, and keep browser icon/manifest PNG formats for compatibility. The street PNG path is retained because saved companion profiles use it.
+
+Use ImageMagick to export illustrations: `magick source.png -strip -define webp:lossless=true -define webp:exact=true output.webp`. Compare decoded RGBA pixels with the source before replacing references. Optimize PNGs with `magick source.png -strip -define png:compression-level=9 output.png`; retain the output only when it is smaller and pixel-identical. Do not re-encode already optimized WebP/JPEG files without a measured benefit. Preserve SVG IDs, view boxes, CSS and animation hooks; whitespace/path rewrites can change the animated puppet.
+
+The chalk overlay loads `MunnyShop-Regular.woff`, a compressed export of the desktop TTF with the same glyphs. Other active browser fonts already use WOFF2. Keep font licenses beside the exports.
+
+After changing asset paths, update the marketing build allowlist and MIME mappings, run `npm run marketing:build` and the relevant application tests, then run both documentation checks. Review the rendered artwork at its intended display size.

@@ -273,6 +273,7 @@ test("cancel cannot override a payment that won the race", async () => {
 });
 test("full refund restores stock exactly once and rejects already fulfilled orders", async () => {
   const { e, order } = fixture();
+  e.features = Object.freeze({...e.features,nft:true});
   const c = client(order),
     p = new Payments(e, { client: c, secret: "whsec_fixture" });
   const stock=e.product('p4').quantity;
